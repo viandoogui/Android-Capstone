@@ -1,6 +1,5 @@
-package com.example.group4androidcapstone.ui.theme
+package com.group4.group4androidcapstone.ui.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme

@@ -1,4 +1,4 @@
-package com.example.group4androidcapstone
+package com.group4.group4androidcapstone
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

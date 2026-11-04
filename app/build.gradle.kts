@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.group4androidcapstone"
+    namespace = "com.group4.group4androidcapstone"
     compileSdk {
         version = release(37)
     }

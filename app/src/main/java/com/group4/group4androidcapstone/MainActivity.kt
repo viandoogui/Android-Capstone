@@ -1,4 +1,4 @@
-package com.example.group4androidcapstone
+package com.group4.group4androidcapstone
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -11,7 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.group4androidcapstone.ui.theme.Group4AndroidCapstoneTheme
+import com.group4.group4androidcapstone.ui.theme.Group4AndroidCapstoneTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

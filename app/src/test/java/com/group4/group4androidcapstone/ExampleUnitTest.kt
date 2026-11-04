@@ -1,4 +1,4 @@
-package com.example.group4androidcapstone
+package com.group4.group4androidcapstone
 
 import org.junit.Test
 
