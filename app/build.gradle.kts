@@ -60,4 +60,6 @@ dependencies {
     implementation(libs.hilt.navigation)
     androidTestImplementation(libs.hilt.android.testing)
     kspAndroidTest(libs.hilt.compiler)
+    implementation(libs.bundles.retrofit)
+    
 }
