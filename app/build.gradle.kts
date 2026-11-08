@@ -21,6 +21,8 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "AW_BASE_URL", "\"https://api.bootcampcentral.com/api/\"")
+        buildConfigField("String", "AUTH_BASE_URL", "\"https://api.bootcampcentral.com/\"")
     }
 
     buildTypes {
@@ -36,6 +38,8 @@ android {
     }
     buildFeatures {
         compose = true
+        viewBinding = true
+        buildConfig = true
     }
 }
 
