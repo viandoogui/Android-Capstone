@@ -1,7 +1,4 @@
-package com.group4.group4androidcapstone.features.products.data
-
-import com.group4.group4androidcapstone.features.orders.data.MyOrderResponseDto
-import com.group4.group4androidcapstone.features.orders.data.MyOrdersDataSource
+package com.group4.group4androidcapstone.features.orders.data
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
