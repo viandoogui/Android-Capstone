@@ -1,17 +1,26 @@
 package com.group4.group4androidcapstone
 
+import android.annotation.SuppressLint
 import android.app.Application
+import android.graphics.Color.GRAY
+import android.graphics.Color.WHITE
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import com.group4.group4androidcapstone.core.structure.CapstoneApp
+import com.group4.group4androidcapstone.features.HomeScreen.presentation.HomeContent
+import com.group4.group4androidcapstone.features.HomeScreen.presentation.HomeScreen
 import com.group4.group4androidcapstone.ui.theme.Group4AndroidCapstoneTheme
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.HiltAndroidApp
@@ -28,11 +37,10 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             Group4AndroidCapstoneTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+
+                Surface(modifier = Modifier.fillMaxSize()) {
+                   CapstoneApp()
+
                 }
             }
         }

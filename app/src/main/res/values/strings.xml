@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Group 4 Android Capstone</string>
+
+
+
+    <!-- Navigation -->
+    <string name="nav_home">Home</string>
 </resources>
