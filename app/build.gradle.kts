@@ -65,5 +65,7 @@ dependencies {
     androidTestImplementation(libs.hilt.android.testing)
     kspAndroidTest(libs.hilt.compiler)
     implementation(libs.bundles.retrofit)
+    implementation(libs.bundles.coil)
+
     
 }

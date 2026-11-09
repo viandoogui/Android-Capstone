@@ -11,6 +11,7 @@ composeBom = "2026.02.01"
 hiltVersion = "2.60.1"
 retrofitVersion = "3.0.0"
 okhttpVersion = "5.5.0"
+coilVersion = "3.6.3"
 
 
 [libraries]
@@ -36,10 +37,13 @@ retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = 
 retrofit-converter = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofitVersion" }
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttpVersion" }
 okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttpVersion" }
+coil-compose = { group = "io.coil-kt.coil3", name="coil-compose", version.ref = "coilVersion"}
+coil-loader = { group = "io.coil-kt.coil3", name="coil-network-okhttp", version.ref = "coilVersion"}
 
 [bundles]
 retrofit = [ "retrofit", "retrofit-converter" ]
 okhttp = [ "okhttp", "okhttp-logging-interceptor" ]
+coil = [ "coil-compose", "coil-loader" ]
 
 
 [plugins]
