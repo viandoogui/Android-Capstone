@@ -5,7 +5,7 @@ data class Product (
     val name: String?,
     val productNumber: String?,
     val summary: String?,
-    val thumbnailPhoto: String?,
+    val thumbnailPhoto: ByteArray?,
     val thumbnailPhotoFileName: String?,
     val warranty: String?,
     val color: String?,
