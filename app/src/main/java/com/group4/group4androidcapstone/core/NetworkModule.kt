@@ -1,9 +1,7 @@
 package com.group4.group4androidcapstone.core
 
 import com.group4.group4androidcapstone.BuildConfig
-import com.group4.group4androidcapstone.features.orders.data.MyOrdersDataSource
 import com.group4.group4androidcapstone.features.orders.data.OrderDataSource
-import com.group4.group4androidcapstone.features.orders.data.RemoteMyOrdersDataSource
 import com.group4.group4androidcapstone.features.orders.data.RemoteOrderDataSource
 import com.group4.group4androidcapstone.features.products.data.ProductDataSource
 import com.group4.group4androidcapstone.features.products.data.RemoteProductDataSource

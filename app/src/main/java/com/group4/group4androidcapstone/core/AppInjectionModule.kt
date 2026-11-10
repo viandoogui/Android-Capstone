@@ -1,7 +1,6 @@
 package com.group4.group4androidcapstone.core
 
 import com.group4.group4androidcapstone.features.orders.data.DefaultOrderRepository
-import com.group4.group4androidcapstone.features.orders.data.MyOrdersRepository
 import com.group4.group4androidcapstone.features.orders.domain.OrderRepository
 import com.group4.group4androidcapstone.features.products.data.RemoteProductRepository
 import com.group4.group4androidcapstone.features.products.domain.ProductRepository

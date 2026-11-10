@@ -19,6 +19,8 @@ object OrderMapper {
                 lastName = firstLine.lastName,
                 orderDate = LocalDateTime.parse(firstLine.orderDate),
                 shipDate = LocalDateTime.parse(firstLine.shipDate),
+                status = firstLine.status,
+                statusName = firstLine.statusName,
                 items = orderLineItems.map { lineItem ->
                     LineItem(
                         id = lineItem.id,
@@ -26,6 +28,7 @@ object OrderMapper {
                         orderQty = lineItem.orderQty,
                         unitPrice = lineItem.unitPrice,
                         lineTotal = lineItem.lineTotal
+
                     )
 
                 }
