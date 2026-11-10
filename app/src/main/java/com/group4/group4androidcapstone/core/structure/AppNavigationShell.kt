@@ -1,0 +1,80 @@
+package com.group4.group4androidcapstone.core.structure
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteDefaults
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavDestination.Companion.hasRoute
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
+
+
+@Composable
+fun AppNavigationShell(
+    navController: NavHostController,
+    content: @Composable () -> Unit
+) {
+    val currentDestination = navController
+        .currentBackStackEntryAsState().value ?.destination
+
+    NavigationSuiteScaffold(
+        navigationSuiteItems = {
+            TopLevelDestination.entries.forEach{destination ->
+                item(
+                    selected = currentDestination?.hierarchy?.any{
+                        it.hasRoute(destination.route::class)
+                    } == true,
+                    onClick = {
+                        navController.navigate(destination.route){
+                            //have one backstack per tab. if you leave a tab and come back, its as you left it
+                            popUpTo(navController.graph.findStartDestination().id){
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    },
+                    icon = { Icon(destination.icon, contentDescription = null) },
+                    label = { Text(stringResource(destination.labelRes)) },
+                )
+
+
+            }
+        },
+        navigationSuiteColors = NavigationSuiteDefaults.colors(
+            navigationBarContainerColor = MaterialTheme.colorScheme.surface,      // Background of bottom nav bar
+            navigationBarContentColor = MaterialTheme.colorScheme.onSurface,      // Unselected icons/text color
+            navigationRailContainerColor = MaterialTheme.colorScheme.surface,     // Background for expanded view rail
+            navigationRailContentColor = MaterialTheme.colorScheme.onSurface
+        )
+    ){
+        //the nav bar handles its system insets
+        //but we need to provide space for them and side margins
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .windowInsetsPadding(WindowInsets.statusBars)
+                .padding(horizontal = 16.dp)
+        ){
+            content()
+
+        }
+
+    }
+
+
+}

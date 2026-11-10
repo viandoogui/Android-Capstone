@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.devtools.ksp)
     alias(libs.plugins.hilt.android)
+    alias(libs.plugins.kotlin.serialization)
+
 
 
 }
@@ -65,5 +67,9 @@ dependencies {
     androidTestImplementation(libs.hilt.android.testing)
     kspAndroidTest(libs.hilt.compiler)
     implementation(libs.bundles.retrofit)
-    
+    implementation(libs.androidx.compose.material3.adaptive.navigation.suite)
+    implementation(libs.androidx.material.icons)
+    implementation(libs.androidx.compose.material3.adaptive.layout)
+    implementation(libs.kotlinx.serialization.json)
+
 }
