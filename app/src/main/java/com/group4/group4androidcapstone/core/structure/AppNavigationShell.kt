@@ -1,5 +1,6 @@
 package com.group4.group4androidcapstone.core.structure
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -7,7 +8,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteDefaults
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -46,11 +49,18 @@ fun AppNavigationShell(
                         }
                     },
                     icon = { Icon(destination.icon, contentDescription = null) },
-                    label = { Text(stringResource(destination.labelRes)) }
+                    label = { Text(stringResource(destination.labelRes)) },
                 )
 
+
             }
-        }
+        },
+        navigationSuiteColors = NavigationSuiteDefaults.colors(
+            navigationBarContainerColor = MaterialTheme.colorScheme.surface,      // Background of bottom nav bar
+            navigationBarContentColor = MaterialTheme.colorScheme.onSurface,      // Unselected icons/text color
+            navigationRailContainerColor = MaterialTheme.colorScheme.surface,     // Background for expanded view rail
+            navigationRailContentColor = MaterialTheme.colorScheme.onSurface
+        )
     ){
         //the nav bar handles its system insets
         //but we need to provide space for them and side margins
@@ -61,6 +71,7 @@ fun AppNavigationShell(
                 .padding(horizontal = 16.dp)
         ){
             content()
+
         }
 
     }
