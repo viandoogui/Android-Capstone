@@ -11,7 +11,9 @@ composeBom = "2026.02.01"
 hiltVersion = "2.60.1"
 retrofitVersion = "3.0.0"
 okhttpVersion = "5.5.0"
+coilVersion = "3.6.3"
 kotlinxSerializationJson = "1.8.1"
+material3 = "1.4.0"
 
 
 [libraries]
@@ -37,14 +39,18 @@ retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = 
 retrofit-converter = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofitVersion" }
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttpVersion" }
 okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttpVersion" }
+coil-compose = { group = "io.coil-kt.coil3", name="coil-compose", version.ref = "coilVersion"}
+coil-loader = { group = "io.coil-kt.coil3", name="coil-network-okhttp", version.ref = "coilVersion"}
 androidx-compose-material3-adaptive-navigation-suite = { group = "androidx.compose.material3", name = "material3-adaptive-navigation-suite" }
 androidx-material-icons = { group = "androidx.compose.material", name = "material-icons-extended"}
 androidx-compose-material3-adaptive-layout = { group = "androidx.compose.material3.adaptive", name = "adaptive-layout", version = "1.3.0" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson"}
+androidx-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
 
 [bundles]
 retrofit = [ "retrofit", "retrofit-converter" ]
 okhttp = [ "okhttp", "okhttp-logging-interceptor" ]
+coil = [ "coil-compose", "coil-loader" ]
 
 
 [plugins]

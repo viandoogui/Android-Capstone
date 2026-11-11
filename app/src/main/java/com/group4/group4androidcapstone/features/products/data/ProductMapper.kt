@@ -1,5 +1,6 @@
 package com.group4.group4androidcapstone.features.products.data
 
+import android.util.Base64
 import com.group4.group4androidcapstone.features.products.domain.Product
 
 object ProductMapper {
@@ -10,7 +11,7 @@ object ProductMapper {
             name = dto.name,
             productNumber = dto.productNumber,
             summary = dto.summary,
-            thumbnailPhoto = dto.thumbnailPhoto,
+            thumbnailPhoto = Base64.decode(dto.thumbnailPhoto, Base64.DEFAULT),
             thumbnailPhotoFileName = dto.thumbnailPhotoFileName,
             warranty = dto.warranty,
             color = dto.color,
@@ -24,7 +25,10 @@ object ProductMapper {
             name = domain.name,
             productNumber = domain.productNumber,
             summary = domain.summary,
-            thumbnailPhoto = domain.thumbnailPhoto,
+            thumbnailPhoto = Base64.encodeToString(
+                domain.thumbnailPhoto,
+                Base64.DEFAULT
+            ),
             thumbnailPhotoFileName = domain.thumbnailPhotoFileName,
             warranty = domain.warranty,
             color = domain.color,
