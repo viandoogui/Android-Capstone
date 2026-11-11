@@ -1,6 +1,7 @@
 package com.group4.group4androidcapstone.features.products.data
 
 import com.group4.group4androidcapstone.features.products.domain.Product
+import com.group4.group4androidcapstone.features.products.domain.ProductDetails
 import com.group4.group4androidcapstone.features.products.domain.ProductRepository
 import javax.inject.Inject
 
@@ -16,8 +17,8 @@ class RemoteProductRepository @Inject constructor(
         return products
     }
 
-    override suspend fun getProduct(id: Int): Product {
+    override suspend fun getProduct(id: Int): ProductDetails {
         val response = dataSource.getProduct(id)
-        return ProductMapper.mapToDomain(response)
+        return ProductDetailsMapper.mapToDomain(response)
     }
 }
