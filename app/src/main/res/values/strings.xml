@@ -5,4 +5,6 @@
 
     <!-- Navigation -->
     <string name="nav_home">Home</string>
+    <string name="nav_ProductDir">Product Directory</string>
+
 </resources>

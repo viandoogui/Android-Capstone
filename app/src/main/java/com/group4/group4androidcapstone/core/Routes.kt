@@ -20,3 +20,11 @@ data object RecentOrdersRoute: CapstoneRoute{
 data object RecentProductsRoute: CapstoneRoute{
 
 }
+
+
+
+
+@Serializable
+data object ProductDirectoryRoute: CapstoneRoute{
+
+}

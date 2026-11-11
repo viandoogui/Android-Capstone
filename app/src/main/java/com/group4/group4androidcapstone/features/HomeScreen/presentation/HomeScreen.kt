@@ -4,9 +4,10 @@ import androidx.compose.runtime.Composable
 
 @Composable
 fun HomeScreen() {
-    HomeContent(
-        onOrderHistory = {Unit},
-        onRecentProducts = {Unit}
-    )
+//    HomeContent(
+//        onOrderHistory = {Unit},
+//        onRecentProducts = {Unit},
+//
+//    )
 
 }

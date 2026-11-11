@@ -27,7 +27,7 @@ private val CapstoneLightColors =
         secondaryContainer = Color(0xFFFFBA00), //Container tone for secondary elements
         onSecondaryContainer = Color(0xFF0C2B2E), //text on top of secondary container
 
-        tertiary = Color(0xFF7D5260), //Used for contrasting accents to balance primary and secondary colors used for special highlights, decorative elements, or contrasting callouts.
+        tertiary = Color(0xFFFFBA00), //Used for contrasting accents to balance primary and secondary colors used for special highlights, decorative elements, or contrasting callouts.
         onTertiary = Color.White,//text on top of tertiary
 
         error = Color(0xFFBA1A1A),
@@ -37,7 +37,7 @@ private val CapstoneLightColors =
         onBackground = Color(0xFFFFBA00),
 
         surface = Color(0xFF0C2B2E),//Used for the surfaces of components, Cards, Sheets, Menus, Dialogs, Bottom Navigation bars.
-        onSurface = Color(0xFF1C1B1F),
+        onSurface = Color(0xFFFFBA00),
     )
 
 private val CapstoneDarkColors =

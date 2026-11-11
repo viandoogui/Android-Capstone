@@ -7,6 +7,8 @@ import com.group4.group4androidcapstone.core.CapstoneRoute
 import com.group4.group4androidcapstone.core.HomeScreenRoute
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.ShoppingCart
+import com.group4.group4androidcapstone.core.ProductDirectoryRoute
 
 enum class TopLevelDestination (
     val route: CapstoneRoute,
@@ -16,7 +18,7 @@ enum class TopLevelDestination (
 
 ){
     HOME(HomeScreenRoute, R.string.nav_home, Icons.Filled.Home),
-//    ARTISTS(ArtistListRoute, R.string.nav_artists, Icons.Filled.Person),
+    PRODUCTS(ProductDirectoryRoute, R.string.nav_ProductDir, Icons.Filled.ShoppingCart),
 //    TODOS(ToDosRoute, R.string.nav_todos, Icons.Filled.CheckCircle),
 //    ORDERS(OrdersRoute, R.string.nav_orders, Icons.Filled.ShoppingCart),
 //    SETTINGS(SettingsRoute, R.string.nav_settings, Icons.Filled.Settings)
