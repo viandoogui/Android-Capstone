@@ -21,8 +21,9 @@ import com.group4.group4androidcapstone.ui.theme.LocalSpacing
 
 @Composable
 fun HomeContent(
-    onOrderHistory: () -> Unit,
-    onRecentProducts: () -> Unit
+    //onOrderHistory: () -> Unit,
+    //onRecentProducts: () -> Unit,
+    onNavigateToProductDirectory: () -> Unit
 ) {
     Box(
         modifier = Modifier

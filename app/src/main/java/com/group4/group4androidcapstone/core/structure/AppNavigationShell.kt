@@ -48,8 +48,8 @@ fun AppNavigationShell(
                             restoreState = true
                         }
                     },
-                    icon = { Icon(destination.icon, contentDescription = null) },
-                    label = { Text(stringResource(destination.labelRes)) },
+                    icon = { Icon(destination.icon, contentDescription = null)},
+                    label = { Text(stringResource(destination.labelRes),color = MaterialTheme.colorScheme.onSurface) }
                 )
 
 
@@ -58,8 +58,8 @@ fun AppNavigationShell(
         navigationSuiteColors = NavigationSuiteDefaults.colors(
             navigationBarContainerColor = MaterialTheme.colorScheme.surface,      // Background of bottom nav bar
             navigationBarContentColor = MaterialTheme.colorScheme.onSurface,      // Unselected icons/text color
-            navigationRailContainerColor = MaterialTheme.colorScheme.surface,     // Background for expanded view rail
-            navigationRailContentColor = MaterialTheme.colorScheme.onSurface
+//            navigationRailContainerColor = MaterialTheme.colorScheme.surface,     // Background for expanded view rail
+//            navigationRailContentColor = MaterialTheme.colorScheme.onSurface
         )
     ){
         //the nav bar handles its system insets

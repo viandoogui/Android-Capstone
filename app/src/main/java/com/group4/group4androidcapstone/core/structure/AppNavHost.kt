@@ -7,10 +7,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.group4.group4androidcapstone.core.HomeScreenRoute
+import com.group4.group4androidcapstone.core.ProductDirectoryRoute
 import com.group4.group4androidcapstone.core.RecentOrdersRoute
 import com.group4.group4androidcapstone.core.RecentProductsRoute
 import com.group4.group4androidcapstone.features.HomeScreen.presentation.HomeContent
 import com.group4.group4androidcapstone.features.HomeScreen.presentation.HomeScreen
+import com.group4.group4androidcapstone.features.products.presentation.composables.ProductDirectory
+import com.group4.group4androidcapstone.features.products.presentation.state.ProductDirectoryState
 
 @Composable
 fun AppNavHost(
@@ -25,12 +28,28 @@ fun AppNavHost(
 
     ) {
         composable<HomeScreenRoute> {
-           HomeScreen(
+           HomeContent(
 //                onOrderHistory = {Unit},
 //                onRecentProducts = {Unit}
+               onNavigateToProductDirectory = {
+                   navController.navigate(ProductDirectoryRoute)
+               }
            )
        }
 
+        composable<ProductDirectoryRoute> {
+            ProductDirectory(
+                state = ProductDirectoryState(),
+                useTwoPaneLayout = false,
+                onProductSelected = {},
+                onRefresh = {},
+                onDismissError = {},
+                onSearchQueryChange = {},
+                onGenreChange = {},
+                onLocationChange = {},
+                onShowFilterChange = {}
+            )
+        }
 
         composable<RecentProductsRoute> {
             //ToDosScreen(useTwoPaneLayout = useTwoPaneLayout)
