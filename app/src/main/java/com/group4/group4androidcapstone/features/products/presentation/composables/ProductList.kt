@@ -27,7 +27,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.tooling.preview.Preview
-import com.group4.group4androidcapstone.features.products.data.MockProductDataSource
 import com.group4.group4androidcapstone.features.products.data.ProductDto
 import com.group4.group4androidcapstone.features.products.data.ProductMapper
 import com.group4.group4androidcapstone.ui.theme.Group4AndroidCapstoneTheme
