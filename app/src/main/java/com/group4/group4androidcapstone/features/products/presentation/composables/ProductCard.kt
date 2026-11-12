@@ -85,7 +85,9 @@ fun ProductCard(
                     )
                 }
                 Text("${product.name} : $${product.listPrice}")
-                Text("${product.summary}")
+                if (!product.summary.isNullOrBlank()) {
+                    Text(product.summary)
+                }
                 AsyncImage(
                     model = product.thumbnailPhoto,
                     contentDescription = null,

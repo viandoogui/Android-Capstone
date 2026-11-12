@@ -9,7 +9,7 @@ data class ProductEntity(
     val productId: Int,
     val name: String,
     val productNumber: String,
-    val summary: String,
+    val summary: String?,
     val thumbnailPhoto: ByteArray,
     val thumbnailPhotoFileName: String,
     val warranty: String?,
