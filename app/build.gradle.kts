@@ -4,8 +4,7 @@ plugins {
     alias(libs.plugins.devtools.ksp)
     alias(libs.plugins.hilt.android)
     alias(libs.plugins.kotlin.serialization)
-
-
+    alias(libs.plugins.androidx.room)
 }
 
 android {
@@ -44,6 +43,10 @@ android {
     }
 }
 
+room {
+    schemaDirectory("${projectDir}/schemas")
+}
+
 dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
@@ -72,5 +75,8 @@ dependencies {
     implementation(libs.androidx.material.icons)
     implementation(libs.androidx.compose.material3.adaptive.layout)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
 
 }
