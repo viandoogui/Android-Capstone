@@ -1,5 +1,6 @@
 package com.group4.group4androidcapstone.features.products.domain
 
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -8,9 +9,9 @@ class GetProductDetailsUseCase @Inject constructor(
     private val productRepository: ProductRepository
 ) {
 
-    suspend operator fun invoke(id: Int): ProductDetails {
+     operator fun invoke(id: Int): Flow<ProductDetails?> {
         return productRepository
-            .getProductDetails(id)
+            .observeProductDetails(id)
     }
 
 }
