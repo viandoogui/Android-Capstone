@@ -17,8 +17,8 @@ class RemoteProductRepository @Inject constructor(
         return products
     }
 
-    override suspend fun getProduct(id: Int): ProductDetails {
-        val response = dataSource.getProduct(id)
+    override suspend fun getProductDetails(id: Int): ProductDetails {
+        val response = dataSource.getProductDetails(id)
         return ProductDetailsMapper.mapToDomain(response)
     }
 }

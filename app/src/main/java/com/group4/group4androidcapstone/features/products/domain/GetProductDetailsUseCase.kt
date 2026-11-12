@@ -4,13 +4,13 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class GetProductUseCase @Inject constructor(
+class GetProductDetailsUseCase @Inject constructor(
     private val productRepository: ProductRepository
 ) {
 
     suspend operator fun invoke(id: Int): ProductDetails {
         return productRepository
-            .getProduct(id)
+            .getProductDetails(id)
     }
 
 }
