@@ -4,7 +4,7 @@ data class ProductDto (
     val productId: Int,
     val name: String,
     val productNumber: String,
-    val summary: String,
+    val summary: String?,
     val thumbnailPhoto: String,
     val thumbnailPhotoFileName: String,
     val warranty: String?,

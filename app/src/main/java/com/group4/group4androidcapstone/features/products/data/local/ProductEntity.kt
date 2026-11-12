@@ -1,0 +1,18 @@
+package com.group4.group4androidcapstone.features.products.data.local
+
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "products")
+data class ProductEntity(
+    @PrimaryKey
+    val productId: Int,
+    val name: String,
+    val productNumber: String,
+    val summary: String?,
+    val thumbnailPhoto: ByteArray,
+    val thumbnailPhotoFileName: String,
+    val warranty: String?,
+    val color: String?,
+    val listPrice: Double
+)

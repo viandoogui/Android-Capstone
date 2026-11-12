@@ -14,7 +14,7 @@ data class ProductDirectoryState(
     val displayedProducts: List<Product>
         get() = products.filter {
             val matchesSearch = searchQuery.isBlank() || it.name.contains(searchQuery, ignoreCase = true)
-            val matchesSummary = summaryFilter == "" || it.summary.contains(summaryFilter, ignoreCase = true)
+            val matchesSummary = summaryFilter.isBlank() || (it.summary != null && it.summary.contains(summaryFilter, ignoreCase = true))
 
             matchesSearch && matchesSummary
         }
