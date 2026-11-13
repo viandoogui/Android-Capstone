@@ -14,7 +14,6 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.group4.group4androidcapstone.features.products.domain.ProductDetails
 import com.group4.group4androidcapstone.features.products.presentation.viewmodels.ProductDirectoryViewModel
 import kotlinx.coroutines.launch
 
@@ -66,7 +65,7 @@ fun ProductDirectoryRoute(
                         CompositionLocalProvider(LocalPaneAnimatedScope provides this) {
                             val productId = navigator.currentDestination?.contentKey
                             if (productId != null) {
-                                ProductDetails()
+                                ProductDetails(productId)
                             }
                         }
                     }
