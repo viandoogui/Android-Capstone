@@ -2,11 +2,13 @@ package com.group4.group4androidcapstone.core.structure
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.group4.group4androidcapstone.core.HomeScreenRoute
+import com.group4.group4androidcapstone.core.OrdersRoute
 import com.group4.group4androidcapstone.core.ProductDirectoryRoute
 import com.group4.group4androidcapstone.core.RecentOrdersRoute
 import com.group4.group4androidcapstone.core.RecentProductsRoute
@@ -33,10 +35,22 @@ fun AppNavHost(
 //                onOrderHistory = {Unit},
 //                onRecentProducts = {Unit}
                onNavigateToOrderHistory = {
-                   navController.navigate(RecentOrdersRoute)
+                   navController.navigate(OrdersRoute) {
+                       popUpTo(navController.graph.findStartDestination().id) {
+                           saveState = true
+                       }
+                       launchSingleTop = true
+                       restoreState = true
+                   }
                },
                onNavigateToProductDirectory = {
-                   navController.navigate(ProductDirectoryRoute)
+                   navController.navigate(ProductDirectoryRoute){
+                       popUpTo(navController.graph.findStartDestination().id) {
+                           saveState = true
+                       }
+                       launchSingleTop = true
+                       restoreState = true
+                   }
                }
            )
        }
@@ -55,11 +69,8 @@ fun AppNavHost(
             )
         }
 
-        composable<RecentProductsRoute> {
-            //ToDosScreen(useTwoPaneLayout = useTwoPaneLayout)
-        }
 
-        composable<RecentOrdersRoute> {
+        composable<OrdersRoute> {
             OrderHistoryRoute()
         }
 
