@@ -4,8 +4,7 @@ plugins {
     alias(libs.plugins.devtools.ksp)
     alias(libs.plugins.hilt.android)
     alias(libs.plugins.kotlin.serialization)
-
-
+    alias(libs.plugins.androidx.room)
 }
 
 android {
@@ -36,6 +35,7 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+        isCoreLibraryDesugaringEnabled = true
     }
     buildFeatures {
         compose = true
@@ -44,9 +44,14 @@ android {
     }
 }
 
+room {
+    schemaDirectory("${projectDir}/schemas")
+}
+
 dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.compose.adaptive.navigation)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
@@ -72,5 +77,9 @@ dependencies {
     implementation(libs.androidx.material.icons)
     implementation(libs.androidx.compose.material3.adaptive.layout)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
 
 }

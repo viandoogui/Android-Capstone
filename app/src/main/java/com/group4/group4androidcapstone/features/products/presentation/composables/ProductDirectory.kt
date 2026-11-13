@@ -43,13 +43,12 @@ import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.res.pluralStringResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.group4.group4androidcapstone.core.presentation.TextFilter
 import com.group4.group4androidcapstone.features.products.domain.Product
 import com.group4.group4androidcapstone.features.products.presentation.state.ProductDirectoryState
+import com.group4.group4androidcapstone.ui.theme.Group4AndroidCapstoneTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -63,7 +62,7 @@ fun ProductDirectory(
     onDismissError: () -> Unit = {},
     onSearchQueryChange: (String) -> Unit = {},
     onGenreChange: (String) -> Unit = {},
-    onLocationChange: (String) -> Unit = {},
+    onSummaryChange: (String) -> Unit = {},
     onShowFilterChange: (Boolean) -> Unit = {}
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
@@ -80,7 +79,7 @@ fun ProductDirectory(
     }
 
     // a failed refresh should keep the cached product on screen
-    // and tell hte user why with a way to try again
+    // and tell the user why with a way to try again
     LaunchedEffect(state.errorMessage) {
         val message = state.errorMessage ?: return@LaunchedEffect
         val result = snackbarHostState.showSnackbar(
@@ -146,7 +145,11 @@ fun ProductDirectory(
                 )
 
                 Text("Displayed Products")
-
+                ProductList(
+                    products = state.displayedProducts,
+                    onProductSelected = onProductSelected,
+                    innerPadding = PaddingValues(0.dp)
+                )
             }
         },
 
@@ -236,7 +239,7 @@ fun ProductDirectory(
                     TextFilter(
                         label = "Summary Filter",
                         filter = state.summaryFilter,
-                        onFilterChange = onLocationChange
+                        onFilterChange = onSummaryChange
                     )
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -244,7 +247,7 @@ fun ProductDirectory(
                         Button(
                             onClick = {
                                 onGenreChange("")
-                                onLocationChange("")
+                                onSummaryChange("")
                             },
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = MaterialTheme.colorScheme.secondaryContainer,
@@ -280,8 +283,10 @@ fun ProductDirectory(
 )
 @Composable
 fun CompactProductDirectoryPreview() {
-    ProductDirectory(
-        state = ProductDirectoryState(),
-        useTwoPaneLayout = false,
-    )
+    Group4AndroidCapstoneTheme() {
+        ProductDirectory(
+            state = ProductDirectoryState(),
+            useTwoPaneLayout = false,
+        )
+    }
 }

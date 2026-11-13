@@ -1,0 +1,236 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "ba8b3a3208beb0e3d926b0c529eaf116",
+    "entities": [
+      {
+        "tableName": "products",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`productId` INTEGER NOT NULL, `name` TEXT NOT NULL, `productNumber` TEXT NOT NULL, `summary` TEXT, `thumbnailPhoto` BLOB NOT NULL, `thumbnailPhotoFileName` TEXT NOT NULL, `warranty` TEXT, `color` TEXT, `listPrice` REAL NOT NULL, PRIMARY KEY(`productId`))",
+        "fields": [
+          {
+            "fieldPath": "productId",
+            "columnName": "productId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "productNumber",
+            "columnName": "productNumber",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "summary",
+            "columnName": "summary",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "thumbnailPhoto",
+            "columnName": "thumbnailPhoto",
+            "affinity": "BLOB",
+            "notNull": true
+          },
+          {
+            "fieldPath": "thumbnailPhotoFileName",
+            "columnName": "thumbnailPhotoFileName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "warranty",
+            "columnName": "warranty",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "color",
+            "columnName": "color",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "listPrice",
+            "columnName": "listPrice",
+            "affinity": "REAL",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "productId"
+          ]
+        }
+      },
+      {
+        "tableName": "product_details",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`productId` INTEGER NOT NULL, `productName` TEXT, `productNumber` TEXT, `summary` TEXT, `photo` TEXT, `photoFileName` TEXT, `color` TEXT, `listPrice` REAL NOT NULL, `stockLevel` INTEGER NOT NULL, `productLine` TEXT, `productModelId` INTEGER, `productModelName` TEXT, `wheelDescription` TEXT, `saddleDescription` TEXT, `pedalDescription` TEXT, `riderExperience` TEXT, `manufacturer` TEXT, `bikeFrame` TEXT, `crankset` TEXT, `material` TEXT, `style` TEXT, `warrantyPeriod` TEXT, `warrantyDescription` TEXT, `maintenanceDescription` TEXT, `numberOfSteps` INTEGER, `setupHours` REAL, `machineHours` REAL, `laborHours` REAL, `lotSize` INTEGER, PRIMARY KEY(`productId`))",
+        "fields": [
+          {
+            "fieldPath": "productId",
+            "columnName": "productId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "productName",
+            "columnName": "productName",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "productNumber",
+            "columnName": "productNumber",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "summary",
+            "columnName": "summary",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "photo",
+            "columnName": "photo",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "photoFileName",
+            "columnName": "photoFileName",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "color",
+            "columnName": "color",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "listPrice",
+            "columnName": "listPrice",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "stockLevel",
+            "columnName": "stockLevel",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "productLine",
+            "columnName": "productLine",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "productModelId",
+            "columnName": "productModelId",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "productModelName",
+            "columnName": "productModelName",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "wheelDescription",
+            "columnName": "wheelDescription",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "saddleDescription",
+            "columnName": "saddleDescription",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "pedalDescription",
+            "columnName": "pedalDescription",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "riderExperience",
+            "columnName": "riderExperience",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "manufacturer",
+            "columnName": "manufacturer",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "bikeFrame",
+            "columnName": "bikeFrame",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "crankset",
+            "columnName": "crankset",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "material",
+            "columnName": "material",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "style",
+            "columnName": "style",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "warrantyPeriod",
+            "columnName": "warrantyPeriod",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "warrantyDescription",
+            "columnName": "warrantyDescription",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "maintenanceDescription",
+            "columnName": "maintenanceDescription",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "numberOfSteps",
+            "columnName": "numberOfSteps",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "setupHours",
+            "columnName": "setupHours",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "machineHours",
+            "columnName": "machineHours",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "laborHours",
+            "columnName": "laborHours",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "lotSize",
+            "columnName": "lotSize",
+            "affinity": "INTEGER"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "productId"
+          ]
+        }
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ba8b3a3208beb0e3d926b0c529eaf116')"
+    ]
+  }
+}
