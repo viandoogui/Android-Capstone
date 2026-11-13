@@ -23,6 +23,7 @@ import com.group4.group4androidcapstone.ui.theme.LocalSpacing
 fun HomeContent(
     //onOrderHistory: () -> Unit,
     //onRecentProducts: () -> Unit,
+    onNavigateToOrderHistory: () -> Unit,
     onNavigateToProductDirectory: () -> Unit
 ) {
     Box(
@@ -60,7 +61,7 @@ fun HomeContent(
 
             HomeOrderReview()
             Button(
-                onClick = { Unit },
+                onClick = onNavigateToOrderHistory,
                 modifier = Modifier
                     .padding(16.dp),
 
