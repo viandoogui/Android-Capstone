@@ -10,87 +10,77 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import com.group4.group4androidcapstone.ui.theme.LocalSpacing
 
 @Composable
 fun HomeContent(
     //onOrderHistory: () -> Unit,
     //onRecentProducts: () -> Unit,
+    onNavigateToOrderHistory: () -> Unit,
     onNavigateToProductDirectory: () -> Unit
 ) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState())
+            .padding(16.dp)
+            .statusBarsPadding()
     ) {
-
-
-        Box(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
-                .statusBarsPadding()
+                .padding(LocalSpacing.current.small),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Column(
+            Text(
+                "Welcome Back, Brandy Chandra!",
+                style = MaterialTheme.typography.headlineMedium,
+                modifier= Modifier
+                    .width(800.dp)
+                    .padding(LocalSpacing.current.small)
+                    .background(MaterialTheme.colorScheme.surface)
+
+            )
+        }
+
+
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+
+            HomeOrderReview()
+            Button(
+                onClick = onNavigateToOrderHistory,
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(LocalSpacing.current.small),
-                verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    "Welcome Back, Brandy Chandra!",
-                    style = MaterialTheme.typography.headlineMedium,
-                    modifier = Modifier
-                        .width(800.dp)
-                        .padding(LocalSpacing.current.small)
-                        .background(MaterialTheme.colorScheme.surface)
-                        .testTag("Home-Title")
-
-                )
-
-
-                HomeOrderReview()
-
-                Button(
-                    onClick = { Unit },
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .testTag("Order-History-Button")
-
+                    .padding(16.dp),
 
                 ) {
-                    Text("To Order History")
-                }
-
-                Spacer(modifier = Modifier.height(24.dp))
-
-                HomeRecentProducts()
-
-                Button(
-                    onClick = { Unit },
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .testTag("Recent-Products-Button")
-
-                ) {
-                    Text("To Recent Products")
-                }
-
-
+                Text("To Order History")
             }
 
+            Spacer(modifier = Modifier.height(24.dp))
+            HomeRecentProducts()
+            Button(
+                onClick = { Unit },
+                modifier = Modifier
+                    .padding(16.dp)
+            ) {
+                Text("To Recent Products")
+            }
+
+
         }
+
     }
 }
