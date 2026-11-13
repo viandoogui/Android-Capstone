@@ -14,6 +14,7 @@ import com.group4.group4androidcapstone.features.HomeScreen.presentation.HomeCon
 import com.group4.group4androidcapstone.features.HomeScreen.presentation.HomeScreen
 import com.group4.group4androidcapstone.features.products.presentation.composables.ProductDirectory
 import com.group4.group4androidcapstone.features.products.presentation.state.ProductDirectoryState
+import com.group4.group4androidcapstone.features.orders.presentation.OrderHistoryRoute
 
 @Composable
 fun AppNavHost(
@@ -31,6 +32,9 @@ fun AppNavHost(
            HomeContent(
 //                onOrderHistory = {Unit},
 //                onRecentProducts = {Unit}
+               onNavigateToOrderHistory = {
+                   navController.navigate(RecentOrdersRoute)
+               },
                onNavigateToProductDirectory = {
                    navController.navigate(ProductDirectoryRoute)
                }
@@ -56,7 +60,7 @@ fun AppNavHost(
         }
 
         composable<RecentOrdersRoute> {
-            //implement screen here
+            OrderHistoryRoute()
         }
 
 
