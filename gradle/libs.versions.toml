@@ -50,6 +50,7 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3",
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "roomVersion" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomVersion" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomVersion" }
+turbine = { group = "app.cash.turbine", name = "turbine", version = "1.2.1" }
 
 [bundles]
 retrofit = [ "retrofit", "retrofit-converter" ]
