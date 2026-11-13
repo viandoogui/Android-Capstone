@@ -1,20 +1,18 @@
 package com.group4.group4androidcapstone.core.structure
 
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.toRoute
 import com.group4.group4androidcapstone.core.HomeScreenRoute
 import com.group4.group4androidcapstone.core.OrdersRoute
 import com.group4.group4androidcapstone.core.ProductDirectoryRoute
 import com.group4.group4androidcapstone.core.RecentOrdersRoute
 import com.group4.group4androidcapstone.core.RecentProductsRoute
 import com.group4.group4androidcapstone.features.HomeScreen.presentation.HomeContent
-import com.group4.group4androidcapstone.features.HomeScreen.presentation.HomeScreen
 import com.group4.group4androidcapstone.features.products.presentation.composables.ProductDirectory
+import com.group4.group4androidcapstone.features.products.presentation.composables.ProductDirectoryRoute
 import com.group4.group4androidcapstone.features.products.presentation.state.ProductDirectoryState
 import com.group4.group4androidcapstone.features.orders.presentation.OrderHistoryRoute
 
@@ -56,16 +54,10 @@ fun AppNavHost(
        }
 
         composable<ProductDirectoryRoute> {
-            ProductDirectory(
-                state = ProductDirectoryState(),
-                useTwoPaneLayout = false,
-                onProductSelected = {},
-                onRefresh = {},
-                onDismissError = {},
-                onSearchQueryChange = {},
-                onGenreChange = {},
-                onLocationChange = {},
-                onShowFilterChange = {}
+            ProductDirectoryRoute(
+                onBack = {
+                    navController.popBackStack()
+                }
             )
         }
 
