@@ -16,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.group4.group4androidcapstone.ui.theme.LocalSpacing
 
@@ -45,6 +46,7 @@ fun HomeContent(
                     .width(800.dp)
                     .padding(LocalSpacing.current.small)
                     .background(MaterialTheme.colorScheme.surface)
+                    .testTag("Home-Title")
 
             )
         }
@@ -62,7 +64,9 @@ fun HomeContent(
             Button(
                 onClick = { Unit },
                 modifier = Modifier
-                    .padding(16.dp),
+                    .padding(16.dp)
+                    .testTag("Order-History-Button")
+
 
                 ) {
                 Text("To Order History")
@@ -74,6 +78,8 @@ fun HomeContent(
                 onClick = { Unit },
                 modifier = Modifier
                     .padding(16.dp)
+                    .testTag("Recent-Products-Button")
+
             ) {
                 Text("To Recent Products")
             }
