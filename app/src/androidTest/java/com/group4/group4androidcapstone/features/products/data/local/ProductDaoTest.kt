@@ -13,6 +13,7 @@ import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNull
 import kotlinx.coroutines.flow.first
 import org.junit.Test
+import java.time.LocalDateTime
 
 class ProductDaoTest {
     private lateinit var db: AppDatabase
@@ -28,6 +29,17 @@ class ProductDaoTest {
     @After
     fun closeDb() {
         db.close()
+    }
+
+    @Test
+    fun givenExistingProduct_whenTimeUpdated_thenObservedAsRecent() = runTest {
+        dao.upsertProducts(listOf(aProductEntity(productId = 1, name = "Pineapple")))
+        dao.updateProductViewedTime(1, LocalDateTime.now())
+
+        dao.observeRecentProducts().test {
+            val product = awaitItem().first()
+            assertEquals(1, product.productId)
+        }
     }
 
     @Test

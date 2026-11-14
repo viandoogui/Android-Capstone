@@ -2,6 +2,7 @@ package com.group4.group4androidcapstone.testutil.builders
 
 import com.group4.group4androidcapstone.features.products.data.local.ProductDetailsEntity
 import com.group4.group4androidcapstone.features.products.data.local.ProductEntity
+import java.time.LocalDateTime
 
 fun aProductEntity(
     productId: Int = 1,
@@ -12,8 +13,9 @@ fun aProductEntity(
     thumbnailPhotoFileName: String = "photo.png",
     warranty: String? = "yes",
     color: String? = "green",
-    listPrice: Double = 1.99
-) = ProductEntity(productId, name, productNumber, summary, thumbnailPhoto, thumbnailPhotoFileName, warranty, color, listPrice)
+    listPrice: Double = 1.99,
+    viewedTime: LocalDateTime? = null
+) = ProductEntity(productId, name, productNumber, summary, thumbnailPhoto, thumbnailPhotoFileName, warranty, color, listPrice, viewedTime)
 
 fun aProductDetailsEntity(
     productId: Int = 1,

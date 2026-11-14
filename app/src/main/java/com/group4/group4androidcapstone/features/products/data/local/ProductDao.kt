@@ -5,7 +5,9 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
+import java.time.LocalDateTime
 
 @Dao
 interface ProductDao {
@@ -18,6 +20,9 @@ interface ProductDao {
     @Query("SELECT * FROM products WHERE productId = :id")
     fun observeProduct(id: Int): Flow<ProductEntity?>
 
+    @Query("SELECT * FROM products WHERE viewedTime IS NOT NULL")
+    fun observeRecentProducts(): Flow<List<ProductEntity>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertProducts(products: List<ProductEntity>)
 
@@ -29,6 +34,11 @@ interface ProductDao {
         upsertProducts(products)
         deleteNotInProducts(products.map {it.productId})
     }
+
+    @Query("UPDATE products SET viewedTime = :viewedTime WHERE productId = :id")
+    suspend fun updateProductViewedTime(id: Int, viewedTime: LocalDateTime?)
+
+    @Transaction
 
     // ProductDetails
 

@@ -7,7 +7,9 @@ import com.group4.group4androidcapstone.features.products.domain.Product
 import com.group4.group4androidcapstone.features.products.domain.ProductDetails
 import com.group4.group4androidcapstone.features.products.domain.ProductRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import java.time.LocalDateTime
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -21,6 +23,13 @@ class RemoteProductRepository @Inject constructor(
             list.map { entity ->
                 ProductEntityMapper.toDomain(entity)
             }
+        }
+
+    override fun observeRecentProducts(): Flow<List<Product>> =
+        productDao.observeRecentProducts().map { list ->
+            list.map { entity ->
+                ProductEntityMapper.toDomain(entity)
+            }.sortedBy { it.viewedTime }
         }
 
     override fun observeProductDetails(id: Int): Flow<ProductDetails?> =
@@ -42,5 +51,13 @@ class RemoteProductRepository @Inject constructor(
     override suspend fun refreshProductDetails(id: Int): Unit {
         val entity = ProductDetailsEntityMapper.toEntity(dataSource.getProductDetails(id))
         productDao.upsertDetails(listOf(entity))
+    }
+
+    override suspend fun updateProductViewedTime(id: Int, viewedTime: LocalDateTime) {
+        val entity = productDao.observeProduct(id).first()
+
+        if(entity != null) {
+            productDao.updateProductViewedTime(id, viewedTime)
+        }
     }
 }

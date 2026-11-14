@@ -18,7 +18,8 @@ object ProductEntityMapper {
             thumbnailPhotoFileName = entity.thumbnailPhotoFileName,
             warranty = entity.warranty,
             color = entity.color,
-            listPrice = entity.listPrice
+            listPrice = entity.listPrice,
+            viewedTime = entity.viewedTime
         )
 
     }
@@ -36,7 +37,8 @@ object ProductEntityMapper {
             thumbnailPhotoFileName = domain.thumbnailPhotoFileName,
             warranty = domain.warranty,
             color = domain.color,
-            listPrice = domain.listPrice
+            listPrice = domain.listPrice,
+            viewedTime = null
         )
     }
 }
