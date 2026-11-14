@@ -32,6 +32,9 @@ interface ProductDao {
 
     // ProductDetails
 
+    @Query("SELECT * FROM product_details")
+    fun observeDetails(): Flow<List<ProductDetailsEntity>>
+
     @Query("SELECT * FROM product_details WHERE productId = :id")
     fun observeDetail(id: Int): Flow<ProductDetailsEntity?>
 
