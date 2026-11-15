@@ -40,11 +40,16 @@ import javax.inject.Singleton
         }
 
     override suspend fun refreshProducts() {
-        val entities = dataSource.getProducts().map {
-            ProductEntityMapper.toEntity(it)
+        val oldEntities = productDao.getProducts().associateBy { it.productId }
+
+        val newEntities = dataSource.getProducts().map {
+            val oldEntity = oldEntities[it.productId]
+            ProductEntityMapper.toEntity(it).copy(
+                viewedTime = oldEntity?.viewedTime // copy over new fields but retain time
+            )
         }
 
-        productDao.replaceAllProducts(entities)
+        productDao.replaceAllProducts(newEntities)
     }
 
     override suspend fun refreshProductDetails(id: Int): Unit {
