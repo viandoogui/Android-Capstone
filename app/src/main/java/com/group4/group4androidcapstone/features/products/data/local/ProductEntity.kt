@@ -2,6 +2,7 @@ package com.group4.group4androidcapstone.features.products.data.local
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.time.LocalDateTime
 
 @Entity(tableName = "products")
 data class ProductEntity(
@@ -14,7 +15,8 @@ data class ProductEntity(
     val thumbnailPhotoFileName: String,
     val warranty: String?,
     val color: String?,
-    val listPrice: Double
+    val listPrice: Double,
+    val viewedTime: LocalDateTime? = null
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

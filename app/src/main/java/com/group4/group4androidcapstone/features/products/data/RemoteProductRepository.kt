@@ -7,12 +7,13 @@ import com.group4.group4androidcapstone.features.products.domain.Product
 import com.group4.group4androidcapstone.features.products.domain.ProductDetails
 import com.group4.group4androidcapstone.features.products.domain.ProductRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import java.time.LocalDateTime
 import javax.inject.Inject
 import javax.inject.Singleton
 
-@Singleton
-class RemoteProductRepository @Inject constructor(
+@Singleton class RemoteProductRepository @Inject constructor(
     private val productDao: ProductDao,
     private val dataSource: ProductDataSource,
 ): ProductRepository {
@@ -21,6 +22,13 @@ class RemoteProductRepository @Inject constructor(
             list.map { entity ->
                 ProductEntityMapper.toDomain(entity)
             }
+        }
+
+    override fun observeRecentProducts(): Flow<List<Product>> =
+        productDao.observeRecentProducts().map { list ->
+            list.map { entity ->
+                ProductEntityMapper.toDomain(entity)
+            }.sortedBy { it.viewedTime }
         }
 
     override fun observeProductDetails(id: Int): Flow<ProductDetails?> =
@@ -32,15 +40,32 @@ class RemoteProductRepository @Inject constructor(
         }
 
     override suspend fun refreshProducts() {
-        val entities = dataSource.getProducts().map {
-            ProductEntityMapper.toEntity(it)
+        val oldEntities = productDao.getProducts().associateBy { it.productId }
+
+        val newEntities = dataSource.getProducts().map {
+            val oldEntity = oldEntities[it.productId]
+            ProductEntityMapper.toEntity(it).copy(
+                viewedTime = oldEntity?.viewedTime // copy over new fields but retain time
+            )
         }
 
-        productDao.replaceAllProducts(entities)
+        productDao.replaceAllProducts(newEntities)
     }
 
     override suspend fun refreshProductDetails(id: Int): Unit {
         val entity = ProductDetailsEntityMapper.toEntity(dataSource.getProductDetails(id))
         productDao.upsertDetails(listOf(entity))
+    }
+
+    override suspend fun setProductViewedTime(id: Int, viewedTime: LocalDateTime?) {
+        val entity = productDao.observeProduct(id).first()
+
+        if(entity != null) {
+            productDao.setNewProductViewedTime(id, viewedTime)
+        }
+    }
+
+    override suspend fun clearProductViewedTimes() {
+        productDao.clearAllProductViewedTimes()
     }
 }

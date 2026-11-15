@@ -15,9 +15,10 @@ import com.group4.group4androidcapstone.features.products.data.local.ProductEnti
         ProductEntity::class,
         ProductDetailsEntity::class,
     ],
-    version = 1,
+    version = 2,
     exportSchema = true,
     autoMigrations = [
+        AutoMigration(from = 1, to = 2)
     ]
 )
 

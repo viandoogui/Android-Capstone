@@ -2,6 +2,7 @@ package com.group4.group4androidcapstone.testutil.builders
 
 import com.group4.group4androidcapstone.features.products.domain.Product
 import com.group4.group4androidcapstone.features.products.domain.ProductDetails
+import java.time.LocalDateTime
 
 fun aProduct(
     productId: Int = 1,
@@ -12,8 +13,9 @@ fun aProduct(
     thumbnailPhotoFileName: String = "photo.png",
     warranty: String? = "yes",
     color: String? = "green",
-    listPrice: Double = 1.99
-) = Product(productId, name, productNumber, summary, thumbnailPhoto, thumbnailPhotoFileName, warranty, color, listPrice)
+    listPrice: Double = 1.99,
+    viewedTime: LocalDateTime? = null
+) = Product(productId, name, productNumber, summary, thumbnailPhoto, thumbnailPhotoFileName, warranty, color, listPrice, viewedTime)
 
 fun aProductDetails(
     productId: Int = 1,
