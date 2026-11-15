@@ -67,7 +67,12 @@ class ProductDirectoryViewModel @Inject constructor(
 
             try {
                 refreshProducts()
-                _uiState.update { it.copy(isRefreshing = false) }
+                savedStateHandle[SUMMARY_KEY] = ""
+                savedStateHandle[SEARCH_KEY] = ""
+                _uiState.update { it.copy(isRefreshing = false, searchQuery = "", summaryFilter = "") }
+
+
+
             }
             // NEVER swallow a CancellationException
             // doing so can orphan the coroutine (suspendable)
