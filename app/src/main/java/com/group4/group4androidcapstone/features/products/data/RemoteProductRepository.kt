@@ -53,11 +53,11 @@ class RemoteProductRepository @Inject constructor(
         productDao.upsertDetails(listOf(entity))
     }
 
-    override suspend fun updateProductViewedTime(id: Int, viewedTime: LocalDateTime) {
+    override suspend fun setProductViewedTime(id: Int, viewedTime: LocalDateTime) {
         val entity = productDao.observeProduct(id).first()
 
         if(entity != null) {
-            productDao.updateProductViewedTime(id, viewedTime)
+            productDao.setNewProductViewedTime(id, viewedTime)
         }
     }
 }

@@ -11,5 +11,5 @@ interface ProductRepository {
     suspend fun refreshProducts(): Unit
     suspend fun refreshProductDetails(id: Int): Unit
 
-    suspend fun updateProductViewedTime(id: Int, viewedTime: LocalDateTime)
+    suspend fun setProductViewedTime(id: Int, viewedTime: LocalDateTime)
 }

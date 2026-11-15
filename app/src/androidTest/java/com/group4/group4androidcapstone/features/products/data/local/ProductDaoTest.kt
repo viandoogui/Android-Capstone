@@ -34,11 +34,66 @@ class ProductDaoTest {
     @Test
     fun givenExistingProduct_whenTimeUpdated_thenObservedAsRecent() = runTest {
         dao.upsertProducts(listOf(aProductEntity(productId = 1, name = "Pineapple")))
-        dao.updateProductViewedTime(1, LocalDateTime.now())
+        dao.setNewProductViewedTime(1, LocalDateTime.now())
 
         dao.observeRecentProducts().test {
             val product = awaitItem().first()
             assertEquals(1, product.productId)
+        }
+    }
+
+    @Test
+    fun givenProductsWithTimes_whenObserved_thenListIsSortedRecentFirst() = runTest {
+        val now = LocalDateTime.now()
+
+        dao.upsertProducts(listOf(
+            aProductEntity(productId = 1, name = "Pineapple", viewedTime = now.plusSeconds(4)),
+            aProductEntity(productId = 2, name = "Apple", viewedTime = now.plusSeconds(10)),
+            aProductEntity(productId = 3, name = "Strawberry", viewedTime = now.plusSeconds(1)),
+            aProductEntity(productId = 4, name = "Taro", viewedTime = now.plusSeconds(6)),
+            aProductEntity(productId = 5, name = "Amaranth", viewedTime = now.plusSeconds(7))
+        ))
+
+        dao.observeRecentProducts().test {
+            val products = awaitItem()
+            assertEquals(listOf(2, 5, 4, 1, 3), products.map { it.productId })
+        }
+    }
+
+    @Test
+    fun givenTenExistingViewedProducts_whenTimeOfNewProductUpdated_thenTimeOfOldestBecomesNull() = runTest {
+        val now = LocalDateTime.now()
+
+        dao.upsertProducts(listOf(
+            aProductEntity(productId = 1, name = "Pineapple", viewedTime = now.plusSeconds(4)),
+            aProductEntity(productId = 2, name = "Apple", viewedTime = now.plusSeconds(10)),
+            aProductEntity(productId = 3, name = "Strawberry", viewedTime = now.plusSeconds(1)),
+            aProductEntity(productId = 4, name = "Taro", viewedTime = now.plusSeconds(6)),
+            aProductEntity(productId = 5, name = "Amaranth", viewedTime = now.plusSeconds(7)),
+            aProductEntity(productId = 6, name = "Pepperoni", viewedTime = now.plusSeconds(3)),
+            aProductEntity(productId = 7, name = "Italian Cheese", viewedTime = now.plusSeconds(5)),
+            aProductEntity(productId = 8, name = "Zesty Marinara", viewedTime = now.plusSeconds(2)),
+            aProductEntity(productId = 9, name = "Zucchini", viewedTime = now.plusSeconds(8)),
+            aProductEntity(productId = 10, name = "Anchovies", viewedTime = now.plusSeconds(9)),
+            aProductEntity(productId = 11, name = "Salsa")
+        ))
+
+        dao.setNewProductViewedTime(11, now.plusSeconds(11))
+
+        dao.observeRecentProducts().test {
+            assertEquals(false, awaitItem().map { it.productId }.contains(3))
+        }
+    }
+
+    @Test
+    fun givenProductViewedTimeCleared_whenRecentObserved_thenListIsEmpty() = runTest {
+        dao.upsertProducts(listOf(aProductEntity(productId = 1, name = "Pineapple", viewedTime = LocalDateTime.now())))
+        dao.upsertProducts(listOf(aProductEntity(productId = 2, name = "Apple", viewedTime = LocalDateTime.now())))
+        dao.upsertProducts(listOf(aProductEntity(productId = 3, name = "Strawberry", viewedTime = LocalDateTime.now())))
+
+        dao.observeRecentProducts().test {
+            dao.clearAllProductViewedTimes()
+            assertEquals(emptyList<ProductEntity>(), awaitItem())
         }
     }
 
