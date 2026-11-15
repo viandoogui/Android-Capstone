@@ -13,8 +13,7 @@ import java.time.LocalDateTime
 import javax.inject.Inject
 import javax.inject.Singleton
 
-@Singleton
-class RemoteProductRepository @Inject constructor(
+@Singleton class RemoteProductRepository @Inject constructor(
     private val productDao: ProductDao,
     private val dataSource: ProductDataSource,
 ): ProductRepository {
@@ -53,11 +52,15 @@ class RemoteProductRepository @Inject constructor(
         productDao.upsertDetails(listOf(entity))
     }
 
-    override suspend fun setProductViewedTime(id: Int, viewedTime: LocalDateTime) {
+    override suspend fun setProductViewedTime(id: Int, viewedTime: LocalDateTime?) {
         val entity = productDao.observeProduct(id).first()
 
         if(entity != null) {
             productDao.setNewProductViewedTime(id, viewedTime)
         }
+    }
+
+    override suspend fun clearProductViewedTimes() {
+        productDao.clearAllProductViewedTimes()
     }
 }
