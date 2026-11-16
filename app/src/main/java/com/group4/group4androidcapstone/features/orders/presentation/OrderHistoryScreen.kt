@@ -85,7 +85,7 @@ fun OrderHistoryScreen(
                         )
 
                         Text(
-                            text = "Status: ${order.statusName}",
+                            text = "Status: ${displayOrderStatus(order.statusName)}",
                             style = MaterialTheme.typography.bodyMedium
                         )
                     }
