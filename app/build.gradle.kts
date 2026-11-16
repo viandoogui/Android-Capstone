@@ -60,6 +60,8 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.material3)
     testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.turbine)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -81,5 +83,7 @@ dependencies {
     implementation(libs.room.ktx)
     ksp(libs.room.compiler)
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
+    androidTestImplementation(libs.turbine)
+
 
 }

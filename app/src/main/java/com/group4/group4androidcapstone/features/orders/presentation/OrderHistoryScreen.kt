@@ -20,20 +20,23 @@ import androidx.compose.material3.Button
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.mutableStateOf
 import com.group4.group4androidcapstone.features.orders.domain.OrderSorter
+import androidx.compose.material3.Card
+import androidx.compose.ui.Modifier
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.clickable
 
 @Composable
 fun OrderHistoryScreen(
     uiState: OrderHistoryUiState,
-    onSortChange: (Boolean) -> Unit
+    onSortChange: (Boolean) -> Unit,
+    onOrderSelected: (Order) -> Unit = {}
 ) {
 
     when {
         uiState.isLoading -> Text("Loading orders...")
-
         uiState.errorMessage != null -> Text(uiState.errorMessage)
-
         uiState.orders.isEmpty() -> Text("No orders found")
-
 
         else -> LazyColumn(
             contentPadding = PaddingValues(16.dp),
@@ -61,10 +64,31 @@ fun OrderHistoryScreen(
             }
 
             items(items = uiState.orders) { order ->
-                Column {
-                    Text("Order #${order.id}")
-                    Text("Date: ${order.orderDate.toLocalDate()}")
-                    Text("Status: ${order.statusName}")
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { onOrderSelected(order) }
+                ) {
+
+                    Column(
+                        modifier = Modifier.padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        Text(
+                            text = "Order #${order.id}",
+                            style = MaterialTheme.typography.titleMedium
+                        )
+
+                        Text(
+                            text = "Date: ${order.orderDate.toLocalDate()}",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+
+                        Text(
+                            text = "Status: ${displayOrderStatus(order.statusName)}",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
                 }
             }
         }
@@ -73,6 +97,7 @@ fun OrderHistoryScreen(
 
 @Composable
 fun OrderHistoryRoute(
+    onOrderSelected: (Order) -> Unit = {},
     viewModel: OrderHistoryViewModel = hiltViewModel()
 ) {
     val state = viewModel.uiState.collectAsState()
@@ -83,9 +108,8 @@ fun OrderHistoryRoute(
 
     OrderHistoryScreen(
         uiState = state.value,
-        onSortChange = { newestFirst ->
-            viewModel.changeSort(newestFirst)
-        }
+        onSortChange = { newestFirst -> viewModel.changeSort(newestFirst) },
+        onOrderSelected = onOrderSelected
     )
 }
 
@@ -98,10 +122,12 @@ fun OrderHistoryPreview() {
     )
 }
 
+
 @Preview(showBackground = true)
 @Composable
 fun OrderHistoryListPreview() {
     val newestFirst = remember { mutableStateOf(true) }
+
     val olderOrder = Order(
         id = 101,
         customerId = 11501,
@@ -124,12 +150,11 @@ fun OrderHistoryListPreview() {
         uiState = OrderHistoryUiState(
             orders = if (newestFirst.value) {
                 OrderSorter.newestFirst(listOf(olderOrder, newerOrder))
-            } else {
-                OrderSorter.oldestFirst(listOf(olderOrder, newerOrder))
-            },
+            } else { OrderSorter.oldestFirst(listOf(olderOrder, newerOrder)) },
             newestFirst = newestFirst.value
         ),
-        onSortChange = { newestFirst.value = it }
+        onSortChange = { newestFirst.value = it },
+        onOrderSelected = {}
     )
 }
 
