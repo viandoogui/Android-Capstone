@@ -15,7 +15,8 @@ object ProductMapper {
             thumbnailPhotoFileName = dto.thumbnailPhotoFileName,
             warranty = dto.warranty,
             color = dto.color,
-            listPrice = dto.listPrice
+            listPrice = dto.listPrice,
+            viewedTime = null
         )
     }
 
