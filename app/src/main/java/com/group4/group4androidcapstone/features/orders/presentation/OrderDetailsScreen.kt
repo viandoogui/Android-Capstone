@@ -16,17 +16,16 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 
 @Composable
-fun OrderDetailsScreen(order: Order) {
+fun OrderDetailsScreen(
+    order: Order,
+    onBack: () -> Unit = {}
+) {
     val customerName = "${order.firstName.orEmpty()} ${order.lastName.orEmpty()}".trim()
     val displayStatus = displayOrderStatus(order.statusName)
-    var itemsSubtotal = BigDecimal.ZERO
-
-    order.items.forEach { item -> itemsSubtotal = itemsSubtotal.add(
-            BigDecimal.valueOf(item.lineTotal)
-        )
-    }
+    val itemsSubtotal = calculateItemsSubtotal(order.items)
 
     Column(
         modifier = Modifier
@@ -34,6 +33,11 @@ fun OrderDetailsScreen(order: Order) {
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
+
+        Button(onClick = onBack) {
+            Text("Back to Order History")
+        }
+
         Text(
             text = "Order Details",
             style = MaterialTheme.typography.headlineMedium
@@ -106,7 +110,18 @@ fun OrderDetailsScreen(order: Order) {
     }
 }
 
-private fun displayOrderStatus(statusName: String): String {
+internal fun calculateItemsSubtotal(items: List<LineItem>): BigDecimal {
+    var subtotal = BigDecimal.ZERO
+
+    items.forEach { item ->
+        subtotal = subtotal.add(
+            BigDecimal.valueOf(item.lineTotal)
+        )
+    }
+
+    return subtotal
+}
+internal fun displayOrderStatus(statusName: String): String {
     return when (statusName.trim().lowercase()) {
         "pending" -> "Pending"
         "in process", "processing" -> "Processing"
