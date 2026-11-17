@@ -4,21 +4,28 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.group4.group4androidcapstone.features.products.domain.GetProductsUseCase
+import com.group4.group4androidcapstone.features.products.domain.GetRecentProductsUseCase
+import com.group4.group4androidcapstone.features.products.domain.ProductCase
 import com.group4.group4androidcapstone.features.products.domain.RefreshProductsUseCase
+import com.group4.group4androidcapstone.features.products.domain.SetProductTimeUseCase
 import com.group4.group4androidcapstone.features.products.presentation.state.ProductDirectoryState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
 class ProductDirectoryViewModel @Inject constructor(
     private val getAvailableProducts: GetProductsUseCase,
+    private val getRecentProducts: GetRecentProductsUseCase,
     private val refreshProducts: RefreshProductsUseCase,
+    private val setProductTime: SetProductTimeUseCase,
     private val savedStateHandle: SavedStateHandle = SavedStateHandle()
 ): ViewModel() {
 
@@ -33,6 +40,8 @@ class ProductDirectoryViewModel @Inject constructor(
     // expose (publicly) a read-only view of the state object
     val uiState: StateFlow<ProductDirectoryState> = _uiState.asStateFlow()
 
+    private var observeJob: Job? = null
+
     init {
         // establish a subscription to the observable collection
         // of products from our Room db
@@ -41,14 +50,36 @@ class ProductDirectoryViewModel @Inject constructor(
             // the subscription will be automatically released and disposed
             // when the viewModel is destroyed (i.e. when the user
             // navigates away from this screen)
-            getAvailableProducts().collect { products ->
+            setProductUseCase(ProductCase.DEFAULT)
+        }
+    }
+
+    fun setProductViewedTime(id: Int, viewedTime: LocalDateTime) {
+        viewModelScope.launch {
+            setProductTime(id, viewedTime)
+        }
+    }
+
+    fun setProductUseCase(case: ProductCase) {
+        observeJob?.cancel()
+
+        observeJob = viewModelScope.launch {
+            val currentFlow = when(case) {
+                ProductCase.DEFAULT -> getAvailableProducts()
+                ProductCase.RECENT -> getRecentProducts()
+                ProductCase.SAVED -> getAvailableProducts()
+            }
+
+            currentFlow.collect { products ->
                 _uiState.update { currentState ->
                     currentState.copy(
                         products = products
                     )
                 }
             }
+
         }
+
     }
 
     // loadProducts does not get the data for the view,
