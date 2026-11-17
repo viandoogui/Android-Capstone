@@ -15,11 +15,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.Sort
 import androidx.compose.material.icons.filled.Filter
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Sort
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DockedSearchBar
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
@@ -38,7 +42,10 @@ import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -66,6 +73,8 @@ fun ProductDirectory(
     onShowFilterChange: (Boolean) -> Unit = {}
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
+    var expanded by remember { mutableStateOf(false)}
+
     val retryLabel = "Retry"
     // we're going to add a search bar (text input) to the top of the screen
     // being the first thing that can take focus, android would focus it
@@ -122,27 +131,66 @@ fun ProductDirectory(
                         Text("Saved Products")
                     }
                 }
+                Row(){
+                    DockedSearchBar(
+                        inputField = {
+                            SearchBarDefaults.InputField(
+                                query = state.searchQuery,
+                                onQueryChange = onSearchQueryChange,
+                                onSearch = {},
+                                expanded = false,
+                                onExpandedChange = {},
+                                placeholder = { Text("Search") },
+                                leadingIcon = { Icon(Icons.Filled.Search, contentDescription = null) }
+                            )
+                        },
+                        expanded = false,
+                        onExpandedChange = {},
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(vertical = 4.dp),
+                        content = {}
+                    )
 
-
-                DockedSearchBar(
-                    inputField = {
-                        SearchBarDefaults.InputField(
-                            query = state.searchQuery,
-                            onQueryChange = onSearchQueryChange,
-                            onSearch = {},
-                            expanded = false,
-                            onExpandedChange = {},
-                            placeholder = { Text("Search") },
-                            leadingIcon = { Icon(Icons.Filled.Search, contentDescription = null) }
+                    IconButton(
+                        onClick = { expanded = true }
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.Sort,
+                            contentDescription = "Sort"
                         )
-                    },
-                    expanded = false,
-                    onExpandedChange = {},
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 4.dp),
-                    content = {}
-                )
+                    }
+                    DropdownMenu(
+                        expanded = expanded,
+                        onDismissRequest = { expanded = false }
+                    ){
+                        DropdownMenuItem(
+                            text = { Text("Name: Ascending") },
+                            onClick = {
+                                // sort alphabetically
+                                viewModel.sortOption = "ASCENDING"
+                                expanded = false
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("Name: Descending") },
+                            onClick = {
+                                // sort reverse alphabetically
+                                expanded = false
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("Price") },
+                            onClick = {
+                                // sort lowest to highest price
+                                expanded = false
+                            }
+                        )
+
+                    }
+
+                }
+
 
                 Text("Displayed Products")
                 if (state.displayedProducts.isEmpty()) {
@@ -223,7 +271,9 @@ fun ProductDirectory(
             PullToRefreshBox(
                 isRefreshing = state.isRefreshing,
                 onRefresh = onRefresh,
-                modifier = Modifier.fillMaxSize().padding(innerPadding)
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
             ) {
                 ProductList(
                     products = state.displayedProducts,
@@ -277,8 +327,6 @@ fun ProductDirectory(
                             Text("Close")
                         }
                     }
-
-
                 }
             }
         }
