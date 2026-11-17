@@ -28,7 +28,7 @@ import javax.inject.Singleton
         productDao.observeRecentProducts().map { list ->
             list.map { entity ->
                 ProductEntityMapper.toDomain(entity)
-            }.sortedBy { it.viewedTime }
+            }
         }
 
     override fun observeProductDetails(id: Int): Flow<ProductDetails?> =

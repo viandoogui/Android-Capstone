@@ -47,6 +47,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.group4.group4androidcapstone.core.presentation.TextFilter
 import com.group4.group4androidcapstone.features.products.domain.Product
+import com.group4.group4androidcapstone.features.products.domain.ProductCase
 import com.group4.group4androidcapstone.features.products.presentation.state.ProductDirectoryState
 import com.group4.group4androidcapstone.ui.theme.Group4AndroidCapstoneTheme
 
@@ -63,7 +64,8 @@ fun ProductDirectory(
     onSearchQueryChange: (String) -> Unit = {},
     onGenreChange: (String) -> Unit = {},
     onSummaryChange: (String) -> Unit = {},
-    onShowFilterChange: (Boolean) -> Unit = {}
+    onShowFilterChange: (Boolean) -> Unit = {},
+    onProductCaseChange: (ProductCase) -> Unit = {}
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val retryLabel = "Retry"
@@ -112,12 +114,23 @@ fun ProductDirectory(
                 )
                 Row(){
                     Button (
-                        onClick = {}
+                        onClick = {
+                            onProductCaseChange(ProductCase.DEFAULT)
+                        }
+                    ){
+                        Text("Default")
+                    }
+                    Button (
+                        onClick = {
+                            onProductCaseChange(ProductCase.RECENT)
+                        }
                     ){
                         Text("Recently Viewed")
                     }
                     Button (
-                        onClick = {}
+                        onClick = {
+                            onProductCaseChange(ProductCase.SAVED)
+                        }
                     ){
                         Text("Saved Products")
                     }

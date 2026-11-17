@@ -16,6 +16,7 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.group4.group4androidcapstone.features.products.presentation.viewmodels.ProductDirectoryViewModel
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
@@ -48,6 +49,7 @@ fun ProductDirectoryRoute(
                                 onBack = onBack,
                                 onProductSelected = { product ->
                                     scope.launch {
+                                        viewModel.setProductViewedTime(product.productId, LocalDateTime.now())
                                         navigator.navigateTo(ListDetailPaneScaffoldRole.Detail,
                                             product.productId)
                                     }
@@ -56,6 +58,7 @@ fun ProductDirectoryRoute(
                                 onDismissError = viewModel::dismissError,
                                 onSearchQueryChange = viewModel::updateSearchQuery,
                                 onSummaryChange = viewModel::updateSummaryFilter,
+                                onProductCaseChange = viewModel::setProductUseCase
                             )
                         }
                     }
