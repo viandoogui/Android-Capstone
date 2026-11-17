@@ -62,11 +62,20 @@ fun HomeRecentProducts(){
                 )
         )
 
-        ProductList(
-            products = products,
-            onProductSelected = {Unit},
-            innerPadding = PaddingValues()
-        )
+//        ProductList(
+//            products = products,
+//            onProductSelected = {Unit},
+//            innerPadding = PaddingValues()
+//        )
+        Column(modifier = Modifier.padding(LocalSpacing.current.medium)) {
+            Text("Recently Viewed Products: ")
+            products.forEach { product ->
+                ProductCard(
+                    product = product,
+                    onClick = {}
+                )
+            }
+        }
 
 
     }

@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -31,12 +33,16 @@ fun HomeContent(
             .fillMaxSize()
             .padding(16.dp)
             .statusBarsPadding()
+            .verticalScroll(state = rememberScrollState()),
+
     ) {
+
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(LocalSpacing.current.small),
-            verticalArrangement = Arrangement.Top,
+                .padding(LocalSpacing.current.large),
+           verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
@@ -46,18 +52,9 @@ fun HomeContent(
                     .width(800.dp)
                     .padding(LocalSpacing.current.small)
                     .background(MaterialTheme.colorScheme.surface)
-
             )
-        }
 
-
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+            Spacer(modifier = Modifier.height(24.dp))
 
             HomeOrderReview()
             Button(
@@ -70,6 +67,7 @@ fun HomeContent(
             }
 
             Spacer(modifier = Modifier.height(24.dp))
+
             HomeRecentProducts()
             Button(
                 onClick = { Unit },
