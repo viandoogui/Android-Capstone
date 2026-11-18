@@ -9,7 +9,8 @@ data class ProductDirectoryState(
     val showFilter: Boolean = false,
     val selectedProductId: Int? = null,
     val isRefreshing: Boolean = false,
-    val errorMessage: String? = null
+    val errorMessage: String? = null,
+    val currentSort: SortOrder = SortOrder.ASCENDING
 ) {
     val displayedProducts: List<Product>
         get() = products.filter {
@@ -23,3 +24,5 @@ data class ProductDirectoryState(
         get() = products.find { it.productId == selectedProductId }
 
 }
+
+enum class SortOrder { ASCENDING, DESCENDING, PRICE_LOW_TO_HIGH }

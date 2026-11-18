@@ -4,8 +4,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.group4.group4androidcapstone.features.products.domain.GetProductsUseCase
+import com.group4.group4androidcapstone.features.products.domain.Product
 import com.group4.group4androidcapstone.features.products.domain.RefreshProductsUseCase
 import com.group4.group4androidcapstone.features.products.presentation.state.ProductDirectoryState
+import com.group4.group4androidcapstone.features.products.presentation.state.SortOrder
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -111,6 +113,24 @@ class ProductDirectoryViewModel @Inject constructor(
         }
     }
 
+    fun onSortChanged(newSort: SortOrder) {
+        _uiState.update { currentState ->
+            val sortedList = sortProducts(currentState.products, newSort)
+            currentState.copy(
+                products = sortedList,
+                currentSort = newSort
+            )
+        }
+    }
+
+    fun sortProducts(list: List<Product>, sortOrder: SortOrder): List<Product> {
+        return when (sortOrder) {
+            SortOrder.ASCENDING -> list.sortedBy { it.name }
+            SortOrder.DESCENDING -> list.sortedByDescending { it.name }
+            SortOrder.PRICE_LOW_TO_HIGH -> list.sortedBy { it.listPrice }
+        }
+    }
+
 
     fun updateShowFilter(show: Boolean) {
         _uiState.update { currentState ->
@@ -132,5 +152,6 @@ class ProductDirectoryViewModel @Inject constructor(
         const val SEARCH_KEY = "searchFilter"
         const val SUMMARY_KEY = "summaryFilter"
     }
+
 
 }

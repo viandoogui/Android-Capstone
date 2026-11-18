@@ -11,14 +11,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.Sort
 import androidx.compose.material.icons.filled.Filter
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Sort
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DockedSearchBar
@@ -55,6 +53,7 @@ import androidx.compose.ui.unit.dp
 import com.group4.group4androidcapstone.core.presentation.TextFilter
 import com.group4.group4androidcapstone.features.products.domain.Product
 import com.group4.group4androidcapstone.features.products.presentation.state.ProductDirectoryState
+import com.group4.group4androidcapstone.features.products.presentation.state.SortOrder
 import com.group4.group4androidcapstone.ui.theme.Group4AndroidCapstoneTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -70,7 +69,8 @@ fun ProductDirectory(
     onSearchQueryChange: (String) -> Unit = {},
     onGenreChange: (String) -> Unit = {},
     onSummaryChange: (String) -> Unit = {},
-    onShowFilterChange: (Boolean) -> Unit = {}
+    onShowFilterChange: (Boolean) -> Unit = {},
+    onSortChanged: (SortOrder) -> Unit
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     var expanded by remember { mutableStateOf(false)}
@@ -167,22 +167,21 @@ fun ProductDirectory(
                         DropdownMenuItem(
                             text = { Text("Name: Ascending") },
                             onClick = {
-                                // sort alphabetically
-                                viewModel.sortOption = "ASCENDING"
+                                onSortChanged(SortOrder.ASCENDING)
                                 expanded = false
                             }
                         )
                         DropdownMenuItem(
                             text = { Text("Name: Descending") },
                             onClick = {
-                                // sort reverse alphabetically
+                                onSortChanged(SortOrder.DESCENDING)
                                 expanded = false
                             }
                         )
                         DropdownMenuItem(
                             text = { Text("Price") },
                             onClick = {
-                                // sort lowest to highest price
+                                onSortChanged(SortOrder.PRICE_LOW_TO_HIGH)
                                 expanded = false
                             }
                         )
@@ -347,6 +346,7 @@ fun CompactProductDirectoryPreview() {
         ProductDirectory(
             state = ProductDirectoryState(),
             useTwoPaneLayout = false,
+            onSortChanged = {}
         )
     }
 }
