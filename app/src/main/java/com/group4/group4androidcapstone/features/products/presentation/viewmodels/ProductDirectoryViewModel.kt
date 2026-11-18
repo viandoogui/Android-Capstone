@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.group4.group4androidcapstone.features.products.domain.GetProductsUseCase
 import com.group4.group4androidcapstone.features.products.domain.GetRecentProductsUseCase
+import com.group4.group4androidcapstone.features.products.domain.GetSavedProductsUseCase
 import com.group4.group4androidcapstone.features.products.domain.ProductCase
 import com.group4.group4androidcapstone.features.products.domain.RefreshProductsUseCase
 import com.group4.group4androidcapstone.features.products.domain.SetProductSavedUseCase
@@ -25,6 +26,7 @@ import javax.inject.Inject
 class ProductDirectoryViewModel @Inject constructor(
     private val getAvailableProducts: GetProductsUseCase,
     private val getRecentProducts: GetRecentProductsUseCase,
+    private val getSavedProducts: GetSavedProductsUseCase,
     private val refreshProducts: RefreshProductsUseCase,
     private val setProductTime: SetProductTimeUseCase,
     private val setProductSaved: SetProductSavedUseCase,
@@ -75,7 +77,7 @@ class ProductDirectoryViewModel @Inject constructor(
             val currentFlow = when(case) {
                 ProductCase.DEFAULT -> getAvailableProducts()
                 ProductCase.RECENT -> getRecentProducts()
-                ProductCase.SAVED -> getAvailableProducts()
+                ProductCase.SAVED -> getSavedProducts()
             }
 
             currentFlow.collect { products ->
@@ -144,7 +146,6 @@ class ProductDirectoryViewModel @Inject constructor(
             )
         }
     }
-
 
     fun updateShowFilter(show: Boolean) {
         _uiState.update { currentState ->

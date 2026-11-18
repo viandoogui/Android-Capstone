@@ -27,6 +27,9 @@ interface ProductDao {
     @Query("SELECT * FROM products WHERE viewedTime IS NOT NULL ORDER BY viewedTime DESC")
     fun observeRecentProducts(): Flow<List<ProductEntity>>
 
+    @Query("SELECT * FROM products WHERE is_saved = '1'")
+    fun observeSavedProducts(): Flow<List<ProductEntity>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertProducts(products: List<ProductEntity>)
 

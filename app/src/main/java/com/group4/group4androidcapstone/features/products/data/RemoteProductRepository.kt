@@ -31,6 +31,13 @@ import javax.inject.Singleton
             }
         }
 
+    override fun observeSavedProducts(): Flow<List<Product>> =
+        productDao.observeSavedProducts().map { list ->
+            list.map { entity ->
+                ProductEntityMapper.toDomain(entity)
+            }.reversed()
+        }
+
     override fun observeProductDetails(id: Int): Flow<ProductDetails?> =
         productDao.observeDetail(id).map { entity ->
             entity?.let {
