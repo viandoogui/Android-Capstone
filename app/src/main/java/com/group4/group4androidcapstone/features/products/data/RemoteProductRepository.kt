@@ -35,7 +35,7 @@ import javax.inject.Singleton
         productDao.observeSavedProducts().map { list ->
             list.map { entity ->
                 ProductEntityMapper.toDomain(entity)
-            }.reversed()
+            }
         }
 
     override fun observeProductDetails(id: Int): Flow<ProductDetails?> =
@@ -52,7 +52,8 @@ import javax.inject.Singleton
         val newEntities = dataSource.getProducts().map {
             val oldEntity = oldEntities[it.productId]
             ProductEntityMapper.toEntity(it).copy(
-                viewedTime = oldEntity?.viewedTime // copy over new fields but retain time
+                viewedTime = oldEntity?.viewedTime, // copy over new fields but retain time
+                isSaved = oldEntity?.isSaved == true
             )
         }
 
