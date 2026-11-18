@@ -36,7 +36,8 @@ import kotlin.io.encoding.Base64
 @Composable
 fun ProductCard(
     product: Product,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    onProductSavedSet: (Int, Boolean) -> Unit
 ) {
     var isFavorite by rememberSaveable() {
         mutableStateOf(false)
@@ -63,6 +64,7 @@ fun ProductCard(
                     checked = isFavorite,
                     onCheckedChange = {
                         isFavorite = it
+                        onProductSavedSet(product.productId, it)
                     }
                 ) {
                     Icon(
@@ -122,6 +124,6 @@ fun ProductCardPreview() {
     )
 
     Group4AndroidCapstoneTheme {
-        ProductCard(product = product, onClick = {})
+        ProductCard(product = product, onClick = {}, onProductSavedSet = {a, b ->})
     }
 }

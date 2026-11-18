@@ -7,6 +7,7 @@ import com.group4.group4androidcapstone.features.products.domain.GetProductsUseC
 import com.group4.group4androidcapstone.features.products.domain.GetRecentProductsUseCase
 import com.group4.group4androidcapstone.features.products.domain.ProductCase
 import com.group4.group4androidcapstone.features.products.domain.RefreshProductsUseCase
+import com.group4.group4androidcapstone.features.products.domain.SetProductSavedUseCase
 import com.group4.group4androidcapstone.features.products.domain.SetProductTimeUseCase
 import com.group4.group4androidcapstone.features.products.presentation.state.ProductDirectoryState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,6 +27,7 @@ class ProductDirectoryViewModel @Inject constructor(
     private val getRecentProducts: GetRecentProductsUseCase,
     private val refreshProducts: RefreshProductsUseCase,
     private val setProductTime: SetProductTimeUseCase,
+    private val setProductSaved: SetProductSavedUseCase,
     private val savedStateHandle: SavedStateHandle = SavedStateHandle()
 ): ViewModel() {
 
@@ -51,6 +53,12 @@ class ProductDirectoryViewModel @Inject constructor(
             // when the viewModel is destroyed (i.e. when the user
             // navigates away from this screen)
             setProductUseCase(ProductCase.DEFAULT)
+        }
+    }
+
+    fun setProductIsSaved(id: Int, isSaved: Boolean) {
+        viewModelScope.launch {
+            setProductSaved(id, isSaved)
         }
     }
 

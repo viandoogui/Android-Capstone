@@ -72,7 +72,8 @@ fun HomeRecentProducts(){
             products.forEach { product ->
                 ProductCard(
                     product = product,
-                    onClick = {}
+                    onClick = {},
+                    onProductSavedSet = {a, b -> }
                 )
             }
         }
