@@ -31,6 +31,13 @@ import javax.inject.Singleton
             }
         }
 
+    override fun observeSavedProducts(): Flow<List<Product>> =
+        productDao.observeSavedProducts().map { list ->
+            list.map { entity ->
+                ProductEntityMapper.toDomain(entity)
+            }
+        }
+
     override fun observeProductDetails(id: Int): Flow<ProductDetails?> =
         productDao.observeDetail(id).map { entity ->
             entity?.let {
@@ -45,7 +52,8 @@ import javax.inject.Singleton
         val newEntities = dataSource.getProducts().map {
             val oldEntity = oldEntities[it.productId]
             ProductEntityMapper.toEntity(it).copy(
-                viewedTime = oldEntity?.viewedTime // copy over new fields but retain time
+                viewedTime = oldEntity?.viewedTime, // copy over new fields but retain time
+                isSaved = oldEntity?.isSaved == true
             )
         }
 
@@ -68,4 +76,10 @@ import javax.inject.Singleton
     override suspend fun clearProductViewedTimes() {
         productDao.clearAllProductViewedTimes()
     }
+
+    override suspend fun setProductSaved(id: Int, isSaved: Boolean) {
+        val savedTime = if (isSaved) LocalDateTime.now() else null
+        productDao.setProductSaved(id, isSaved, savedTime)
+    }
+
 }

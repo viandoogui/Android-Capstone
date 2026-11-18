@@ -19,7 +19,9 @@ object ProductEntityMapper {
             warranty = entity.warranty,
             color = entity.color,
             listPrice = entity.listPrice,
-            viewedTime = entity.viewedTime
+            viewedTime = entity.viewedTime,
+            isSaved = entity.isSaved,
+            savedTime = entity.savedTime
         )
 
     }
@@ -38,7 +40,6 @@ object ProductEntityMapper {
             warranty = domain.warranty,
             color = domain.color,
             listPrice = domain.listPrice,
-            viewedTime = null
         )
     }
 }

@@ -65,7 +65,8 @@ fun ProductDirectory(
     onGenreChange: (String) -> Unit = {},
     onSummaryChange: (String) -> Unit = {},
     onShowFilterChange: (Boolean) -> Unit = {},
-    onProductCaseChange: (ProductCase) -> Unit = {}
+    onProductCaseChange: (ProductCase) -> Unit = {},
+    onProductSavedSet: (Int, Boolean) -> Unit = { a, b -> }
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val retryLabel = "Retry"
@@ -161,6 +162,7 @@ fun ProductDirectory(
                 ProductList(
                     products = state.displayedProducts,
                     onProductSelected = onProductSelected,
+                    onProductSavedSet = onProductSavedSet,
                     innerPadding = PaddingValues(0.dp)
                 )
             }
@@ -197,6 +199,7 @@ fun ProductDirectory(
                     ProductList(
                         products = state.displayedProducts,
                         onProductSelected = onProductSelected,
+                        onProductSavedSet = onProductSavedSet,
                         innerPadding = PaddingValues(0.dp)
                     )
                 }
@@ -229,6 +232,7 @@ fun ProductDirectory(
                 ProductList(
                     products = state.displayedProducts,
                     onProductSelected = onProductSelected,
+                    onProductSavedSet = onProductSavedSet,
                     innerPadding = PaddingValues(0.dp)
                 )
             }
