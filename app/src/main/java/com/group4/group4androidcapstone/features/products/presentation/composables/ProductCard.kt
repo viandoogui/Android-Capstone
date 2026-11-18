@@ -16,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -39,8 +40,8 @@ fun ProductCard(
     onClick: () -> Unit,
     onProductSavedSet: (Int, Boolean) -> Unit
 ) {
-    var isFavorite by rememberSaveable() {
-        mutableStateOf(false)
+    var isFavorite by remember(product.isSaved) {
+        mutableStateOf(product.isSaved)
     }
     val starScale by animateFloatAsState(
         targetValue = if (isFavorite) 1.5f else 1f,
