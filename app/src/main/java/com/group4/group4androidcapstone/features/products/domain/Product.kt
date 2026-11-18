@@ -12,7 +12,9 @@ data class Product (
     val warranty: String?,
     val color: String?,
     val listPrice: Double,
-    val viewedTime: LocalDateTime? = null
+    val viewedTime: LocalDateTime? = null,
+    val isSaved: Boolean = false,
+    val savedTime: LocalDateTime? = null
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

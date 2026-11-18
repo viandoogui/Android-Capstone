@@ -69,7 +69,8 @@ fun ProductDirectoryRoute(
                                 onDismissError = viewModel::dismissError,
                                 onSearchQueryChange = viewModel::updateSearchQuery,
                                 onSummaryChange = viewModel::updateSummaryFilter,
-                                onProductCaseChange = viewModel::setProductUseCase
+                                onProductCaseChange = viewModel::setProductUseCase,
+                                onProductSavedSet = viewModel::setProductIsSaved
                             )
                         }
                     }

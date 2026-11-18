@@ -37,6 +37,7 @@ import kotlin.io.encoding.Base64
 fun ProductList(
     products: List<Product>,
     onProductSelected: (Product) -> Unit,
+    onProductSavedSet: (Int, Boolean) -> Unit,
     innerPadding: PaddingValues
 ) {
     val listState = rememberLazyListState()
@@ -66,7 +67,8 @@ fun ProductList(
                     product = product,
                     onClick = {
                         onProductSelected(product)
-                    }
+                    },
+                    onProductSavedSet = onProductSavedSet
                 )
             }
         }
@@ -127,6 +129,6 @@ fun ProductListPreview() {
         ),
     )
     Group4AndroidCapstoneTheme {
-        ProductList(products = products, onProductSelected = {}, innerPadding = PaddingValues())
+        ProductList(products = products, onProductSelected = {}, onProductSavedSet = {a, b -> }, innerPadding = PaddingValues())
     }
 }
