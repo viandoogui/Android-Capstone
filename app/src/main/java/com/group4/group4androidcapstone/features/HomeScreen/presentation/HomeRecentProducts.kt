@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,8 +24,10 @@ import com.group4.group4androidcapstone.features.products.presentation.composabl
 import com.group4.group4androidcapstone.ui.theme.LocalSpacing
 
 @Composable
-fun HomeRecentProducts(){
-
+fun HomeRecentProducts(
+    products: List<Product> = emptyList(),
+    onProductSelected: (Product) -> Unit
+){
 
 
     Column(
@@ -37,42 +41,42 @@ fun HomeRecentProducts(){
 //        Text("Home screen recent products displayed here",
 //            modifier= Modifier.padding(LocalSpacing.current.large))
 
-        val products = listOf(
-            Product(
-                productId = 1,
-                name = "Product 1",
-                productNumber = "21432152",
-                summary = "Summary of Product 1",
-                thumbnailPhoto = byteArrayOf(),
-                thumbnailPhotoFileName = "product1.jpg",
-                warranty = "1 year",
-                color = "Red",
-                listPrice = 9.99
-            ),
-             Product(
-                    productId = 2,
-                    name = "Product 2",
-                    productNumber = "21432152",
-                    summary = "Summary of Product 2",
-                    thumbnailPhoto = byteArrayOf(),
-                    thumbnailPhotoFileName = "product2.jpg",
-                    warranty = "2 year",
-                    color = "blue",
-                    listPrice = 10.99
-                )
-        )
+//        val products = listOf(
+//            Product(
+//                productId = 1,
+//                name = "Product 1",
+//                productNumber = "21432152",
+//                summary = "Summary of Product 1",
+//                thumbnailPhoto = byteArrayOf(),
+//                thumbnailPhotoFileName = "product1.jpg",
+//                warranty = "1 year",
+//                color = "Red",
+//                listPrice = 9.99
+//            ),
+//             Product(
+//                    productId = 2,
+//                    name = "Product 2",
+//                    productNumber = "21432152",
+//                    summary = "Summary of Product 2",
+//                    thumbnailPhoto = byteArrayOf(),
+//                    thumbnailPhotoFileName = "product2.jpg",
+//                    warranty = "2 year",
+//                    color = "blue",
+//                    listPrice = 10.99
+//                )
+//        )
 
 //        ProductList(
 //            products = products,
 //            onProductSelected = {Unit},
 //            innerPadding = PaddingValues()
 //        )
-        Column(modifier = Modifier.padding(LocalSpacing.current.medium)) {
+        Column(modifier = Modifier.padding(LocalSpacing.current.medium).verticalScroll(rememberScrollState())) {
             Text("Recently Viewed Products: ")
             products.forEach { product ->
                 ProductCard(
                     product = product,
-                    onClick = {}
+                    onClick = {onProductSelected(product)}
                 )
             }
         }

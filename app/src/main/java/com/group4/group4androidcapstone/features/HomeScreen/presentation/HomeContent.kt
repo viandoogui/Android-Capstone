@@ -16,18 +16,27 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.group4.group4androidcapstone.features.HomeScreen.presentation.ViewModels.HomeViewModel
+import com.group4.group4androidcapstone.features.products.domain.Product
 import com.group4.group4androidcapstone.ui.theme.LocalSpacing
+import dagger.hilt.android.lifecycle.HiltViewModel
 
 @Composable
 fun HomeContent(
     //onOrderHistory: () -> Unit,
     //onRecentProducts: () -> Unit,
+    viewModel: HomeViewModel = hiltViewModel(),
+    onProductSelected: (Product) -> Unit,
     onNavigateToOrderHistory: () -> Unit,
     onNavigateToProductDirectory: () -> Unit
 ) {
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -68,7 +77,7 @@ fun HomeContent(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            HomeRecentProducts()
+            HomeRecentProducts(products = state.recentProducts, onProductSelected = onProductSelected)
             Button(
                 onClick = { Unit },
                 modifier = Modifier

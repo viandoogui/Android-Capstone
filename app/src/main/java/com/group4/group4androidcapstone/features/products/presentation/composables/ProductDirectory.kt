@@ -43,6 +43,7 @@ import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.group4.group4androidcapstone.core.presentation.TextFilter
@@ -74,10 +75,12 @@ fun ProductDirectory(
     // when the screen loads, we don't want that.
     // We want the user to tap on the text input when they want to search
     val focusManager = LocalFocusManager.current
+    val keyboardController = LocalSoftwareKeyboardController.current // <-- Get keyboard controller
     LaunchedEffect(Unit) {
         // delay until the next rendering frame executes
         withFrameNanos {}
         focusManager.clearFocus(force = true)
+        keyboardController?.hide()
     }
 
     // a failed refresh should keep the cached product on screen

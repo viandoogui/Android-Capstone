@@ -25,7 +25,7 @@ data object RecentProductsRoute: CapstoneRoute{
 
 
 @Serializable
-data object ProductDirectoryRoute: CapstoneRoute{
+data class ProductDirectoryRoute(val selectedProductId: Int? = null): CapstoneRoute{
 
 }
 

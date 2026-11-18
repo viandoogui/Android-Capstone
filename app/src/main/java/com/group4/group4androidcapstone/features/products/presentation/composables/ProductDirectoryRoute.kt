@@ -8,6 +8,7 @@ import androidx.compose.material3.adaptive.navigation.NavigableListDetailPaneSca
 import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -22,7 +23,8 @@ import java.time.LocalDateTime
 @Composable
 fun ProductDirectoryRoute(
     onBack: () -> Unit = {},
-    viewModel: ProductDirectoryViewModel = hiltViewModel()
+    viewModel: ProductDirectoryViewModel = hiltViewModel(),
+    selectedProductId: Int? = null
 ) {
     // get an observable copy of the state inside our viewModel
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -35,6 +37,15 @@ fun ProductDirectoryRoute(
     // it also handles system back gesture
     val navigator = rememberListDetailPaneScaffoldNavigator<Int>()
     val scope = rememberCoroutineScope()
+
+    LaunchedEffect(selectedProductId) {
+        if (selectedProductId != null) {
+            viewModel.setProductViewedTime(selectedProductId, LocalDateTime.now())
+            navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, selectedProductId)
+        }
+    }
+
+
 
     SharedTransitionLayout {
         CompositionLocalProvider(LocalSharedTransitionScope provides this) {
