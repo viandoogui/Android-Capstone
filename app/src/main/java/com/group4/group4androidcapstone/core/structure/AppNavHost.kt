@@ -15,6 +15,11 @@ import com.group4.group4androidcapstone.features.products.presentation.composabl
 import com.group4.group4androidcapstone.features.products.presentation.composables.ProductDirectoryRoute
 import com.group4.group4androidcapstone.features.products.presentation.state.ProductDirectoryState
 import com.group4.group4androidcapstone.features.orders.presentation.OrderHistoryRoute
+import androidx.activity.compose.BackHandler
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateOf
+import com.group4.group4androidcapstone.features.orders.domain.Order
+import com.group4.group4androidcapstone.features.orders.presentation.OrderDetailsScreen
 
 @Composable
 fun AppNavHost(
@@ -63,9 +68,31 @@ fun AppNavHost(
 
 
         composable<OrdersRoute> {
-            OrderHistoryRoute()
-        }
+            val selectedOrder = remember {
+                mutableStateOf<Order?>(null)
+            }
 
+            BackHandler(enabled = selectedOrder.value != null) {
+                selectedOrder.value = null
+            }
+
+            val order = selectedOrder.value
+
+            if (order == null) {
+                OrderHistoryRoute(
+                    onOrderSelected = { selected ->
+                        selectedOrder.value = selected
+                    }
+                )
+            } else {
+                OrderDetailsScreen(
+                    order = order,
+                    onBack = {
+                        selectedOrder.value = null
+                    }
+                )
+            }
+        }
 
     }
 

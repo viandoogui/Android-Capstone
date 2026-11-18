@@ -16,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -36,10 +37,11 @@ import kotlin.io.encoding.Base64
 @Composable
 fun ProductCard(
     product: Product,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    onProductSavedSet: (Int, Boolean) -> Unit
 ) {
-    var isFavorite by rememberSaveable() {
-        mutableStateOf(false)
+    var isFavorite by remember(product.isSaved) {
+        mutableStateOf(product.isSaved)
     }
     val starScale by animateFloatAsState(
         targetValue = if (isFavorite) 1.5f else 1f,
@@ -63,6 +65,7 @@ fun ProductCard(
                     checked = isFavorite,
                     onCheckedChange = {
                         isFavorite = it
+                        onProductSavedSet(product.productId, it)
                     }
                 ) {
                     Icon(
@@ -122,6 +125,6 @@ fun ProductCardPreview() {
     )
 
     Group4AndroidCapstoneTheme {
-        ProductCard(product = product, onClick = {})
+        ProductCard(product = product, onClick = {}, onProductSavedSet = {a, b ->})
     }
 }

@@ -5,24 +5,35 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.group4.group4androidcapstone.features.products.domain.GetProductsUseCase
 import com.group4.group4androidcapstone.features.products.domain.Product
+import com.group4.group4androidcapstone.features.products.domain.GetRecentProductsUseCase
+import com.group4.group4androidcapstone.features.products.domain.GetSavedProductsUseCase
+import com.group4.group4androidcapstone.features.products.domain.ProductCase
 import com.group4.group4androidcapstone.features.products.domain.RefreshProductsUseCase
+import com.group4.group4androidcapstone.features.products.domain.SetProductSavedUseCase
+import com.group4.group4androidcapstone.features.products.domain.SetProductTimeUseCase
 import com.group4.group4androidcapstone.features.products.presentation.state.ProductDirectoryState
 import com.group4.group4androidcapstone.features.products.presentation.state.SortOrder
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
 class ProductDirectoryViewModel @Inject constructor(
     private val getAvailableProducts: GetProductsUseCase,
+    private val getRecentProducts: GetRecentProductsUseCase,
+    private val getSavedProducts: GetSavedProductsUseCase,
     private val refreshProducts: RefreshProductsUseCase,
+    private val setProductTime: SetProductTimeUseCase,
+    private val setProductSaved: SetProductSavedUseCase,
     private val savedStateHandle: SavedStateHandle = SavedStateHandle()
-): ViewModel() {
+) : ViewModel() {
 
     // keep the actual mutable state value private
     private val _uiState = MutableStateFlow(
@@ -35,6 +46,8 @@ class ProductDirectoryViewModel @Inject constructor(
     // expose (publicly) a read-only view of the state object
     val uiState: StateFlow<ProductDirectoryState> = _uiState.asStateFlow()
 
+    private var observeJob: Job? = null
+
     init {
         // establish a subscription to the observable collection
         // of products from our Room db
@@ -43,14 +56,42 @@ class ProductDirectoryViewModel @Inject constructor(
             // the subscription will be automatically released and disposed
             // when the viewModel is destroyed (i.e. when the user
             // navigates away from this screen)
-            getAvailableProducts().collect { products ->
+            setProductUseCase(ProductCase.DEFAULT)
+        }
+    }
+
+    fun setProductIsSaved(id: Int, isSaved: Boolean) {
+        viewModelScope.launch {
+            setProductSaved(id, isSaved)
+        }
+    }
+
+    fun setProductViewedTime(id: Int, viewedTime: LocalDateTime) {
+        viewModelScope.launch {
+            setProductTime(id, viewedTime)
+        }
+    }
+
+    fun setProductUseCase(case: ProductCase) {
+        observeJob?.cancel()
+
+        observeJob = viewModelScope.launch {
+            val currentFlow = when (case) {
+                ProductCase.DEFAULT -> getAvailableProducts()
+                ProductCase.RECENT -> getRecentProducts()
+                ProductCase.SAVED -> getSavedProducts()
+            }
+
+            currentFlow.collect { products ->
                 _uiState.update { currentState ->
                     currentState.copy(
                         products = products
                     )
                 }
             }
+
         }
+
     }
 
     // loadProducts does not get the data for the view,
@@ -74,14 +115,12 @@ class ProductDirectoryViewModel @Inject constructor(
                 _uiState.update { it.copy(isRefreshing = false, searchQuery = "", summaryFilter = "") }
 
 
-
             }
             // NEVER swallow a CancellationException
             // doing so can orphan the coroutine (suspendable)
             catch (e: CancellationException) {
                 throw e
-            }
-            catch (e: Exception) {
+            } catch (e: Exception) {
                 // cached products are already on screen, they can stay there
                 // we just need to surface the error
                 _uiState.update {
@@ -101,7 +140,7 @@ class ProductDirectoryViewModel @Inject constructor(
 
     fun updateSearchQuery(query: String) {
         savedStateHandle[SEARCH_KEY] = query
-        _uiState.update { it.copy(searchQuery = query)}
+        _uiState.update { it.copy(searchQuery = query) }
     }
 
     fun updateSummaryFilter(summary: String) {
@@ -130,7 +169,6 @@ class ProductDirectoryViewModel @Inject constructor(
             SortOrder.PRICE_LOW_TO_HIGH -> list.sortedBy { it.listPrice }
         }
     }
-
 
     fun updateShowFilter(show: Boolean) {
         _uiState.update { currentState ->

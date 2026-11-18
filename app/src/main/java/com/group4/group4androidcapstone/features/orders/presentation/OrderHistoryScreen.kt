@@ -20,11 +20,6 @@ import androidx.compose.material3.Button
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.mutableStateOf
 import com.group4.group4androidcapstone.features.orders.domain.OrderSorter
-import androidx.compose.material3.Card
-import androidx.compose.ui.Modifier
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.clickable
 
 @Composable
 fun OrderHistoryScreen(
@@ -32,7 +27,6 @@ fun OrderHistoryScreen(
     onSortChange: (Boolean) -> Unit,
     onOrderSelected: (Order) -> Unit = {}
 ) {
-
     when {
         uiState.isLoading -> Text("Loading orders...")
         uiState.errorMessage != null -> Text(uiState.errorMessage)
@@ -64,32 +58,10 @@ fun OrderHistoryScreen(
             }
 
             items(items = uiState.orders) { order ->
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { onOrderSelected(order) }
-                ) {
-
-                    Column(
-                        modifier = Modifier.padding(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(4.dp)
-                    ) {
-                        Text(
-                            text = "Order #${order.id}",
-                            style = MaterialTheme.typography.titleMedium
-                        )
-
-                        Text(
-                            text = "Date: ${order.orderDate.toLocalDate()}",
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-
-                        Text(
-                            text = "Status: ${order.statusName}",
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                    }
-                }
+                OrderCard(
+                    order = order,
+                    onClick = { onOrderSelected(order) }
+                )
             }
         }
     }
@@ -122,7 +94,6 @@ fun OrderHistoryPreview() {
     )
 }
 
-
 @Preview(showBackground = true)
 @Composable
 fun OrderHistoryListPreview() {
@@ -150,7 +121,9 @@ fun OrderHistoryListPreview() {
         uiState = OrderHistoryUiState(
             orders = if (newestFirst.value) {
                 OrderSorter.newestFirst(listOf(olderOrder, newerOrder))
-            } else { OrderSorter.oldestFirst(listOf(olderOrder, newerOrder)) },
+            } else {
+                OrderSorter.oldestFirst(listOf(olderOrder, newerOrder))
+                   },
             newestFirst = newestFirst.value
         ),
         onSortChange = { newestFirst.value = it },

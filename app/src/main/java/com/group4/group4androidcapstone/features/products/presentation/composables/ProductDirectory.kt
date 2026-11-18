@@ -52,6 +52,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.group4.group4androidcapstone.core.presentation.TextFilter
 import com.group4.group4androidcapstone.features.products.domain.Product
+import com.group4.group4androidcapstone.features.products.domain.ProductCase
 import com.group4.group4androidcapstone.features.products.presentation.state.ProductDirectoryState
 import com.group4.group4androidcapstone.features.products.presentation.state.SortOrder
 import com.group4.group4androidcapstone.ui.theme.Group4AndroidCapstoneTheme
@@ -70,10 +71,12 @@ fun ProductDirectory(
     onGenreChange: (String) -> Unit = {},
     onSummaryChange: (String) -> Unit = {},
     onShowFilterChange: (Boolean) -> Unit = {},
-    onSortChanged: (SortOrder) -> Unit
+    onSortChanged: (SortOrder) -> Unit,
+    onProductCaseChange: (ProductCase) -> Unit = {},
+    onProductSavedSet: (Int, Boolean) -> Unit = { a, b -> }
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
-    var expanded by remember { mutableStateOf(false)}
+    var expanded by remember { mutableStateOf(false) }
 
     val retryLabel = "Retry"
     // we're going to add a search bar (text input) to the top of the screen
@@ -119,19 +122,30 @@ fun ProductDirectory(
                         }
                     }
                 )
-                Row(){
-                    Button (
-                        onClick = {}
-                    ){
+                Row() {
+                    Button(
+                        onClick = {
+                            onProductCaseChange(ProductCase.DEFAULT)
+                        }
+                    ) {
+                        Text("Default")
+                    }
+                    Button(
+                        onClick = {
+                            onProductCaseChange(ProductCase.RECENT)
+                        }
+                    ) {
                         Text("Recently Viewed")
                     }
-                    Button (
-                        onClick = {}
-                    ){
+                    Button(
+                        onClick = {
+                            onProductCaseChange(ProductCase.SAVED)
+                        }
+                    ) {
                         Text("Saved Products")
                     }
                 }
-                Row(){
+                Row() {
                     DockedSearchBar(
                         inputField = {
                             SearchBarDefaults.InputField(
@@ -163,7 +177,7 @@ fun ProductDirectory(
                     DropdownMenu(
                         expanded = expanded,
                         onDismissRequest = { expanded = false }
-                    ){
+                    ) {
                         DropdownMenuItem(
                             text = { Text("Name: Ascending") },
                             onClick = {
@@ -203,7 +217,8 @@ fun ProductDirectory(
                         ProductList(
                             products = state.displayedProducts,
                             onProductSelected = onProductSelected,
-                            innerPadding = PaddingValues(0.dp)
+                            innerPadding = PaddingValues(0.dp),
+                            onProductSavedSet = onProductSavedSet,
                         )
                     }
 
@@ -243,6 +258,7 @@ fun ProductDirectory(
                     ProductList(
                         products = state.displayedProducts,
                         onProductSelected = onProductSelected,
+                        onProductSavedSet = onProductSavedSet,
                         innerPadding = PaddingValues(0.dp)
                     )
                 }
@@ -277,6 +293,7 @@ fun ProductDirectory(
                 ProductList(
                     products = state.displayedProducts,
                     onProductSelected = onProductSelected,
+                    onProductSavedSet = onProductSavedSet,
                     innerPadding = PaddingValues(0.dp)
                 )
             }
