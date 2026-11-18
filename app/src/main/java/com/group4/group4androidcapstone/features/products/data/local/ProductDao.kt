@@ -27,7 +27,7 @@ interface ProductDao {
     @Query("SELECT * FROM products WHERE viewedTime IS NOT NULL ORDER BY viewedTime DESC")
     fun observeRecentProducts(): Flow<List<ProductEntity>>
 
-    @Query("SELECT * FROM products WHERE is_saved = '1'")
+    @Query("SELECT * FROM products WHERE is_saved = '1' ORDER BY savedTime DESC")
     fun observeSavedProducts(): Flow<List<ProductEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -60,8 +60,8 @@ interface ProductDao {
     @Query("UPDATE products SET viewedTime = NULL")
     suspend fun clearAllProductViewedTimes()
 
-    @Query("UPDATE products SET is_saved = :isSaved WHERE productId = :id")
-    suspend fun setProductSaved(id: Int, isSaved: Boolean)
+    @Query("UPDATE products SET is_saved = :isSaved, savedTime = :savedTime WHERE productId = :id")
+    suspend fun setProductSaved(id: Int, isSaved: Boolean, savedTime: LocalDateTime?)
 
     @Transaction
 

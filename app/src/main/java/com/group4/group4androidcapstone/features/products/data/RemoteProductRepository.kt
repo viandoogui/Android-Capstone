@@ -78,7 +78,8 @@ import javax.inject.Singleton
     }
 
     override suspend fun setProductSaved(id: Int, isSaved: Boolean) {
-        productDao.setProductSaved(id, isSaved)
+        val savedTime = if (isSaved) LocalDateTime.now() else null
+        productDao.setProductSaved(id, isSaved, savedTime)
     }
 
 }
