@@ -17,7 +17,8 @@ object ProductMapper {
             color = dto.color,
             listPrice = dto.listPrice,
             viewedTime = null,
-            isSaved = false
+            isSaved = false,
+            savedTime = null
         )
     }
 

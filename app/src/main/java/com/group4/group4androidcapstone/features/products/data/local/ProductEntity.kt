@@ -18,7 +18,8 @@ data class ProductEntity(
     val color: String?,
     val listPrice: Double,
     val viewedTime: LocalDateTime? = null,
-    @ColumnInfo(name = "is_saved", defaultValue = "0") val isSaved: Boolean = false
+    @ColumnInfo(name = "is_saved", defaultValue = "0") val isSaved: Boolean = false,
+    val savedTime: LocalDateTime? = null
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
