@@ -68,4 +68,9 @@ import javax.inject.Singleton
     override suspend fun clearProductViewedTimes() {
         productDao.clearAllProductViewedTimes()
     }
+
+    override suspend fun setProductSaved(id: Int, isSaved: Boolean) {
+        productDao.setProductSaved(id, isSaved)
+    }
+
 }

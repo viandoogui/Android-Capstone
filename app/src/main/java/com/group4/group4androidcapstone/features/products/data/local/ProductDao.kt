@@ -57,6 +57,9 @@ interface ProductDao {
     @Query("UPDATE products SET viewedTime = NULL")
     suspend fun clearAllProductViewedTimes()
 
+    @Query("UPDATE products SET is_saved = :isSaved WHERE productId = :id")
+    suspend fun setProductSaved(id: Int, isSaved: Boolean)
+
     @Transaction
 
     // ProductDetails

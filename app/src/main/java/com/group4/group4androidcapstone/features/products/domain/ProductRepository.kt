@@ -13,4 +13,6 @@ interface ProductRepository {
 
     suspend fun setProductViewedTime(id: Int, viewedTime: LocalDateTime?)
     suspend fun clearProductViewedTimes()
+
+    suspend fun setProductSaved(id: Int, isSaved: Boolean)
 }
