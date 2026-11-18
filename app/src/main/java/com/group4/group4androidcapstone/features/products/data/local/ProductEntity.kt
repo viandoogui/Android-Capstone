@@ -1,5 +1,6 @@
 package com.group4.group4androidcapstone.features.products.data.local
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.time.LocalDateTime
@@ -16,7 +17,8 @@ data class ProductEntity(
     val warranty: String?,
     val color: String?,
     val listPrice: Double,
-    val viewedTime: LocalDateTime? = null
+    val viewedTime: LocalDateTime? = null,
+    @ColumnInfo(name = "is_saved", defaultValue = "0") val isSaved: Boolean = false
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

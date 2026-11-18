@@ -16,7 +16,8 @@ object ProductMapper {
             warranty = dto.warranty,
             color = dto.color,
             listPrice = dto.listPrice,
-            viewedTime = null
+            viewedTime = null,
+            isSaved = false
         )
     }
 
