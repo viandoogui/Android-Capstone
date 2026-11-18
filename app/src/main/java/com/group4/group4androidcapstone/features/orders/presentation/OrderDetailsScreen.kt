@@ -17,6 +17,9 @@ import java.math.RoundingMode
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.Surface
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.ui.graphics.Color
 
 @Composable
 fun OrderDetailsScreen(
@@ -27,85 +30,90 @@ fun OrderDetailsScreen(
     val displayStatus = displayOrderStatus(order.statusName)
     val itemsSubtotal = calculateItemsSubtotal(order.items)
 
-    Column(
-        modifier = Modifier
-            .verticalScroll(rememberScrollState())
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = Color.White,
+        contentColor = Color.Black
     ) {
-
-        Button(onClick = onBack) {
-            Text("Back to Order History")
-        }
-
-        Text(
-            text = "Order Details",
-            style = MaterialTheme.typography.headlineMedium
-        )
-
-        Text(
-            text = "Order #${order.id}",
-            style = MaterialTheme.typography.titleMedium
-        )
-
-        if (customerName.isNotEmpty()) {
-            Text(
-                text = "Customer: $customerName"
-            )
-        }
-
-        Text(
-            text = "Date: ${order.orderDate.toLocalDate()}"
-        )
-
-        Text(
-            text = "Status: $displayStatus"
-        )
-        if (displayStatus == "Shipped") {
-            Text(
-                text = "Shipped on: ${order.shipDate.toLocalDate()}"
-            )
-        } else {
-            Text(
-                text = "Shipping date on record: ${order.shipDate.toLocalDate()}"
-            )
-            Text(
-                text = "This date does not confirm shipment.",
-                style = MaterialTheme.typography.bodySmall
-            )
-        }
-
-        Text(
-            text = "Products",
-            style = MaterialTheme.typography.titleMedium
-        )
-
-        if (order.items.isEmpty()) {
-            Text("Product details unavailable")
-        } else {
-            order.items.forEach { item ->
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(4.dp)
-                ) {
-                    Text(
-                        text = item.productName ?: "Product name unavailable",
-                        style = MaterialTheme.typography.titleSmall
-                    )
-
-                    Text("Quantity: ${item.orderQty}")
-
-                    Text("Unit Price: ${formatOrderMoney(item.unitPrice)}")
-
-                    Text("Line Total: ${formatOrderMoney(item.lineTotal)}")
-                }
+        Column(
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Button(onClick = onBack) {
+                Text("Back to Order History")
             }
-        }
 
-        if (order.items.isNotEmpty()) {
             Text(
-                text = "Items Subtotal: ${formatOrderMoney(itemsSubtotal)}",
+                text = "Order Details",
+                style = MaterialTheme.typography.headlineMedium
+            )
+
+            Text(
+                text = "Order #${order.id}",
                 style = MaterialTheme.typography.titleMedium
             )
+
+            if (customerName.isNotEmpty()) {
+                Text(
+                    text = "Customer: $customerName"
+                )
+            }
+
+            Text(
+                text = "Date: ${order.orderDate.toLocalDate()}"
+            )
+
+            Text(
+                text = "Status: $displayStatus"
+            )
+            if (displayStatus == "Shipped") {
+                Text(
+                    text = "Shipped on: ${order.shipDate.toLocalDate()}"
+                )
+            } else {
+                Text(
+                    text = "Shipping date on record: ${order.shipDate.toLocalDate()}"
+                )
+                Text(
+                    text = "This date does not confirm shipment.",
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
+
+            Text(
+                text = "Products",
+                style = MaterialTheme.typography.titleMedium
+            )
+
+            if (order.items.isEmpty()) {
+                Text("Product details unavailable")
+            } else {
+                order.items.forEach { item ->
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        Text(
+                            text = item.productName ?: "Product name unavailable",
+                            style = MaterialTheme.typography.titleSmall
+                        )
+
+                        Text("Quantity: ${item.orderQty}")
+
+                        Text("Unit Price: ${formatOrderMoney(item.unitPrice)}")
+
+                        Text("Line Total: ${formatOrderMoney(item.lineTotal)}")
+                    }
+                }
+            }
+
+            if (order.items.isNotEmpty()) {
+                Text(
+                    text = "Items Subtotal: ${formatOrderMoney(itemsSubtotal)}",
+                    style = MaterialTheme.typography.titleMedium
+                )
+            }
         }
     }
 }
@@ -118,7 +126,6 @@ internal fun calculateItemsSubtotal(items: List<LineItem>): BigDecimal {
             BigDecimal.valueOf(item.lineTotal)
         )
     }
-
     return subtotal
 }
 internal fun displayOrderStatus(statusName: String): String {
@@ -167,7 +174,6 @@ fun OrderDetailsPreview() {
             )
         )
     )
-
     OrderDetailsScreen(order = sampleOrder)
 }
 
@@ -185,6 +191,5 @@ fun OrderDetailsMissingProductsPreview() {
         statusName = "Pending",
         items = emptyList()
     )
-
     OrderDetailsScreen(order = sampleOrder)
 }
