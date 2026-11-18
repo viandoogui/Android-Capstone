@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.group4.group4androidcapstone.features.HomeScreen.presentation.state.HomeUiState
 import com.group4.group4androidcapstone.features.orders.domain.GetOrdersUseCase
 import com.group4.group4androidcapstone.features.products.domain.GetRecentProductsUseCase
+import com.group4.group4androidcapstone.features.products.domain.RefreshProductsUseCase
+import com.group4.group4androidcapstone.features.products.domain.SetProductSavedUseCase
 import com.group4.group4androidcapstone.features.products.presentation.state.ProductDirectoryState
 import com.group4.group4androidcapstone.features.products.presentation.viewmodels.ProductDirectoryViewModel
 import com.group4.group4androidcapstone.features.products.presentation.viewmodels.ProductDirectoryViewModel.Companion.SEARCH_KEY
@@ -20,25 +22,65 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val useCase: GetRecentProductsUseCase
-
+    private val useCase: GetRecentProductsUseCase,
+    private val setProductSaved: SetProductSavedUseCase,
+    private val getOrders: GetOrdersUseCase,
+    private val refreshProductsUseCase: RefreshProductsUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUiState())
 
-    // expose (publicly) a read-only view of the state object
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
     init {
         loadRecentProducts()
+        //refresh()
+        getRecentOrders()
     }
 
-    private fun loadRecentProducts() {
+     fun loadRecentProducts() {
         viewModelScope.launch {
             useCase().collect { products ->
                 _uiState.update { it.copy(recentProducts = products) }
             }
         }
+    }
+
+    fun setProductIsSaved(id: Int, isSaved: Boolean) {
+        viewModelScope.launch {
+            setProductSaved(id, isSaved)
+        }
+    }
+    fun refresh() {
+        if (_uiState.value.isRefreshing) return
+        viewModelScope.launch {
+            _uiState.update { it.copy(isRefreshing = true) }
+            try {
+                refreshProductsUseCase()
+                val updatedOrders = getOrders()
+
+                _uiState.update {
+                    it.copy(recentOrders = updatedOrders)
+                }
+            } catch (e: Exception) {
+                _uiState.update {
+                    it.copy(
+                        error = e.message ?: "Couldn't refresh products"
+                    )
+                }
+            }finally {
+                _uiState.update { it.copy(isRefreshing = false) }
+            }
+
+        }
+    }
+
+    fun getRecentOrders(){
+        viewModelScope.launch {
+            val orders = getOrders()
+            _uiState.update { it.copy(recentOrders = orders) }
+        }
+
     }
 
 

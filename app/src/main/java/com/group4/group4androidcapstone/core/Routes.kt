@@ -30,6 +30,6 @@ data class ProductDirectoryRoute(val selectedProductId: Int? = null): CapstoneRo
 }
 
 @Serializable
-data object OrdersRoute: CapstoneRoute{
+data class OrdersRoute(val selectedOrderId: Int? = null): CapstoneRoute{
 
 }

@@ -9,23 +9,33 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.group4.group4androidcapstone.features.HomeScreen.presentation.ViewModels.HomeViewModel
+import com.group4.group4androidcapstone.features.HomeScreen.presentation.state.HomeUiState
 import com.group4.group4androidcapstone.features.products.domain.Product
 import com.group4.group4androidcapstone.features.products.presentation.composables.ProductCard
 import com.group4.group4androidcapstone.features.products.presentation.composables.ProductList
 import com.group4.group4androidcapstone.ui.theme.LocalSpacing
 
 @Composable
-fun HomeRecentProducts(){
+fun HomeRecentProducts(
+    products: List<Product>,
+    onProductSelected: (Product) -> Unit,
+    onProductSaved: (Int, Boolean) -> Unit,
+    isLoading: Boolean
 
-
-
+){
     Column(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.surface)
@@ -33,50 +43,30 @@ fun HomeRecentProducts(){
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
 
-        ){
-//        Text("Home screen recent products displayed here",
-//            modifier= Modifier.padding(LocalSpacing.current.large))
+        ) {
+    if(isLoading){
+        CircularProgressIndicator()
+    }else if (products.isEmpty()){
+        Text("No recent products")
+    }else {
 
-        val products = listOf(
-            Product(
-                productId = 1,
-                name = "Product 1",
-                productNumber = "21432152",
-                summary = "Summary of Product 1",
-                thumbnailPhoto = byteArrayOf(),
-                thumbnailPhotoFileName = "product1.jpg",
-                warranty = "1 year",
-                color = "Red",
-                listPrice = 9.99
-            ),
-             Product(
-                    productId = 2,
-                    name = "Product 2",
-                    productNumber = "21432152",
-                    summary = "Summary of Product 2",
-                    thumbnailPhoto = byteArrayOf(),
-                    thumbnailPhotoFileName = "product2.jpg",
-                    warranty = "2 year",
-                    color = "blue",
-                    listPrice = 10.99
-                )
-        )
 
-//        ProductList(
-//            products = products,
-//            onProductSelected = {Unit},
-//            innerPadding = PaddingValues()
-//        )
-        Column(modifier = Modifier.padding(LocalSpacing.current.medium)) {
-            Text("Recently Viewed Products: ")
-            products.forEach { product ->
-                ProductCard(
-                    product = product,
-                    onClick = {},
-                    onProductSavedSet = {a, b -> }
-                )
+                Column(
+
+                    modifier = Modifier
+                        .padding(LocalSpacing.current.medium)
+                        .verticalScroll(state = rememberScrollState())
+                ) {
+                    products.forEach { product ->
+                        ProductCard(
+                            product = product,
+                            onClick = { onProductSelected(product) },
+                            onProductSavedSet = onProductSaved
+                        )
+                    }
+                }
             }
-        }
+
 
 
     }

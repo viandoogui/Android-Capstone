@@ -43,7 +43,7 @@ fun AppNavHost(
 //                onOrderHistory = {Unit},
 //                onRecentProducts = {Unit}
                onNavigateToOrderHistory = {
-                   navController.navigate(OrdersRoute) {
+                   navController.navigate(OrdersRoute()) {
                        popUpTo(navController.graph.findStartDestination().id) {
                            saveState = true
                        }
@@ -52,7 +52,7 @@ fun AppNavHost(
                    }
                },
                onNavigateToProductDirectory = {
-                   navController.navigate(ProductDirectoryRoute){
+                   navController.navigate(ProductDirectoryRoute()){
                        popUpTo(navController.graph.findStartDestination().id) {
                            saveState = true
                        }
@@ -62,6 +62,15 @@ fun AppNavHost(
                },
                onProductSelected = { selectedProduct ->
                    navController.navigate(ProductDirectoryRoute(selectedProductId = selectedProduct.productId)) {
+                       popUpTo(navController.graph.findStartDestination().id) {
+                           saveState = true
+                       }
+                       launchSingleTop = true
+                       restoreState = false
+                   }
+               },
+               onOrderSelected = { selectedOrder ->
+                   navController.navigate(OrdersRoute(selectedOrderId = selectedOrder.id)) {
                        popUpTo(navController.graph.findStartDestination().id) {
                            saveState = true
                        }

@@ -21,7 +21,7 @@ enum class TopLevelDestination (
 ){
     HOME(HomeScreenRoute, R.string.nav_home, Icons.Filled.Home),
     PRODUCTS(ProductDirectoryRoute(), R.string.nav_ProductDir, Icons.Filled.Apps),
-    ORDERS(OrdersRoute, R.string.nav_OrdersDir, Icons.Filled.ShoppingCart),
+    ORDERS(OrdersRoute(), R.string.nav_OrdersDir, Icons.Filled.ShoppingCart),
 //    ORDERS(OrdersRoute, R.string.nav_orders, Icons.Filled.ShoppingCart),
 //    SETTINGS(SettingsRoute, R.string.nav_settings, Icons.Filled.Settings)
 }
