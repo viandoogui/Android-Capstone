@@ -69,7 +69,7 @@ fun ProductDetails(
                     ProductDetailText("Product Number", product.productNumber)
                     ProductDetailText("Summary", product.summary)
                     AsyncImage(
-                        model = product.photo,
+                        model = Base64.decode(product.photo ?: ""),
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
