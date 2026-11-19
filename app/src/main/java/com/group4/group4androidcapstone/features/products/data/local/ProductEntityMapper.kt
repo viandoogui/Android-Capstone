@@ -11,10 +11,7 @@ object ProductEntityMapper {
             name = entity.name,
             productNumber = entity.productNumber,
             summary = entity.summary,
-            thumbnailPhoto = Base64.encode(
-                entity.thumbnailPhoto,
-                Base64.DEFAULT
-            ),
+            thumbnailPhoto = entity.thumbnailPhoto,
             thumbnailPhotoFileName = entity.thumbnailPhotoFileName,
             warranty = entity.warranty,
             color = entity.color,
