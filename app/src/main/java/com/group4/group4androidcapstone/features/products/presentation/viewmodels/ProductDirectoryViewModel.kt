@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.group4.group4androidcapstone.features.products.domain.GetProductsUseCase
+import com.group4.group4androidcapstone.features.products.domain.Product
 import com.group4.group4androidcapstone.features.products.domain.GetRecentProductsUseCase
 import com.group4.group4androidcapstone.features.products.domain.GetSavedProductsUseCase
 import com.group4.group4androidcapstone.features.products.domain.ProductCase
@@ -11,6 +12,7 @@ import com.group4.group4androidcapstone.features.products.domain.RefreshProducts
 import com.group4.group4androidcapstone.features.products.domain.SetProductSavedUseCase
 import com.group4.group4androidcapstone.features.products.domain.SetProductTimeUseCase
 import com.group4.group4androidcapstone.features.products.presentation.state.ProductDirectoryState
+import com.group4.group4androidcapstone.features.products.presentation.state.SortOrder
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
@@ -31,13 +33,12 @@ class ProductDirectoryViewModel @Inject constructor(
     private val setProductTime: SetProductTimeUseCase,
     private val setProductSaved: SetProductSavedUseCase,
     private val savedStateHandle: SavedStateHandle = SavedStateHandle()
-): ViewModel() {
+) : ViewModel() {
 
     // keep the actual mutable state value private
     private val _uiState = MutableStateFlow(
         ProductDirectoryState(
             searchQuery = savedStateHandle[SEARCH_KEY] ?: "",
-            summaryFilter = savedStateHandle[SUMMARY_KEY] ?: "",
         )
     )
 
@@ -74,7 +75,7 @@ class ProductDirectoryViewModel @Inject constructor(
         observeJob?.cancel()
 
         observeJob = viewModelScope.launch {
-            val currentFlow = when(case) {
+            val currentFlow = when (case) {
                 ProductCase.DEFAULT -> getAvailableProducts()
                 ProductCase.RECENT -> getRecentProducts()
                 ProductCase.SAVED -> getSavedProducts()
@@ -108,14 +109,16 @@ class ProductDirectoryViewModel @Inject constructor(
 
             try {
                 refreshProducts()
-                _uiState.update { it.copy(isRefreshing = false) }
+                savedStateHandle[SEARCH_KEY] = ""
+                _uiState.update { it.copy(isRefreshing = false, searchQuery = "") }
+
+
             }
             // NEVER swallow a CancellationException
             // doing so can orphan the coroutine (suspendable)
             catch (e: CancellationException) {
                 throw e
-            }
-            catch (e: Exception) {
+            } catch (e: Exception) {
                 // cached products are already on screen, they can stay there
                 // we just need to surface the error
                 _uiState.update {
@@ -135,15 +138,39 @@ class ProductDirectoryViewModel @Inject constructor(
 
     fun updateSearchQuery(query: String) {
         savedStateHandle[SEARCH_KEY] = query
-        _uiState.update { it.copy(searchQuery = query)}
+        _uiState.update { it.copy(searchQuery = query) }
     }
 
-    fun updateSummaryFilter(summary: String) {
-        savedStateHandle[SUMMARY_KEY] = summary
+    fun updateWarrantyFilter(displayWarrantyOnly: Boolean) {
+
+        _uiState.update {
+            it.copy(displayWarrantyOnly = displayWarrantyOnly)
+        }
+    }
+
+    fun onSortChanged(newSort: SortOrder) {
         _uiState.update { currentState ->
+            val sortedList = sortProducts(currentState.products, newSort)
             currentState.copy(
-                summaryFilter = summary
+                products = sortedList,
+                currentSort = newSort
             )
+        }
+    }
+
+    fun sortProducts(list: List<Product>, sortOrder: SortOrder): List<Product> {
+        return when (sortOrder) {
+            SortOrder.ASCENDING -> list.sortedBy { it.name }
+            SortOrder.DESCENDING -> list.sortedByDescending { it.name }
+            SortOrder.PRICE_LOW_TO_HIGH -> list.sortedBy { it.listPrice }
+        }
+    }
+
+    fun getProductsBasedOnWarranty(list: List<Product>, displayWarrantyOnly: Boolean): List<Product> {
+        return if (displayWarrantyOnly) {
+            list.filter { !it.warranty.isNullOrEmpty() }
+        } else {
+            list
         }
     }
 
@@ -165,7 +192,7 @@ class ProductDirectoryViewModel @Inject constructor(
 
     companion object {
         const val SEARCH_KEY = "searchFilter"
-        const val SUMMARY_KEY = "summaryFilter"
     }
+
 
 }

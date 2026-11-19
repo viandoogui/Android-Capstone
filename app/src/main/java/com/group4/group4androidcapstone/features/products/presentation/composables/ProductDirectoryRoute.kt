@@ -61,14 +61,18 @@ fun ProductDirectoryRoute(
                                 onProductSelected = { product ->
                                     scope.launch {
                                         viewModel.setProductViewedTime(product.productId, LocalDateTime.now())
-                                        navigator.navigateTo(ListDetailPaneScaffoldRole.Detail,
-                                            product.productId)
+                                        navigator.navigateTo(
+                                            ListDetailPaneScaffoldRole.Detail,
+                                            product.productId
+                                        )
                                     }
                                 },
                                 onRefresh = viewModel::loadProducts,
                                 onDismissError = viewModel::dismissError,
                                 onSearchQueryChange = viewModel::updateSearchQuery,
-                                onSummaryChange = viewModel::updateSummaryFilter,
+                                onWarrantyToggled = viewModel::updateWarrantyFilter,
+                                onShowFilterChange = viewModel::updateShowFilter,
+                                onSortChanged = viewModel::onSortChanged,
                                 onProductCaseChange = viewModel::setProductUseCase,
                                 onProductSavedSet = viewModel::setProductIsSaved
                             )

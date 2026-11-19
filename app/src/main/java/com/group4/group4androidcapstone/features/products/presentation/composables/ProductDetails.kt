@@ -65,7 +65,6 @@ fun ProductDetails(
                         .fillMaxWidth()
                         .verticalScroll(rememberScrollState())
                 ) {
-                    ProductDetailText("Id", product.productId)
                     ProductDetailText("Product Name", product.productName)
                     ProductDetailText("Product Number", product.productNumber)
                     ProductDetailText("Summary", product.summary)

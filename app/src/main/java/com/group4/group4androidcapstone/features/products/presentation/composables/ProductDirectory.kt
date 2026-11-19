@@ -11,15 +11,17 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.Sort
 import androidx.compose.material.icons.filled.Filter
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DockedSearchBar
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
@@ -32,13 +34,17 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,10 +52,10 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.group4.group4androidcapstone.core.presentation.TextFilter
 import com.group4.group4androidcapstone.features.products.domain.Product
 import com.group4.group4androidcapstone.features.products.domain.ProductCase
 import com.group4.group4androidcapstone.features.products.presentation.state.ProductDirectoryState
+import com.group4.group4androidcapstone.features.products.presentation.state.SortOrder
 import com.group4.group4androidcapstone.ui.theme.Group4AndroidCapstoneTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -63,13 +69,15 @@ fun ProductDirectory(
     onRefresh: () -> Unit = {},
     onDismissError: () -> Unit = {},
     onSearchQueryChange: (String) -> Unit = {},
-    onGenreChange: (String) -> Unit = {},
-    onSummaryChange: (String) -> Unit = {},
+    onWarrantyToggled: (Boolean) -> Unit = {},
     onShowFilterChange: (Boolean) -> Unit = {},
+    onSortChanged: (SortOrder) -> Unit,
     onProductCaseChange: (ProductCase) -> Unit = {},
     onProductSavedSet: (Int, Boolean) -> Unit = { a, b -> }
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
+    var expanded by remember { mutableStateOf(false) }
+
     val retryLabel = "Retry"
     // we're going to add a search bar (text input) to the top of the screen
     // being the first thing that can take focus, android would focus it
@@ -116,58 +124,108 @@ fun ProductDirectory(
                         }
                     }
                 )
-                Row(){
-                    Button (
+                Row() {
+                    Button(
                         onClick = {
                             onProductCaseChange(ProductCase.DEFAULT)
                         }
-                    ){
+                    ) {
                         Text("Default")
                     }
-                    Button (
+                    Button(
                         onClick = {
                             onProductCaseChange(ProductCase.RECENT)
                         }
-                    ){
+                    ) {
                         Text("Recently Viewed")
                     }
-                    Button (
+                    Button(
                         onClick = {
                             onProductCaseChange(ProductCase.SAVED)
                         }
-                    ){
+                    ) {
                         Text("Saved Products")
                     }
                 }
+                Row() {
+                    DockedSearchBar(
+                        inputField = {
+                            SearchBarDefaults.InputField(
+                                query = state.searchQuery,
+                                onQueryChange = onSearchQueryChange,
+                                onSearch = {},
+                                expanded = false,
+                                onExpandedChange = {},
+                                placeholder = { Text("Search") },
+                                leadingIcon = { Icon(Icons.Filled.Search, contentDescription = null) }
+                            )
+                        },
+                        expanded = false,
+                        onExpandedChange = {},
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(vertical = 4.dp),
+                        content = {}
+                    )
 
-
-                DockedSearchBar(
-                    inputField = {
-                        SearchBarDefaults.InputField(
-                            query = state.searchQuery,
-                            onQueryChange = onSearchQueryChange,
-                            onSearch = {},
-                            expanded = false,
-                            onExpandedChange = {},
-                            placeholder = { Text("Search") },
-                            leadingIcon = { Icon(Icons.Filled.Search, contentDescription = null) }
+                    IconButton(
+                        onClick = { expanded = true }
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.Sort,
+                            contentDescription = "Sort"
                         )
-                    },
-                    expanded = false,
-                    onExpandedChange = {},
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 4.dp),
-                    content = {}
-                )
+                    }
+                    DropdownMenu(
+                        expanded = expanded,
+                        onDismissRequest = { expanded = false }
+                    ) {
+                        DropdownMenuItem(
+                            text = { Text("Name: Ascending") },
+                            onClick = {
+                                onSortChanged(SortOrder.ASCENDING)
+                                expanded = false
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("Name: Descending") },
+                            onClick = {
+                                onSortChanged(SortOrder.DESCENDING)
+                                expanded = false
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("Price") },
+                            onClick = {
+                                onSortChanged(SortOrder.PRICE_LOW_TO_HIGH)
+                                expanded = false
+                            }
+                        )
+
+                    }
+
+                }
+
 
                 Text("Displayed Products")
-                ProductList(
-                    products = state.displayedProducts,
-                    onProductSelected = onProductSelected,
-                    onProductSavedSet = onProductSavedSet,
-                    innerPadding = PaddingValues(0.dp)
-                )
+                if (state.displayedProducts.isEmpty()) {
+                    Text("No products found")
+                } else {
+                    PullToRefreshBox(
+                        isRefreshing = state.isRefreshing,
+                        onRefresh = onRefresh,
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        ProductList(
+                            products = state.displayedProducts,
+                            onProductSelected = onProductSelected,
+                            innerPadding = PaddingValues(0.dp),
+                            onProductSavedSet = onProductSavedSet,
+                        )
+                    }
+
+                }
+
             }
         },
 
@@ -230,7 +288,9 @@ fun ProductDirectory(
             PullToRefreshBox(
                 isRefreshing = state.isRefreshing,
                 onRefresh = onRefresh,
-                modifier = Modifier.fillMaxSize().padding(innerPadding)
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
             ) {
                 ProductList(
                     products = state.displayedProducts,
@@ -256,25 +316,26 @@ fun ProductDirectory(
                         text = "Filter",
                         style = MaterialTheme.typography.titleSmall
                     )
-                    TextFilter(
-                        label = "Summary Filter",
-                        filter = state.summaryFilter,
-                        onFilterChange = onSummaryChange
+                    Text("Filter By Warranty")
+                    Switch(
+                        checked = state.displayWarrantyOnly,
+                        onCheckedChange = {
+                            onWarrantyToggled(it)
+                        }
                     )
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         Button(
                             onClick = {
-                                onGenreChange("")
-                                onSummaryChange("")
+                                onWarrantyToggled(false)
                             },
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = MaterialTheme.colorScheme.secondaryContainer,
                                 contentColor = MaterialTheme.colorScheme.onSecondaryContainer
                             )
                         ) {
-                            Text("Clear")
+                            Text("Reset Filters")
                         }
 
                         Button(
@@ -285,8 +346,6 @@ fun ProductDirectory(
                             Text("Close")
                         }
                     }
-
-
                 }
             }
         }
@@ -307,6 +366,7 @@ fun CompactProductDirectoryPreview() {
         ProductDirectory(
             state = ProductDirectoryState(),
             useTwoPaneLayout = false,
+            onSortChanged = {}
         )
     }
 }
