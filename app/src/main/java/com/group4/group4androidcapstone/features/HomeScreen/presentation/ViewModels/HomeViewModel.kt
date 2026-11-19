@@ -7,10 +7,6 @@ import com.group4.group4androidcapstone.features.orders.domain.GetOrdersUseCase
 import com.group4.group4androidcapstone.features.products.domain.GetRecentProductsUseCase
 import com.group4.group4androidcapstone.features.products.domain.RefreshProductsUseCase
 import com.group4.group4androidcapstone.features.products.domain.SetProductSavedUseCase
-import com.group4.group4androidcapstone.features.products.presentation.state.ProductDirectoryState
-import com.group4.group4androidcapstone.features.products.presentation.viewmodels.ProductDirectoryViewModel
-import com.group4.group4androidcapstone.features.products.presentation.viewmodels.ProductDirectoryViewModel.Companion.SEARCH_KEY
-import com.group4.group4androidcapstone.features.products.presentation.viewmodels.ProductDirectoryViewModel.Companion.SUMMARY_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
