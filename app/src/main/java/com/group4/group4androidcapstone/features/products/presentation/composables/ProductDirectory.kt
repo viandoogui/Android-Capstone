@@ -34,6 +34,7 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.VerticalDivider
@@ -50,7 +51,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.group4.group4androidcapstone.core.presentation.TextFilter
 import com.group4.group4androidcapstone.features.products.domain.Product
 import com.group4.group4androidcapstone.features.products.domain.ProductCase
 import com.group4.group4androidcapstone.features.products.presentation.state.ProductDirectoryState
@@ -68,8 +68,7 @@ fun ProductDirectory(
     onRefresh: () -> Unit = {},
     onDismissError: () -> Unit = {},
     onSearchQueryChange: (String) -> Unit = {},
-    onGenreChange: (String) -> Unit = {},
-    onSummaryChange: (String) -> Unit = {},
+    onWarrantyToggled: (Boolean) -> Unit = {},
     onShowFilterChange: (Boolean) -> Unit = {},
     onSortChanged: (SortOrder) -> Unit,
     onProductCaseChange: (ProductCase) -> Unit = {},
@@ -314,25 +313,26 @@ fun ProductDirectory(
                         text = "Filter",
                         style = MaterialTheme.typography.titleSmall
                     )
-                    TextFilter(
-                        label = "Summary Filter",
-                        filter = state.summaryFilter,
-                        onFilterChange = onSummaryChange
+                    Text("Filter By Warranty")
+                    Switch(
+                        checked = state.displayWarrantyOnly,
+                        onCheckedChange = {
+                            onWarrantyToggled(it)
+                        }
                     )
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         Button(
                             onClick = {
-                                onGenreChange("")
-                                onSummaryChange("")
+                                onWarrantyToggled(false)
                             },
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = MaterialTheme.colorScheme.secondaryContainer,
                                 contentColor = MaterialTheme.colorScheme.onSecondaryContainer
                             )
                         ) {
-                            Text("Clear")
+                            Text("Reset Filters")
                         }
 
                         Button(

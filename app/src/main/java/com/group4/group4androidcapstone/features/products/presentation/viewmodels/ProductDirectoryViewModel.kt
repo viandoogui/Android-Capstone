@@ -39,7 +39,6 @@ class ProductDirectoryViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(
         ProductDirectoryState(
             searchQuery = savedStateHandle[SEARCH_KEY] ?: "",
-            summaryFilter = savedStateHandle[SUMMARY_KEY] ?: "",
         )
     )
 
@@ -110,9 +109,8 @@ class ProductDirectoryViewModel @Inject constructor(
 
             try {
                 refreshProducts()
-                savedStateHandle[SUMMARY_KEY] = ""
                 savedStateHandle[SEARCH_KEY] = ""
-                _uiState.update { it.copy(isRefreshing = false, searchQuery = "", summaryFilter = "") }
+                _uiState.update { it.copy(isRefreshing = false, searchQuery = "") }
 
 
             }
@@ -143,12 +141,10 @@ class ProductDirectoryViewModel @Inject constructor(
         _uiState.update { it.copy(searchQuery = query) }
     }
 
-    fun updateSummaryFilter(summary: String) {
-        savedStateHandle[SUMMARY_KEY] = summary
-        _uiState.update { currentState ->
-            currentState.copy(
-                summaryFilter = summary
-            )
+    fun updateWarrantyFilter(displayWarrantyOnly: Boolean) {
+
+        _uiState.update {
+            it.copy(displayWarrantyOnly = displayWarrantyOnly)
         }
     }
 
@@ -170,6 +166,14 @@ class ProductDirectoryViewModel @Inject constructor(
         }
     }
 
+    fun getProductsBasedOnWarranty(list: List<Product>, displayWarrantyOnly: Boolean): List<Product> {
+        return if (displayWarrantyOnly) {
+            list.filter { !it.warranty.isNullOrEmpty() }
+        } else {
+            list
+        }
+    }
+
     fun updateShowFilter(show: Boolean) {
         _uiState.update { currentState ->
             currentState.copy(
@@ -188,7 +192,6 @@ class ProductDirectoryViewModel @Inject constructor(
 
     companion object {
         const val SEARCH_KEY = "searchFilter"
-        const val SUMMARY_KEY = "summaryFilter"
     }
 
 

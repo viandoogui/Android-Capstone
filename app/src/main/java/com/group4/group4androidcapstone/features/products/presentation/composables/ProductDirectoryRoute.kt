@@ -59,7 +59,7 @@ fun ProductDirectoryRoute(
                                 onRefresh = viewModel::loadProducts,
                                 onDismissError = viewModel::dismissError,
                                 onSearchQueryChange = viewModel::updateSearchQuery,
-                                onSummaryChange = viewModel::updateSummaryFilter,
+                                onWarrantyToggled = viewModel::updateWarrantyFilter,
                                 onShowFilterChange = viewModel::updateShowFilter,
                                 onSortChanged = viewModel::onSortChanged,
                                 onProductCaseChange = viewModel::setProductUseCase,

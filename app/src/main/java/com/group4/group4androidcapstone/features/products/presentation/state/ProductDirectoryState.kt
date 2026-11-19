@@ -5,7 +5,7 @@ import com.group4.group4androidcapstone.features.products.domain.Product
 data class ProductDirectoryState(
     val products: List<Product> = emptyList(),
     val searchQuery:String = "",
-    val summaryFilter: String = "",
+    val displayWarrantyOnly: Boolean = false,
     val showFilter: Boolean = false,
     val selectedProductId: Int? = null,
     val isRefreshing: Boolean = false,
@@ -15,9 +15,8 @@ data class ProductDirectoryState(
     val displayedProducts: List<Product>
         get() = products.filter {
             val matchesSearch = searchQuery.isBlank() || it.name.contains(searchQuery, ignoreCase = true)
-            val matchesSummary = summaryFilter.isBlank() || (it.summary != null && it.summary.contains(summaryFilter, ignoreCase = true))
-
-            matchesSearch && matchesSummary
+            val matchesWarranty = !displayWarrantyOnly || !it.warranty.isNullOrEmpty()
+            matchesSearch && matchesWarranty
         }
 
     val selectedProduct: Product?
