@@ -68,7 +68,7 @@ import javax.inject.Singleton
     override suspend fun setProductViewedTime(id: Int, viewedTime: LocalDateTime?) {
         val entity = productDao.observeProduct(id).first()
 
-        if(entity != null) {
+       if(entity != null) {
             productDao.setNewProductViewedTime(id, viewedTime)
         }
     }
