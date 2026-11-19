@@ -16,10 +16,15 @@ import com.group4.group4androidcapstone.features.products.presentation.composabl
 import com.group4.group4androidcapstone.features.products.presentation.state.ProductDirectoryState
 import com.group4.group4androidcapstone.features.orders.presentation.OrderHistoryRoute
 import androidx.activity.compose.BackHandler
+import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.mutableStateOf
+import androidx.navigation.toRoute
 import com.group4.group4androidcapstone.features.orders.domain.Order
 import com.group4.group4androidcapstone.features.orders.presentation.OrderDetailsScreen
+import com.group4.group4androidcapstone.features.products.presentation.composables.ProductDetails
+import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 
 @Composable
 fun AppNavHost(
@@ -38,7 +43,7 @@ fun AppNavHost(
 //                onOrderHistory = {Unit},
 //                onRecentProducts = {Unit}
                onNavigateToOrderHistory = {
-                   navController.navigate(OrdersRoute) {
+                   navController.navigate(OrdersRoute()) {
                        popUpTo(navController.graph.findStartDestination().id) {
                            saveState = true
                        }
@@ -47,19 +52,40 @@ fun AppNavHost(
                    }
                },
                onNavigateToProductDirectory = {
-                   navController.navigate(ProductDirectoryRoute){
+                   navController.navigate(ProductDirectoryRoute()){
                        popUpTo(navController.graph.findStartDestination().id) {
                            saveState = true
                        }
                        launchSingleTop = true
                        restoreState = true
                    }
+               },
+               onProductSelected = { selectedProduct ->
+                   navController.navigate(ProductDirectoryRoute(selectedProductId = selectedProduct.productId)) {
+                       popUpTo(navController.graph.findStartDestination().id) {
+                           saveState = true
+                       }
+                       launchSingleTop = true
+                       restoreState = false
+                   }
+               },
+               onOrderSelected = { selectedOrder ->
+                   navController.navigate(OrdersRoute(selectedOrderId = selectedOrder.id)) {
+                       popUpTo(navController.graph.findStartDestination().id) {
+                           saveState = true
+                       }
+                       launchSingleTop = true
+                       restoreState = false
+                   }
                }
+
            )
        }
 
-        composable<ProductDirectoryRoute> {
+        composable<ProductDirectoryRoute> { backStackEntry ->
+            val route = backStackEntry.toRoute<ProductDirectoryRoute>()
             ProductDirectoryRoute(
+                selectedProductId =route.selectedProductId ,
                 onBack = {
                     navController.popBackStack()
                 }
