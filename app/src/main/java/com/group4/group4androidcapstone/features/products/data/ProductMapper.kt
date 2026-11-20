@@ -16,6 +16,7 @@ object ProductMapper {
             warranty = dto.warranty,
             color = dto.color,
             listPrice = dto.listPrice,
+            stockLevel = dto.stockLevel,
             viewedTime = null,
             isSaved = false,
             savedTime = null
@@ -35,7 +36,8 @@ object ProductMapper {
             thumbnailPhotoFileName = domain.thumbnailPhotoFileName,
             warranty = domain.warranty,
             color = domain.color,
-            listPrice = domain.listPrice
+            listPrice = domain.listPrice,
+            stockLevel = domain.stockLevel
         )
     }
 }
