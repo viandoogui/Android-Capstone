@@ -40,7 +40,6 @@ fun ProductDirectoryRoute(
 
     LaunchedEffect(selectedProductId) {
         if (selectedProductId != null) {
-            viewModel.setProductViewedTime(selectedProductId, LocalDateTime.now())
             navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, selectedProductId)
         }
     }
@@ -60,7 +59,6 @@ fun ProductDirectoryRoute(
                                 onBack = onBack,
                                 onProductSelected = { product ->
                                     scope.launch {
-                                        viewModel.setProductViewedTime(product.productId, LocalDateTime.now())
                                         navigator.navigateTo(
                                             ListDetailPaneScaffoldRole.Detail,
                                             product.productId

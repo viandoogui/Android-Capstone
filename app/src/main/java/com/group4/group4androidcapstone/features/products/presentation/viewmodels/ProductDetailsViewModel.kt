@@ -19,12 +19,14 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 import javax.inject.Inject
-
+import com.group4.group4androidcapstone.features.products.domain.SetProductTimeUseCase
 @HiltViewModel
 class ProductDetailsViewModel @Inject constructor(
     private val getProduct: GetProductDetailsUseCase,
-    private val refreshProduct: RefreshProductDetailsUseCase
+    private val refreshProduct: RefreshProductDetailsUseCase,
+    private val setProductTime: SetProductTimeUseCase
 ): ViewModel() {
 
     private val _uiState: MutableStateFlow<LoadableState<ProductDetails>> = MutableStateFlow(
@@ -36,9 +38,9 @@ class ProductDetailsViewModel @Inject constructor(
     private var loadJob: Job? = null
     private var loadedId: Int? = null
 
-    fun loadProduct(id: Int) {
-        // Don't restart (and flash loading) if this id is already being observed
-        if (id == loadedId && loadJob?.isActive == true) return
+    fun loadProduct(id: Int, forceRefresh: Boolean = false) {
+        // Don't restart (and flash loading) if this id is already being observed unless forced or in error state
+        if (!forceRefresh && id == loadedId && loadJob?.isActive == true && _uiState.value !is LoadableState.Error) return
 
         loadedId = id
         loadJob?.cancel()
@@ -67,7 +69,10 @@ class ProductDetailsViewModel @Inject constructor(
             // establish our subscription
             getProduct(id).collect { product ->
                 when {
-                    product != null -> _uiState.value = LoadableState.Success(product)
+                    product != null -> {
+                        _uiState.value = LoadableState.Success(product)
+                        setProductTime(id, LocalDateTime.now())
+                    }
                     hadCache -> _uiState.value = LoadableState.Empty // temporary state while the refresh is still underway
                     // no other useful cases - stay in loading state
                     // until the refresh either writes to the db or fails
@@ -77,6 +82,11 @@ class ProductDetailsViewModel @Inject constructor(
         }
     }
 
+    fun markProductAsViewed(id: Int) {
+        val timeJob = viewModelScope.launch {
+            setProductTime(id, LocalDateTime.now())
+        }
+    }
 }
 
 
