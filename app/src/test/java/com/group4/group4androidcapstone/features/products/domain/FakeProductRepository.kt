@@ -25,6 +25,10 @@ class FakeProductRepository : ProductRepository {
 
     }
 
+    override fun observeSavedProducts(): Flow<List<Product>> {
+        return flowOf(products.filter { it.isSaved })
+    }
+
     override fun observeProductDetails(id: Int): Flow<ProductDetails?> {
         return emptyFlow<ProductDetails>()
     }
@@ -48,4 +52,10 @@ class FakeProductRepository : ProductRepository {
         return Unit
     }
 
+    override suspend fun setProductSaved(
+        id: Int,
+        isSaved: Boolean
+    ) {
+        return Unit
+    }
 }

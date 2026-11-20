@@ -25,6 +25,13 @@ import com.group4.group4androidcapstone.features.orders.presentation.OrderDetail
 import com.group4.group4androidcapstone.features.products.presentation.composables.ProductDetails
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.compose.material3.Text
+import com.group4.group4androidcapstone.features.orders.presentation.OrderHistoryScreen
+import com.group4.group4androidcapstone.features.orders.presentation.OrderHistoryViewModel
 
 @Composable
 fun AppNavHost(
@@ -93,33 +100,63 @@ fun AppNavHost(
         }
 
 
-        composable<OrdersRoute> {
-            val selectedOrder = remember {
-                mutableStateOf<Order?>(null)
+
+        composable<OrdersRoute> { backStackEntry ->
+            val route = backStackEntry.toRoute<OrdersRoute>()
+
+            val viewModel: OrderHistoryViewModel = hiltViewModel()
+            val uiState = viewModel.uiState.collectAsState().value
+
+            val selectedOrderId = rememberSaveable {
+                mutableStateOf(route.selectedOrderId)
             }
 
-            BackHandler(enabled = selectedOrder.value != null) {
-                selectedOrder.value = null
+            LaunchedEffect(Unit) {
+                viewModel.loadOrders()
             }
 
-            val order = selectedOrder.value
+            val selectedOrder = uiState.orders.firstOrNull {
+                it.id == selectedOrderId.value
+            }
 
-            if (order == null) {
-                OrderHistoryRoute(
-                    onOrderSelected = { selected ->
-                        selectedOrder.value = selected
-                    }
-                )
-            } else {
-                OrderDetailsScreen(
-                    order = order,
-                    onBack = {
-                        selectedOrder.value = null
-                    }
-                )
+            BackHandler(enabled = selectedOrderId.value != null) {
+                selectedOrderId.value = null
+            }
+
+            when {
+                selectedOrderId.value == null -> {
+                    OrderHistoryScreen(
+                        uiState = uiState,
+                        onSortChange = { newestFirst ->
+                            viewModel.changeSort(newestFirst)
+                        },
+                        onOrderSelected = { order ->
+                            selectedOrderId.value = order.id
+                        }
+                    )
+                }
+
+                selectedOrder != null -> {
+                    OrderDetailsScreen(
+                        order = selectedOrder,
+                        onBack = {
+                            selectedOrderId.value = null
+                        }
+                    )
+                }
+
+                uiState.isLoading -> {
+                    Text("Loading order...")
+                }
+
+                uiState.errorMessage != null -> {
+                    Text(uiState.errorMessage)
+                }
+
+                else -> {
+                    Text("Order not found")
+                }
             }
         }
-
     }
-
 }
