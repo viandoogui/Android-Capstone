@@ -31,6 +31,8 @@ import coil3.compose.AsyncImage
 import com.group4.group4androidcapstone.R
 import com.group4.group4androidcapstone.features.products.data.ProductDto
 import com.group4.group4androidcapstone.features.products.domain.Product
+import com.group4.group4androidcapstone.features.products.domain.ProductStockCase
+import com.group4.group4androidcapstone.features.products.presentation.mapper.ProductStockMapper
 import com.group4.group4androidcapstone.ui.theme.Group4AndroidCapstoneTheme
 import kotlin.io.encoding.Base64
 
@@ -99,6 +101,25 @@ fun ProductCard(
                         .size(96.dp)
                         .clip(MaterialTheme.shapes.medium)
                 )
+                val productStockLevel = ProductStockMapper.convertStockLevel(product.stockLevel)
+                when (productStockLevel) {
+                    ProductStockCase.IN_STOCK ->
+                        Text(
+                            text = "In Stock",
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    ProductStockCase.OUT_OF_STOCK ->
+                        Text(
+                            text = "Out of Stock",
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    ProductStockCase.UNKNOWN ->
+                        Text(
+                            text = "Unknown",
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                }
+
             }
         }
     }
