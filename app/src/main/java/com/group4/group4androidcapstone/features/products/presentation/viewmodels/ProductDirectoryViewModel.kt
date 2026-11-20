@@ -61,6 +61,14 @@ class ProductDirectoryViewModel @Inject constructor(
         }
     }
 
+    fun updateShowClear(shouldShow: Boolean) {
+        _uiState.update { currentState ->
+            currentState.copy(
+                showClearRecentProducts = shouldShow
+            )
+        }
+    }
+
     fun clearRecentProducts() {
         viewModelScope.launch {
             clearRecentlyViewedProducts()

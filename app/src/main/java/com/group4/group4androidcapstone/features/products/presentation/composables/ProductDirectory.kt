@@ -78,7 +78,8 @@ fun ProductDirectory(
     onSortChanged: (SortOrder) -> Unit,
     onProductCaseChange: (ProductCase) -> Unit = {},
     onProductSavedSet: (Int, Boolean) -> Unit = { a, b -> },
-    onRecentProductsCleared: () -> Unit = {}
+    onRecentProductsCleared: () -> Unit = {},
+    onShowRecentClearChange: (Boolean) -> Unit = {}
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     var expanded by remember { mutableStateOf(false) }
@@ -133,6 +134,7 @@ fun ProductDirectory(
                     Button(
                         onClick = {
                             onProductCaseChange(ProductCase.DEFAULT)
+                            onShowRecentClearChange(false)
                         }
                     ) {
                         Text("Default")
@@ -140,6 +142,7 @@ fun ProductDirectory(
                     Button(
                         onClick = {
                             onProductCaseChange(ProductCase.RECENT)
+                            onShowRecentClearChange(true)
                         }
                     ) {
                         Text("Recently Viewed")
@@ -147,6 +150,7 @@ fun ProductDirectory(
                     Button(
                         onClick = {
                             onProductCaseChange(ProductCase.SAVED)
+                            onShowRecentClearChange(false)
                         }
                     ) {
                         Text("Saved Products")
@@ -242,19 +246,21 @@ fun ProductDirectory(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
 
-                ExtendedFloatingActionButton(
-                    text = { Text("Clear Recent") },
-                    icon = {
-                        Icon(
-                            Icons.Filled.Delete,
-                            contentDescription = "Clear recent products icon"
-                        )
-                    },
-                    onClick = {
-                        onRecentProductsCleared()
-                    },
-                    modifier = Modifier.height(45.dp)
-                )
+                if(state.showClearRecentProducts) {
+                    ExtendedFloatingActionButton(
+                        text = { Text("Clear Recent") },
+                        icon = {
+                            Icon(
+                                Icons.Filled.Delete,
+                                contentDescription = "Clear recent products icon"
+                            )
+                        },
+                        onClick = {
+                            onRecentProductsCleared()
+                        },
+                        modifier = Modifier.height(45.dp)
+                    )
+                }
 
                 ExtendedFloatingActionButton(
                     text = { Text("Filters") },
