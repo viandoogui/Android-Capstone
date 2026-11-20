@@ -32,6 +32,7 @@ import com.group4.group4androidcapstone.features.orders.domain.Order
 import com.group4.group4androidcapstone.features.products.domain.Product
 import com.group4.group4androidcapstone.ui.theme.LocalSpacing
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.time.LocalDateTime
 
 @Composable
 fun HomeContent(
@@ -107,7 +108,9 @@ fun HomeContent(
 
                 HomeRecentProducts(
                     products = state.recentProducts,
-                    onProductSelected = onProductSelected,
+                    onProductSelected = { product ->
+                        viewModel.setProductViewedTime(product.productId, LocalDateTime.now())
+                        onProductSelected(product)},
                     onProductSaved = { id, isSaved ->
                         viewModel.setProductIsSaved(id, isSaved)
                     },

@@ -53,7 +53,8 @@ import javax.inject.Singleton
             val oldEntity = oldEntities[it.productId]
             ProductEntityMapper.toEntity(it).copy(
                 viewedTime = oldEntity?.viewedTime, // copy over new fields but retain time
-                isSaved = oldEntity?.isSaved == true
+                isSaved = oldEntity?.isSaved == true,
+                savedTime = oldEntity?.savedTime
             )
         }
 
