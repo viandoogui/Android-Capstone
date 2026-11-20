@@ -51,7 +51,6 @@ fun HomeOrderReview(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.surface)
             .width(1000.dp),
-        //.verticalScroll(state = rememberScrollState())
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
 
@@ -70,7 +69,6 @@ fun HomeOrderReview(
                 modifier = Modifier
                     .padding(LocalSpacing.current.small)
                     .horizontalScroll(state = rememberScrollState())
-                    //.height(1000.dp)
             ) {
                 recentOrders.take(5).forEach { order ->
                     OrderCard(

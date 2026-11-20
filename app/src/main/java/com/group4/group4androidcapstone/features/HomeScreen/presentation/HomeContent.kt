@@ -49,11 +49,9 @@ fun HomeContent(
     }
 
     Column(
-//        isRefreshing = state.isRefreshing,
-//        onRefresh = viewModel::refresh,
+
         modifier = Modifier
             .fillMaxSize()
-            //.padding(16.dp)
             .statusBarsPadding()
             .verticalScroll(state = rememberScrollState()),
 

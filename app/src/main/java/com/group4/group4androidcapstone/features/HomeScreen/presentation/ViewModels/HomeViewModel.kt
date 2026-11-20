@@ -98,7 +98,6 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             setProductTime(id, viewedTime)
 
-            // Immediately update recentProducts list in UI state
             val updatedProducts = useCase().first()
             _uiState.update { it.copy(recentProducts = updatedProducts) }
         }
