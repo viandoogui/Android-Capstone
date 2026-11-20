@@ -220,7 +220,7 @@ fun ProductDirectory(
                 }
 
                 Text("Displayed Products")
-                if (state.displayedProducts.isEmpty()) {
+                if (state.displayedProducts.isEmpty() && !state.isRefreshing) {
                     Text("No products found")
                 }
 
