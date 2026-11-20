@@ -74,7 +74,9 @@ fun ProductDirectoryRoute(
                                 onShowFilterChange = viewModel::updateShowFilter,
                                 onSortChanged = viewModel::onSortChanged,
                                 onProductCaseChange = viewModel::setProductUseCase,
-                                onProductSavedSet = viewModel::setProductIsSaved
+                                onProductSavedSet = viewModel::setProductIsSaved,
+                                onRecentProductsCleared = viewModel::clearRecentProducts,
+                                onShowRecentClearChange = viewModel::updateShowClear
                             )
                         }
                     }

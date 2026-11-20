@@ -12,6 +12,7 @@ data class Product (
     val warranty: String?,
     val color: String?,
     val listPrice: Double,
+    val stockLevel: Int = 0,
     val viewedTime: LocalDateTime? = null,
     val isSaved: Boolean = false,
     val savedTime: LocalDateTime? = null

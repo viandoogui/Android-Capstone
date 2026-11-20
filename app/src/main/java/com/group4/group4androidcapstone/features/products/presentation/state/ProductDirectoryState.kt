@@ -7,6 +7,7 @@ data class ProductDirectoryState(
     val searchQuery:String = "",
     val displayWarrantyOnly: Boolean = false,
     val showFilter: Boolean = false,
+    val showClearRecentProducts: Boolean = false,
     val selectedProductId: Int? = null,
     val isRefreshing: Boolean = false,
     val errorMessage: String? = null,

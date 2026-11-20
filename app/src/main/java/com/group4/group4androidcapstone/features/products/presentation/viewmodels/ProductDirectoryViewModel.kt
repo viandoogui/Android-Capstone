@@ -3,6 +3,7 @@ package com.group4.group4androidcapstone.features.products.presentation.viewmode
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.group4.group4androidcapstone.features.products.domain.ClearProductTimesUseCase
 import com.group4.group4androidcapstone.features.products.domain.GetProductsUseCase
 import com.group4.group4androidcapstone.features.products.domain.Product
 import com.group4.group4androidcapstone.features.products.domain.GetRecentProductsUseCase
@@ -32,6 +33,7 @@ class ProductDirectoryViewModel @Inject constructor(
     private val refreshProducts: RefreshProductsUseCase,
     private val setProductTime: SetProductTimeUseCase,
     private val setProductSaved: SetProductSavedUseCase,
+    private val clearRecentlyViewedProducts: ClearProductTimesUseCase,
     private val savedStateHandle: SavedStateHandle = SavedStateHandle()
 ) : ViewModel() {
 
@@ -56,6 +58,20 @@ class ProductDirectoryViewModel @Inject constructor(
             // when the viewModel is destroyed (i.e. when the user
             // navigates away from this screen)
             setProductUseCase(ProductCase.DEFAULT)
+        }
+    }
+
+    fun updateShowClear(shouldShow: Boolean) {
+        _uiState.update { currentState ->
+            currentState.copy(
+                showClearRecentProducts = shouldShow
+            )
+        }
+    }
+
+    fun clearRecentProducts() {
+        viewModelScope.launch {
+            clearRecentlyViewedProducts()
         }
     }
 

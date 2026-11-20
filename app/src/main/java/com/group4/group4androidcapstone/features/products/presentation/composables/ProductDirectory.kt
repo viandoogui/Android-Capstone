@@ -11,10 +11,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.Sort
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Filter
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
@@ -57,6 +60,7 @@ import com.group4.group4androidcapstone.features.products.domain.ProductCase
 import com.group4.group4androidcapstone.features.products.presentation.state.ProductDirectoryState
 import com.group4.group4androidcapstone.features.products.presentation.state.SortOrder
 import com.group4.group4androidcapstone.ui.theme.Group4AndroidCapstoneTheme
+import com.group4.group4androidcapstone.ui.theme.Spacing
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -73,7 +77,9 @@ fun ProductDirectory(
     onShowFilterChange: (Boolean) -> Unit = {},
     onSortChanged: (SortOrder) -> Unit,
     onProductCaseChange: (ProductCase) -> Unit = {},
-    onProductSavedSet: (Int, Boolean) -> Unit = { a, b -> }
+    onProductSavedSet: (Int, Boolean) -> Unit = { a, b -> },
+    onRecentProductsCleared: () -> Unit = {},
+    onShowRecentClearChange: (Boolean) -> Unit = {}
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     var expanded by remember { mutableStateOf(false) }
@@ -132,6 +138,7 @@ fun ProductDirectory(
                     Button(
                         onClick = {
                             onProductCaseChange(ProductCase.DEFAULT)
+                            onShowRecentClearChange(false)
                         }
                     ) {
                         Text("Default")
@@ -139,6 +146,7 @@ fun ProductDirectory(
                     Button(
                         onClick = {
                             onProductCaseChange(ProductCase.RECENT)
+                            onShowRecentClearChange(true)
                         }
                     ) {
                         Text("Recently Viewed")
@@ -146,6 +154,7 @@ fun ProductDirectory(
                     Button(
                         onClick = {
                             onProductCaseChange(ProductCase.SAVED)
+                            onShowRecentClearChange(false)
                         }
                     ) {
                         Text("Saved Products")
@@ -210,43 +219,55 @@ fun ProductDirectory(
 
                 }
 
-
                 Text("Displayed Products")
                 if (state.displayedProducts.isEmpty()) {
                     Text("No products found")
-                } else {
-                    PullToRefreshBox(
-                        isRefreshing = state.isRefreshing,
-                        onRefresh = onRefresh,
-                        modifier = Modifier.fillMaxSize()
-                    ) {
-                        ProductList(
-                            products = state.displayedProducts,
-                            onProductSelected = onProductSelected,
-                            innerPadding = PaddingValues(0.dp),
-                            onProductSavedSet = onProductSavedSet,
-                        )
-                    }
-
                 }
 
             }
         },
 
         floatingActionButton = {
-            ExtendedFloatingActionButton(
-                text = { Text("Filters") },
-                icon = {
-                    Icon(
-                        Icons.Filled.Filter,
-                        contentDescription = "Filter icon"
+
+            Column(
+                modifier = Modifier.padding(),
+                horizontalAlignment = Alignment.End,
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+
+                if(state.showClearRecentProducts) {
+                    ExtendedFloatingActionButton(
+                        text = { Text("Clear Recent") },
+                        icon = {
+                            Icon(
+                                Icons.Filled.Delete,
+                                contentDescription = "Clear recent products icon"
+                            )
+                        },
+                        onClick = {
+                            onRecentProductsCleared()
+                        },
+                        modifier = Modifier.height(45.dp)
                     )
-                },
-                onClick = {
-                    onShowFilterChange(true)
                 }
-            )
+
+                ExtendedFloatingActionButton(
+                    text = { Text("Filters") },
+                    icon = {
+                        Icon(
+                            Icons.Filled.Filter,
+                            contentDescription = "Filter icon"
+                        )
+                    },
+                    onClick = {
+                        onShowFilterChange(true)
+                    },
+                    modifier = Modifier.height(45.dp)
+                )
+            }
+
         }
+
     ) { innerPadding ->
 
         if (useTwoPaneLayout) {
