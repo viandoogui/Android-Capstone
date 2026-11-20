@@ -9,5 +9,6 @@ data class ProductDto (
     val thumbnailPhotoFileName: String,
     val warranty: String?,
     val color: String?,
-    val listPrice: Double
+    val listPrice: Double,
+    val stockLevel: Int
 )

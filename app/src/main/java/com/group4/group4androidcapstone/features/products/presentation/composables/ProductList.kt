@@ -103,7 +103,7 @@ fun ProductListPreview() {
             thumbnailPhotoFileName = "product1.jpg",
             warranty = "1 year",
             color = "Red",
-            listPrice = 9.99
+            listPrice = 9.99,
         ),
         Product(
             productId = 2,
