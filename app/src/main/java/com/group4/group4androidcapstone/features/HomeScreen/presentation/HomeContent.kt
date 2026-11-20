@@ -32,6 +32,7 @@ import com.group4.group4androidcapstone.features.orders.domain.Order
 import com.group4.group4androidcapstone.features.products.domain.Product
 import com.group4.group4androidcapstone.ui.theme.LocalSpacing
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.time.LocalDateTime
 
 @Composable
 fun HomeContent(
@@ -48,11 +49,9 @@ fun HomeContent(
     }
 
     Column(
-//        isRefreshing = state.isRefreshing,
-//        onRefresh = viewModel::refresh,
+
         modifier = Modifier
             .fillMaxSize()
-            //.padding(16.dp)
             .statusBarsPadding()
             .verticalScroll(state = rememberScrollState()),
 
@@ -107,7 +106,9 @@ fun HomeContent(
 
                 HomeRecentProducts(
                     products = state.recentProducts,
-                    onProductSelected = onProductSelected,
+                    onProductSelected = { product ->
+                        viewModel.setProductViewedTime(product.productId, LocalDateTime.now())
+                        onProductSelected(product)},
                     onProductSaved = { id, isSaved ->
                         viewModel.setProductIsSaved(id, isSaved)
                     },

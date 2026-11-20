@@ -7,12 +7,15 @@ import com.group4.group4androidcapstone.features.orders.domain.GetOrdersUseCase
 import com.group4.group4androidcapstone.features.products.domain.GetRecentProductsUseCase
 import com.group4.group4androidcapstone.features.products.domain.RefreshProductsUseCase
 import com.group4.group4androidcapstone.features.products.domain.SetProductSavedUseCase
+import com.group4.group4androidcapstone.features.products.domain.SetProductTimeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 
@@ -22,6 +25,7 @@ class HomeViewModel @Inject constructor(
     private val setProductSaved: SetProductSavedUseCase,
     private val getOrders: GetOrdersUseCase,
     private val refreshProductsUseCase: RefreshProductsUseCase,
+    private val setProductTime: SetProductTimeUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUiState())
@@ -61,6 +65,8 @@ class HomeViewModel @Inject constructor(
             _uiState.update { it.copy(isProductRefreshing = true) }
             try {
                 refreshProductsUseCase()
+                val updatedProducts = useCase().first()
+                _uiState.update { it.copy(recentProducts = updatedProducts) }
             } catch (e: Exception) {
                 _uiState.update {
                     it.copy(error = e.message ?: "Couldn't refresh products")
@@ -69,11 +75,6 @@ class HomeViewModel @Inject constructor(
                 _uiState.update { it.copy(isProductRefreshing = false) }
             }
         }
-    }
-
-
-            fun refreshOrders(){
-
     }
 
     fun getRecentOrders(){
@@ -91,6 +92,15 @@ class HomeViewModel @Inject constructor(
             }
         }
 
+    }
+
+    fun setProductViewedTime(id: Int, viewedTime: LocalDateTime) {
+        viewModelScope.launch {
+            setProductTime(id, viewedTime)
+
+            val updatedProducts = useCase().first()
+            _uiState.update { it.copy(recentProducts = updatedProducts) }
+        }
     }
 
 

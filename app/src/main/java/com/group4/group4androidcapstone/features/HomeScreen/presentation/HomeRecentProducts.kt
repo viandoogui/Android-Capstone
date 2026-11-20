@@ -68,7 +68,7 @@ fun HomeRecentProducts(
                             product = product,
                             onClick = { onProductSelected(product) },
                             onProductSavedSet = onProductSaved,
-                            modifier = Modifier.size(width = 300.dp, height = 300.dp)
+                            modifier = Modifier.size(width = 300.dp, height = 400.dp)
 
                         )
                     }

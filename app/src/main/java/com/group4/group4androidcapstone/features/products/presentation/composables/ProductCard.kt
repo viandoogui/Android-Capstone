@@ -47,7 +47,7 @@ fun ProductCard(
         mutableStateOf(product.isSaved)
     }
     val starScale by animateFloatAsState(
-        targetValue = if (isFavorite) 1.5f else 1f,
+        targetValue = if (product.isSaved) 1.5f else 1f,
         animationSpec = spring(
             dampingRatio = Spring.DampingRatioMediumBouncy,
             stiffness = Spring.StiffnessMedium
@@ -65,7 +65,7 @@ fun ProductCard(
                 modifier = Modifier.padding(16.dp)
             ) {
                 IconToggleButton(
-                    checked = isFavorite,
+                    checked = product.isSaved,
                     onCheckedChange = {
                         isFavorite = it
                         onProductSavedSet(product.productId, it)

@@ -25,7 +25,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.group4.group4androidcapstone.core.structure.CapstoneApp
 import com.group4.group4androidcapstone.features.HomeScreen.presentation.HomeContent
-import com.group4.group4androidcapstone.features.HomeScreen.presentation.HomeScreen
 import com.group4.group4androidcapstone.ui.theme.CapstoneTheme
 import com.group4.group4androidcapstone.ui.theme.Group4AndroidCapstoneTheme
 import dagger.hilt.android.AndroidEntryPoint

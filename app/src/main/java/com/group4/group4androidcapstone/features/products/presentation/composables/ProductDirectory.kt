@@ -90,7 +90,7 @@ fun ProductDirectory(
     // when the screen loads, we don't want that.
     // We want the user to tap on the text input when they want to search
     val focusManager = LocalFocusManager.current
-    val keyboardController = LocalSoftwareKeyboardController.current // <-- Get keyboard controller
+    val keyboardController = LocalSoftwareKeyboardController.current
     LaunchedEffect(Unit) {
         // delay until the next rendering frame executes
         withFrameNanos {}
