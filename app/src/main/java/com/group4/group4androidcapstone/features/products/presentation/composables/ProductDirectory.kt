@@ -215,24 +215,9 @@ fun ProductDirectory(
 
                 }
 
-
                 Text("Displayed Products")
                 if (state.displayedProducts.isEmpty()) {
                     Text("No products found")
-                } else {
-                    PullToRefreshBox(
-                        isRefreshing = state.isRefreshing,
-                        onRefresh = onRefresh,
-                        modifier = Modifier.fillMaxSize()
-                    ) {
-                        ProductList(
-                            products = state.displayedProducts,
-                            onProductSelected = onProductSelected,
-                            innerPadding = PaddingValues(0.dp),
-                            onProductSavedSet = onProductSavedSet,
-                        )
-                    }
-
                 }
 
             }
@@ -278,7 +263,6 @@ fun ProductDirectory(
             }
 
         }
-
 
     ) { innerPadding ->
 
