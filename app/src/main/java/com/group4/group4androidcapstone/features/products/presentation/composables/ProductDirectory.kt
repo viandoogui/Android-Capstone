@@ -113,13 +113,17 @@ fun ProductDirectory(
             Column {
                 TopAppBar(
                     title = {
-                        Text("Products")
+                        Text("Products",
+                            color = MaterialTheme.colorScheme.primary,
+                            //style = MaterialTheme.typography.headlineLarge,
+                            )
                     },
                     navigationIcon = {
                         IconButton(onClick = onBack) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = "Back arrow"
+                                contentDescription = "Back arrow",
+                                tint = MaterialTheme.colorScheme.primary
                             )
                         }
                     }

@@ -36,16 +36,16 @@ class HomeViewModel @Inject constructor(
 
      fun loadRecentProducts() {
          viewModelScope.launch {
-             _uiState.update { it.copy(isRefreshing = true) }
+             _uiState.update { it.copy(isProductRefreshing = true) }
              try {
                  useCase().collect { products ->
                      _uiState.update {
-                         it.copy(recentProducts = products, isRefreshing = false)
+                         it.copy(recentProducts = products, isProductRefreshing = false)
                      }
                  }
              } catch (e: Exception) {
                  _uiState.update {
-                     it.copy(error = e.message ?: "Couldn't load products", isRefreshing = false)
+                     it.copy(error = e.message ?: "Couldn't load products", isProductRefreshing = false)
                  }
              }
          }
@@ -56,41 +56,37 @@ class HomeViewModel @Inject constructor(
             setProductSaved(id, isSaved)
         }
     }
-    fun refresh() {
-        if (_uiState.value.isRefreshing) return
+    fun refreshProducts() {
         viewModelScope.launch {
-            _uiState.update { it.copy(isRefreshing = true) }
+            _uiState.update { it.copy(isProductRefreshing = true) }
             try {
                 refreshProductsUseCase()
-                val updatedOrders = getOrders()
-
-                _uiState.update {
-                    it.copy(recentOrders = updatedOrders)
-                }
             } catch (e: Exception) {
                 _uiState.update {
-                    it.copy(
-                        error = e.message ?: "Couldn't refresh products"
-                    )
+                    it.copy(error = e.message ?: "Couldn't refresh products")
                 }
-            }finally {
-                _uiState.update { it.copy(isRefreshing = false) }
+            } finally {
+                _uiState.update { it.copy(isProductRefreshing = false) }
             }
-
         }
+    }
+
+
+            fun refreshOrders(){
+
     }
 
     fun getRecentOrders(){
         viewModelScope.launch {
-            _uiState.update { it.copy(isRefreshing = true) }
+            _uiState.update { it.copy(isOrderRefreshing = true) }
             try {
                 val orders = getOrders()
                 _uiState.update {
-                    it.copy(recentOrders = orders, isRefreshing = false)
+                    it.copy(recentOrders = orders, isOrderRefreshing = false)
                 }
             } catch (e: Exception) {
                 _uiState.update {
-                    it.copy(error = e.message ?: "Couldn't load recent orders", isRefreshing = false)
+                    it.copy(error = e.message ?: "Couldn't load recent orders", isOrderRefreshing = false)
                 }
             }
         }

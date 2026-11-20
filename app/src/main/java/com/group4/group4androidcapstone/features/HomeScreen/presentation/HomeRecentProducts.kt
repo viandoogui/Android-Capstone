@@ -2,15 +2,19 @@ package com.group4.group4androidcapstone.features.HomeScreen.presentation
 
 import android.graphics.Color.GRAY
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -34,13 +38,14 @@ fun HomeRecentProducts(
     onProductSelected: (Product) -> Unit,
     onProductSaved: (Int, Boolean) -> Unit,
     isLoading: Boolean,
-    error: String? = null
+    error: String? = null,
+    viewModel: HomeViewModel
 
 ){
     Column(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.surface)
-            .size(width = 800.dp, height = 600.dp),
+            .width(width = 1000.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
 
@@ -51,19 +56,28 @@ fun HomeRecentProducts(
         Text("There was an error: (${error})")
     }else {
         Text("Recently Viewed Products:", Modifier.padding(LocalSpacing.current.small))
-                Column(
+                Row(
 
                     modifier = Modifier
-                        .padding(LocalSpacing.current.medium)
-                        .verticalScroll(state = rememberScrollState())
+                        .padding(LocalSpacing.current.small)
+                        .horizontalScroll(state = rememberScrollState())
+
                 ) {
                     products.forEach { product ->
                         ProductCard(
                             product = product,
                             onClick = { onProductSelected(product) },
-                            onProductSavedSet = onProductSaved
+                            onProductSavedSet = onProductSaved,
+                            modifier = Modifier.size(width = 300.dp, height = 300.dp)
+
                         )
                     }
+                }
+                Button(
+                    modifier = Modifier.align(Alignment.End)
+                        .padding(LocalSpacing.current.small),
+                    onClick = { viewModel.refreshProducts() }){
+                    Text("Refresh")
                 }
             }
 

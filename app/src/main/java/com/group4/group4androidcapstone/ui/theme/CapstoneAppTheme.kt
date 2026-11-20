@@ -20,7 +20,7 @@ private val CapstoneLightColors =
         primary = Color(0xFFFFBA00), //high emphasis elements like buttons, switches, active tabs
         onPrimary = Color(0xFF0C2B2E), //text on top of primary
         primaryContainer = Color(0xFFD3CECE), //used for lower emphasis containers like nav rail items or highlighted cards
-        onPrimaryContainer = Color(0xFF21005D), //text and icons on top of primary container
+        onPrimaryContainer = Color(0xFF0C2B2E), //text and icons on top of primary container
 
         secondary = Color(0xFFFFBA00), //less prominent components like filter chips, badges, checkboxes, and secondary action buttons
         onSecondary =Color(0xFF0C2B2E) , //text on top of secondary
@@ -37,7 +37,7 @@ private val CapstoneLightColors =
         onBackground = Color(0xFFFFBA00),
 
         surface = Color(0xFF0C2B2E),//Used for the surfaces of components, Cards, Sheets, Menus, Dialogs, Bottom Navigation bars.
-        onSurface = Color(0xFFFFBA00),
+        onSurface = Color(0xFF0C2B2E),
     )
 
 private val CapstoneDarkColors =

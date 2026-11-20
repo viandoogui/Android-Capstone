@@ -21,13 +21,32 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-
+import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.NavigationRailItemDefaults
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteItemColors
 
 @Composable
 fun AppNavigationShell(
     navController: NavHostController,
     content: @Composable () -> Unit
 ) {
+
+    val customItemColors = NavigationSuiteDefaults.itemColors(
+        navigationBarItemColors = NavigationBarItemDefaults.colors(
+            unselectedIconColor = MaterialTheme.colorScheme.tertiary, //Unselected icon color
+            unselectedTextColor = MaterialTheme.colorScheme.tertiary, // Unselected label color
+            selectedIconColor = MaterialTheme.colorScheme.onPrimary,   // Selected icon color
+            selectedTextColor = MaterialTheme.colorScheme.onPrimary     //Selected label color
+        ),
+        navigationRailItemColors = NavigationRailItemDefaults.colors(
+            unselectedIconColor = MaterialTheme.colorScheme.tertiary,
+            unselectedTextColor = MaterialTheme.colorScheme.tertiary,
+            selectedIconColor = MaterialTheme.colorScheme.onPrimary,
+            selectedTextColor = MaterialTheme.colorScheme.onPrimary
+        )
+    )
+
+
     val currentDestination = navController
         .currentBackStackEntryAsState().value ?.destination
 
@@ -49,17 +68,19 @@ fun AppNavigationShell(
                         }
                     },
                     icon = { Icon(destination.icon, contentDescription = null)},
-                    label = { Text(stringResource(destination.labelRes),color = MaterialTheme.colorScheme.onSurface) }
+                    label = { Text(stringResource(destination.labelRes),color = MaterialTheme.colorScheme.tertiary) },
+                    colors = customItemColors
                 )
 
 
             }
         },
         navigationSuiteColors = NavigationSuiteDefaults.colors(
-            navigationBarContainerColor = MaterialTheme.colorScheme.surface,      // Background of bottom nav bar
-            navigationBarContentColor = MaterialTheme.colorScheme.onSurface,      // Unselected icons/text color
-//            navigationRailContainerColor = MaterialTheme.colorScheme.surface,     // Background for expanded view rail
-//            navigationRailContentColor = MaterialTheme.colorScheme.onSurface
+            navigationBarContainerColor = MaterialTheme.colorScheme.surface,
+            navigationBarContentColor = MaterialTheme.colorScheme.tertiary,
+            navigationRailContainerColor = MaterialTheme.colorScheme.surface,
+            navigationRailContentColor = MaterialTheme.colorScheme.onSurface,
+
         )
     ){
         //the nav bar handles its system insets

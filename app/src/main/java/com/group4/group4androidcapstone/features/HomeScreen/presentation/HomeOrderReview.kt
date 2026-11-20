@@ -2,22 +2,33 @@ package com.group4.group4androidcapstone.features.HomeScreen.presentation
 
 import android.graphics.Color.GRAY
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.materialIcon
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.group4.group4androidcapstone.features.HomeScreen.presentation.ViewModels.HomeViewModel
 import com.group4.group4androidcapstone.features.orders.domain.Order
 import com.group4.group4androidcapstone.features.orders.presentation.OrderCard
 import com.group4.group4androidcapstone.features.products.presentation.composables.ProductCard
@@ -30,15 +41,17 @@ fun HomeOrderReview(
     recentOrders: List<Order>,
     onOrderSelected: (Order) -> Unit,
     isLoading:Boolean,
-    error:String? = null
+    error:String? = null,
+    viewModel: HomeViewModel
 ){
 
 
-
     Column(
+
         modifier = Modifier
             .background(MaterialTheme.colorScheme.surface)
-            .size(width = 800.dp, height = 600.dp),
+            .width(1000.dp),
+        //.verticalScroll(state = rememberScrollState())
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
 
@@ -52,10 +65,12 @@ fun HomeOrderReview(
 
             Text("Five Most Recent Orders: ", Modifier.padding(LocalSpacing.current.small))
 
-            Column(
+            Row(
+
                 modifier = Modifier
-                    .padding(LocalSpacing.current.medium)
-                    .verticalScroll(state = rememberScrollState())
+                    .padding(LocalSpacing.current.small)
+                    .horizontalScroll(state = rememberScrollState())
+                    //.height(1000.dp)
             ) {
                 recentOrders.take(5).forEach { order ->
                     OrderCard(
@@ -63,6 +78,13 @@ fun HomeOrderReview(
                         onClick = { onOrderSelected(order)}
                     )
                 }
+
+
+            }
+            Button(modifier = Modifier.align(Alignment.End)
+                .padding(LocalSpacing.current.small),
+                onClick = { viewModel.getRecentOrders() }){
+                Text("Refresh")
             }
         }
 
