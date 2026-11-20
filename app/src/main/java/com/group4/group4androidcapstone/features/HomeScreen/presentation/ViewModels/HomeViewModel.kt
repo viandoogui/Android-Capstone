@@ -35,11 +35,20 @@ class HomeViewModel @Inject constructor(
     }
 
      fun loadRecentProducts() {
-        viewModelScope.launch {
-            useCase().collect { products ->
-                _uiState.update { it.copy(recentProducts = products) }
-            }
-        }
+         viewModelScope.launch {
+             _uiState.update { it.copy(isRefreshing = true) }
+             try {
+                 useCase().collect { products ->
+                     _uiState.update {
+                         it.copy(recentProducts = products, isRefreshing = false)
+                     }
+                 }
+             } catch (e: Exception) {
+                 _uiState.update {
+                     it.copy(error = e.message ?: "Couldn't load products", isRefreshing = false)
+                 }
+             }
+         }
     }
 
     fun setProductIsSaved(id: Int, isSaved: Boolean) {
@@ -73,8 +82,17 @@ class HomeViewModel @Inject constructor(
 
     fun getRecentOrders(){
         viewModelScope.launch {
-            val orders = getOrders()
-            _uiState.update { it.copy(recentOrders = orders) }
+            _uiState.update { it.copy(isRefreshing = true) }
+            try {
+                val orders = getOrders()
+                _uiState.update {
+                    it.copy(recentOrders = orders, isRefreshing = false)
+                }
+            } catch (e: Exception) {
+                _uiState.update {
+                    it.copy(error = e.message ?: "Couldn't load recent orders", isRefreshing = false)
+                }
+            }
         }
 
     }

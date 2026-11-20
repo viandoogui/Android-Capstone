@@ -29,7 +29,8 @@ import com.group4.group4androidcapstone.ui.theme.Spacing
 fun HomeOrderReview(
     recentOrders: List<Order>,
     onOrderSelected: (Order) -> Unit,
-    isLoading:Boolean
+    isLoading:Boolean,
+    error:String? = null
 ){
 
 
@@ -44,10 +45,12 @@ fun HomeOrderReview(
     ){
         if(isLoading){
             CircularProgressIndicator()
-        } else if(recentOrders.isEmpty()){
-            Text("No recent orders")
-        }else {
-            Text("Five Most Recent Orders: ")
+        }else if(error != null){
+            Text("There was an error: (${error})")
+        }
+        else {
+
+            Text("Five Most Recent Orders: ", Modifier.padding(LocalSpacing.current.small))
 
             Column(
                 modifier = Modifier

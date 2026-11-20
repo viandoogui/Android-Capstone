@@ -33,7 +33,8 @@ fun HomeRecentProducts(
     products: List<Product>,
     onProductSelected: (Product) -> Unit,
     onProductSaved: (Int, Boolean) -> Unit,
-    isLoading: Boolean
+    isLoading: Boolean,
+    error: String? = null
 
 ){
     Column(
@@ -46,11 +47,10 @@ fun HomeRecentProducts(
         ) {
     if(isLoading){
         CircularProgressIndicator()
-    }else if (products.isEmpty()){
-        Text("No recent products")
+    }else if (error != null){
+        Text("There was an error: (${error})")
     }else {
-
-
+        Text("Recently Viewed Products:", Modifier.padding(LocalSpacing.current.small))
                 Column(
 
                     modifier = Modifier

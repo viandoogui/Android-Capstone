@@ -41,6 +41,7 @@ fun HomeContent(
     onOrderSelected:(Order)->Unit
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+
     LifecycleEventEffect(Lifecycle.Event.ON_START) {
         viewModel.loadRecentProducts()
     }
@@ -82,7 +83,8 @@ fun HomeContent(
                 HomeOrderReview(
                     recentOrders = state.recentOrders,
                     isLoading = state.isRefreshing,
-                    onOrderSelected = onOrderSelected
+                    onOrderSelected = onOrderSelected,
+                    error = state.error
                 )
 
                 Button(
@@ -102,7 +104,9 @@ fun HomeContent(
                     onProductSaved = { id, isSaved ->
                         viewModel.setProductIsSaved(id, isSaved)
                     },
-                    isLoading = state.isRefreshing)
+                    isLoading = state.isRefreshing,
+                    error = state.error
+                    )
                 Button(
                     onClick = onNavigateToProductDirectory,
                     modifier = Modifier
