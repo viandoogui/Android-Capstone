@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
@@ -41,16 +42,17 @@ fun HomeContent(
     onOrderSelected:(Order)->Unit
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+
     LifecycleEventEffect(Lifecycle.Event.ON_START) {
         viewModel.loadRecentProducts()
     }
 
-    PullToRefreshBox(
-        isRefreshing = state.isRefreshing,
-        onRefresh = viewModel::refresh,
+    Column(
+//        isRefreshing = state.isRefreshing,
+//        onRefresh = viewModel::refresh,
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            //.padding(16.dp)
             .statusBarsPadding()
             .verticalScroll(state = rememberScrollState()),
 
@@ -63,26 +65,33 @@ fun HomeContent(
 
             Column(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(LocalSpacing.current.large),
+                    .fillMaxSize(),
+                   // .padding(LocalSpacing.current.large),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                Column(modifier = Modifier
+                    .padding(LocalSpacing.current.medium)
+                    //.width(800.dp)
+                    .background(MaterialTheme.colorScheme.surface),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
                 Text(
                     "Welcome Back, Brandy Chandra!",
+                    modifier = Modifier.padding(LocalSpacing.current.medium),
                     style = MaterialTheme.typography.headlineMedium,
-                    modifier = Modifier
-                        .width(800.dp)
-                        .padding(LocalSpacing.current.small)
-                        .background(MaterialTheme.colorScheme.surface)
+                    textAlign = TextAlign.Center
                 )
+                }
 
                 Spacer(modifier = Modifier.height(24.dp))
 
                 HomeOrderReview(
                     recentOrders = state.recentOrders,
-                    isLoading = state.isRefreshing,
-                    onOrderSelected = onOrderSelected
+                    isLoading = state.isOrderRefreshing,
+                    onOrderSelected = onOrderSelected,
+                    error = state.error,
+                    viewModel = viewModel
                 )
 
                 Button(
@@ -102,7 +111,10 @@ fun HomeContent(
                     onProductSaved = { id, isSaved ->
                         viewModel.setProductIsSaved(id, isSaved)
                     },
-                    isLoading = state.isRefreshing)
+                    isLoading = state.isProductRefreshing,
+                    error = state.error,
+                    viewModel = viewModel
+                    )
                 Button(
                     onClick = onNavigateToProductDirectory,
                     modifier = Modifier

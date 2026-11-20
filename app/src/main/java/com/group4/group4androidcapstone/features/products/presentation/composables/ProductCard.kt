@@ -40,7 +40,8 @@ import kotlin.io.encoding.Base64
 fun ProductCard(
     product: Product,
     onClick: () -> Unit,
-    onProductSavedSet: (Int, Boolean) -> Unit
+    onProductSavedSet: (Int, Boolean) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     var isFavorite by remember(product.isSaved) {
         mutableStateOf(product.isSaved)
@@ -54,7 +55,7 @@ fun ProductCard(
     )
 
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(8.dp)
             .clickable { onClick() },
