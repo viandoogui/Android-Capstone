@@ -78,6 +78,7 @@ fun ProductDirectory(
     val snackbarHostState = remember { SnackbarHostState() }
     var categoryExpanded by remember { mutableStateOf(false) }
     var sortExpanded by remember { mutableStateOf(false) }
+    var screenName by remember { mutableStateOf("") }
 
     val retryLabel = "Retry"
     // we're going to add a search bar (text input) to the top of the screen
@@ -116,7 +117,7 @@ fun ProductDirectory(
             ) {
                 TopAppBar(
                     title = {
-                        Text("Products",
+                        Text("${screenName} Products",
                             color = MaterialTheme.colorScheme.primary,
                             //style = MaterialTheme.typography.headlineLarge,
                             )
@@ -176,6 +177,7 @@ fun ProductDirectory(
                                     onProductCaseChange(ProductCase.DEFAULT)
                                     onShowRecentClearChange(false)
                                     categoryExpanded = false
+                                    screenName = ""
                                 }
                             )
                             DropdownMenuItem(
@@ -184,6 +186,7 @@ fun ProductDirectory(
                                     onProductCaseChange(ProductCase.RECENT)
                                     onShowRecentClearChange(true)
                                     categoryExpanded = false
+                                    screenName = "Recent"
                                 }
                             )
                             DropdownMenuItem(
@@ -192,6 +195,7 @@ fun ProductDirectory(
                                     onProductCaseChange(ProductCase.SAVED)
                                     onShowRecentClearChange(false)
                                     categoryExpanded = false
+                                    screenName = "Saved"
                                 }
                             )
 
