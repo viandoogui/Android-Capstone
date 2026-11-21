@@ -55,7 +55,6 @@ fun ProductDirectoryRoute(
                         CompositionLocalProvider(LocalPaneAnimatedScope provides this) {
                             ProductDirectory(
                                 state = uiState,
-                                useTwoPaneLayout = false,
                                 onBack = onBack,
                                 onProductSelected = { product ->
                                     scope.launch {
