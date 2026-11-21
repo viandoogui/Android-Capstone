@@ -67,7 +67,6 @@ import com.group4.group4androidcapstone.ui.theme.Spacing
 @Composable
 fun ProductDirectory(
     state: ProductDirectoryState,
-    useTwoPaneLayout: Boolean,
     onBack: () -> Unit = {},
     onProductSelected: (Product) -> Unit = {},
     onRefresh: () -> Unit = {},
@@ -269,62 +268,20 @@ fun ProductDirectory(
 
     ) { innerPadding ->
 
-        if (useTwoPaneLayout) {
-            Row(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                PullToRefreshBox(
-                    isRefreshing = state.isRefreshing,
-                    onRefresh = onRefresh,
-                    modifier = Modifier.weight(1f)
-                ) {
-                    ProductList(
-                        products = state.displayedProducts,
-                        onProductSelected = onProductSelected,
-                        onProductSavedSet = onProductSavedSet,
-                        innerPadding = PaddingValues(0.dp)
-                    )
-                }
-                VerticalDivider()
-                Column(
-                    modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    Text("Selected Products")
-                    val selectedProduct = state.selectedProduct
-                    AnimatedVisibility(
-                        visible = selectedProduct != null,
-                        enter = fadeIn() + expandVertically(expandFrom = Alignment.Top),
-                        exit = fadeOut() + shrinkVertically(shrinkTowards = Alignment.Top)
-                    ) {
-                        if (selectedProduct != null) {
-                            Text("Hello")
-                        }
-                    }
-
-                }
-            }
-
-        } else {
-            PullToRefreshBox(
-                isRefreshing = state.isRefreshing,
-                onRefresh = onRefresh,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
-            ) {
-                ProductList(
-                    products = state.displayedProducts,
-                    onProductSelected = onProductSelected,
-                    onProductSavedSet = onProductSavedSet,
-                    innerPadding = PaddingValues(0.dp)
-                )
-            }
+        PullToRefreshBox(
+            isRefreshing = state.isRefreshing,
+            onRefresh = onRefresh,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+        ) {
+            ProductList(
+                products = state.displayedProducts,
+                onProductSelected = onProductSelected,
+                onProductSavedSet = onProductSavedSet,
+                innerPadding = PaddingValues(0.dp)
+            )
         }
-
 
         if (state.showFilter) {
             ModalBottomSheet(
@@ -389,7 +346,6 @@ fun CompactProductDirectoryPreview() {
     Group4AndroidCapstoneTheme() {
         ProductDirectory(
             state = ProductDirectoryState(),
-            useTwoPaneLayout = false,
             onSortChanged = {}
         )
     }
