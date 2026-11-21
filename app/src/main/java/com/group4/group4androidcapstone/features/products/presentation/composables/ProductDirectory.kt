@@ -1,22 +1,17 @@
 package com.group4.group4androidcapstone.features.products.presentation.composables
 
 import android.annotation.SuppressLint
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.More
 import androidx.compose.material.icons.automirrored.filled.Sort
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Filter
@@ -41,7 +36,6 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -62,7 +56,6 @@ import com.group4.group4androidcapstone.features.products.domain.ProductCase
 import com.group4.group4androidcapstone.features.products.presentation.state.ProductDirectoryState
 import com.group4.group4androidcapstone.features.products.presentation.state.SortOrder
 import com.group4.group4androidcapstone.ui.theme.Group4AndroidCapstoneTheme
-import com.group4.group4androidcapstone.ui.theme.Spacing
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -83,7 +76,8 @@ fun ProductDirectory(
     onShowRecentClearChange: (Boolean) -> Unit = {}
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
-    var expanded by remember { mutableStateOf(false) }
+    var categoryExpanded by remember { mutableStateOf(false) }
+    var sortExpanded by remember { mutableStateOf(false) }
 
     val retryLabel = "Retry"
     // we're going to add a search bar (text input) to the top of the screen
@@ -117,7 +111,9 @@ fun ProductDirectory(
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
-            Column {
+            Column(
+                modifier = Modifier.padding(vertical = 0.dp)
+            ) {
                 TopAppBar(
                     title = {
                         Text("Products",
@@ -135,33 +131,10 @@ fun ProductDirectory(
                         }
                     }
                 )
-                Row() {
-                    Button(
-                        onClick = {
-                            onProductCaseChange(ProductCase.DEFAULT)
-                            onShowRecentClearChange(false)
-                        }
-                    ) {
-                        Text("Default")
-                    }
-                    Button(
-                        onClick = {
-                            onProductCaseChange(ProductCase.RECENT)
-                            onShowRecentClearChange(true)
-                        }
-                    ) {
-                        Text("Recently Viewed")
-                    }
-                    Button(
-                        onClick = {
-                            onProductCaseChange(ProductCase.SAVED)
-                            onShowRecentClearChange(false)
-                        }
-                    ) {
-                        Text("Saved")
-                    }
-                }
-                Row() {
+                Row(
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     DockedSearchBar(
                         inputField = {
                             SearchBarDefaults.InputField(
@@ -178,15 +151,58 @@ fun ProductDirectory(
                         onExpandedChange = {},
                         modifier = Modifier
                             .weight(1f)
-                            .padding(vertical = 4.dp),
+                            .padding(vertical = 8.dp),
                         content = {}
                     )
+
+                    Box(
+                    ) {
+                        IconButton(
+                            onClick = { categoryExpanded = true }
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.More,
+                                contentDescription = "Product Category"
+                            )
+                        }
+                        DropdownMenu(
+                            expanded = categoryExpanded,
+                            onDismissRequest = { categoryExpanded = false },
+                            offset = DpOffset(x = (-120).dp, y = 0.dp)
+                        ) {
+                            DropdownMenuItem(
+                                text = { Text("Default") },
+                                onClick = {
+                                    onProductCaseChange(ProductCase.DEFAULT)
+                                    onShowRecentClearChange(false)
+                                    categoryExpanded = false
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = { Text("Recently Viewed") },
+                                onClick = {
+                                    onProductCaseChange(ProductCase.RECENT)
+                                    onShowRecentClearChange(true)
+                                    categoryExpanded = false
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = { Text("Saved") },
+                                onClick = {
+                                    onProductCaseChange(ProductCase.SAVED)
+                                    onShowRecentClearChange(false)
+                                    categoryExpanded = false
+                                }
+                            )
+
+                        }
+                    }
 
                     Box(
                         modifier = Modifier.padding()
                     ) {
                         IconButton(
-                            onClick = { expanded = true }
+                            onClick = { sortExpanded = true }
                         ) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.Sort,
@@ -194,29 +210,29 @@ fun ProductDirectory(
                             )
                         }
                         DropdownMenu(
-                            expanded = expanded,
-                            onDismissRequest = { expanded = false },
+                            expanded = sortExpanded,
+                            onDismissRequest = { sortExpanded = false },
                             offset = DpOffset(x = (-120).dp, y = 0.dp)
                         ) {
                             DropdownMenuItem(
                                 text = { Text("Name: Ascending") },
                                 onClick = {
                                     onSortChanged(SortOrder.ASCENDING)
-                                    expanded = false
+                                    sortExpanded = false
                                 }
                             )
                             DropdownMenuItem(
                                 text = { Text("Name: Descending") },
                                 onClick = {
                                     onSortChanged(SortOrder.DESCENDING)
-                                    expanded = false
+                                    sortExpanded = false
                                 }
                             )
                             DropdownMenuItem(
                                 text = { Text("Price") },
                                 onClick = {
                                     onSortChanged(SortOrder.PRICE_LOW_TO_HIGH)
-                                    expanded = false
+                                    sortExpanded = false
                                 }
                             )
 
