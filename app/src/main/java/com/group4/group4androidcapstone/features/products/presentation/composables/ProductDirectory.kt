@@ -157,7 +157,7 @@ fun ProductDirectory(
                             onShowRecentClearChange(false)
                         }
                     ) {
-                        Text("Saved Products")
+                        Text("Saved")
                     }
                 }
                 Row() {
@@ -219,7 +219,6 @@ fun ProductDirectory(
 
                 }
 
-                Text("Displayed Products")
                 if (state.displayedProducts.isEmpty() && !state.isRefreshing) {
                     Text("No products found")
                 }
@@ -302,7 +301,7 @@ fun ProductDirectory(
                         exit = fadeOut() + shrinkVertically(shrinkTowards = Alignment.Top)
                     ) {
                         if (selectedProduct != null) {
-                            // TODO, DISPLAY PRODUCT DETAILS HERE
+                            Text("Hello")
                         }
                     }
 
