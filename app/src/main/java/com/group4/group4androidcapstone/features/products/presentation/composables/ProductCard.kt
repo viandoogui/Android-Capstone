@@ -25,6 +25,9 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
@@ -54,11 +57,22 @@ fun ProductCard(
         )
     )
 
+    val stockText = when (ProductStockMapper.convertStockLevel(product.stockLevel)) {
+        ProductStockCase.IN_STOCK -> "In Stock"
+        ProductStockCase.OUT_OF_STOCK -> "Out of Stock"
+        ProductStockCase.UNKNOWN -> "Unknown"
+    }
+
     Card(
         modifier = modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .clickable { onClick() },
+            .clickable { onClick() }
+            .clearAndSetSemantics {
+                contentDescription = "The stock of product ${product.name} is ${stockText}" +
+                        (if (isFavorite) "and it is saved." else ".") + "The price is $${product.listPrice}." +
+                                "The summary is ${product.summary}"
+            },
     ) {
 
             Column(
