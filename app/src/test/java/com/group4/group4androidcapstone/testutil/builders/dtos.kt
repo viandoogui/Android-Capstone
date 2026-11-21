@@ -12,8 +12,11 @@ fun aProductDto(
     thumbnailPhotoFileName: String = "photo.png",
     warranty: String? = "yes",
     color: String? = "green",
-    listPrice: Double = 1.99
-) = ProductDto(productId, name, productNumber, summary, thumbnailPhoto, thumbnailPhotoFileName, warranty, color, listPrice)
+    listPrice: Double = 1.99,
+    stockLevel:Int = 5,
+    isSaved: Boolean = false,
+    saveTime:String? = null
+) = ProductDto(productId, name, productNumber, summary, thumbnailPhoto, thumbnailPhotoFileName, warranty, color,listPrice,stockLevel)
 
 fun aProductDetailsDto(
     productId: Int = 1,

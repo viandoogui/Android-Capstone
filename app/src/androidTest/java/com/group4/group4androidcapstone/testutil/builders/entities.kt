@@ -14,8 +14,11 @@ fun aProductEntity(
     warranty: String? = "yes",
     color: String? = "green",
     listPrice: Double = 1.99,
-    viewedTime: LocalDateTime? = null
-) = ProductEntity(productId, name, productNumber, summary, thumbnailPhoto, thumbnailPhotoFileName, warranty, color, listPrice, viewedTime)
+    stockLevel: Int = 0,
+    viewedTime: LocalDateTime? = null,
+    isSaved: Boolean = false,
+    savedTime: LocalDateTime? = null
+) = ProductEntity(productId, name, productNumber, summary, thumbnailPhoto, thumbnailPhotoFileName, warranty, color, listPrice, stockLevel, viewedTime)
 
 fun aProductDetailsEntity(
     productId: Int = 1,
