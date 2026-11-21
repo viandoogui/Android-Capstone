@@ -10,6 +10,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.unit.dp
 import com.group4.group4androidcapstone.features.orders.domain.Order
 
@@ -23,6 +25,12 @@ fun OrderCard(
             .fillMaxWidth()
             .padding(8.dp)
             .clickable { onClick() }
+            .clearAndSetSemantics {
+                contentDescription = "The date of order #${order.id} is " +
+                        "${order.orderDate.toLocalDate()} and " +
+                        "the status is ${displayOrderStatus(order.statusName)}." +
+                        "Tap to view order details."
+            }
     ) {
         Column(
             modifier = Modifier.padding(16.dp),
