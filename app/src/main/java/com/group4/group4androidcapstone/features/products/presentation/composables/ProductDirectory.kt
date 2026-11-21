@@ -23,6 +23,7 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -261,19 +262,16 @@ fun ProductDirectory(
             ) {
 
                 if(state.showClearRecentProducts) {
-                    ExtendedFloatingActionButton(
-                        text = { Text("Clear Recent") },
-                        icon = {
-                            Icon(
-                                Icons.Filled.Delete,
-                                contentDescription = "Clear recent products icon"
-                            )
-                        },
+                    FilledIconButton(
                         onClick = {
                             onRecentProductsCleared()
-                        },
-                        modifier = Modifier.height(45.dp)
-                    )
+                        }
+                    ) {
+                        Icon(
+                            Icons.Filled.Delete,
+                            contentDescription = "Clear recent products icon"
+                        )
+                    }
                 }
 
                 ExtendedFloatingActionButton(
