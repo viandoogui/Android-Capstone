@@ -130,6 +130,9 @@ fun AppNavHost(
                         onSortChange = { newestFirst ->
                             viewModel.changeSort(newestFirst)
                         },
+                        onRetry = {
+                            viewModel.loadOrders()
+                                  },
                         onOrderSelected = { order ->
                             selectedOrderId.value = order.id
                         }

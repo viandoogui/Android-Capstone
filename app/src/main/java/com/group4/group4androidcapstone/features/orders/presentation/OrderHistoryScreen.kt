@@ -25,12 +25,21 @@ import com.group4.group4androidcapstone.features.orders.domain.OrderSorter
 fun OrderHistoryScreen(
     uiState: OrderHistoryUiState,
     onSortChange: (Boolean) -> Unit,
+    onRetry: () -> Unit = {},
     onOrderSelected: (Order) -> Unit = {}
 ) {
     when {
         uiState.isLoading -> Text("Loading orders...")
-        uiState.errorMessage != null -> Text(uiState.errorMessage)
         uiState.orders.isEmpty() -> Text("No orders found")
+        uiState.errorMessage != null -> {
+            Column {
+                Text(uiState.errorMessage)
+
+                Button(onClick = onRetry) {
+                    Text("Retry")
+                }
+            }
+        }
 
         else -> LazyColumn(
             contentPadding = PaddingValues(16.dp),
@@ -81,6 +90,7 @@ fun OrderHistoryRoute(
     OrderHistoryScreen(
         uiState = state.value,
         onSortChange = { newestFirst -> viewModel.changeSort(newestFirst) },
+        onRetry = { viewModel.loadOrders() },
         onOrderSelected = onOrderSelected
     )
 }
