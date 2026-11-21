@@ -7,6 +7,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -54,6 +55,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.group4.group4androidcapstone.features.products.domain.Product
 import com.group4.group4androidcapstone.features.products.domain.ProductCase
@@ -180,40 +182,45 @@ fun ProductDirectory(
                         content = {}
                     )
 
-                    IconButton(
-                        onClick = { expanded = true }
+                    Box(
+                        modifier = Modifier.padding()
                     ) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.Sort,
-                            contentDescription = "Sort"
-                        )
-                    }
-                    DropdownMenu(
-                        expanded = expanded,
-                        onDismissRequest = { expanded = false }
-                    ) {
-                        DropdownMenuItem(
-                            text = { Text("Name: Ascending") },
-                            onClick = {
-                                onSortChanged(SortOrder.ASCENDING)
-                                expanded = false
-                            }
-                        )
-                        DropdownMenuItem(
-                            text = { Text("Name: Descending") },
-                            onClick = {
-                                onSortChanged(SortOrder.DESCENDING)
-                                expanded = false
-                            }
-                        )
-                        DropdownMenuItem(
-                            text = { Text("Price") },
-                            onClick = {
-                                onSortChanged(SortOrder.PRICE_LOW_TO_HIGH)
-                                expanded = false
-                            }
-                        )
+                        IconButton(
+                            onClick = { expanded = true }
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.Sort,
+                                contentDescription = "Sort"
+                            )
+                        }
+                        DropdownMenu(
+                            expanded = expanded,
+                            onDismissRequest = { expanded = false },
+                            offset = DpOffset(x = (-120).dp, y = 0.dp)
+                        ) {
+                            DropdownMenuItem(
+                                text = { Text("Name: Ascending") },
+                                onClick = {
+                                    onSortChanged(SortOrder.ASCENDING)
+                                    expanded = false
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = { Text("Name: Descending") },
+                                onClick = {
+                                    onSortChanged(SortOrder.DESCENDING)
+                                    expanded = false
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = { Text("Price") },
+                                onClick = {
+                                    onSortChanged(SortOrder.PRICE_LOW_TO_HIGH)
+                                    expanded = false
+                                }
+                            )
 
+                        }
                     }
 
                 }
