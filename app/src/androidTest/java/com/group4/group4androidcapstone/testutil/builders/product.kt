@@ -14,8 +14,11 @@ fun aProduct(
     warranty: String? = "yes",
     color: String? = "green",
     listPrice: Double = 1.99,
-    viewedTime: LocalDateTime? = null
-) = Product(productId, name, productNumber, summary, thumbnailPhoto, thumbnailPhotoFileName, warranty, color, listPrice, viewedTime)
+    stockLevel: Int = 0,
+    viewedTime: LocalDateTime? = null,
+    isSaved: Boolean = false,
+    savedTime: LocalDateTime? = null
+) = Product(productId, name, productNumber, summary, thumbnailPhoto, thumbnailPhotoFileName, warranty, color, listPrice,stockLevel, viewedTime)
 
 fun aProductDetails(
     productId: Int = 1,
