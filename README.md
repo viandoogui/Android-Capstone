@@ -17,7 +17,9 @@ We added automated tests to check that the main parts of our app are working cor
 
 ### Test Results
 
-Both automated test runs completed successfully.
+To run the automated tests, open a terminal in the project's folder and use the commands below. 
+For instrumented tests, make sure an Android device with USB debugging enabled 
+is connected or an emulator is running. Both automated test runs completed successfully.
 
 **Unit Tests:**
 `bash ./gradlew testDebugUnitTest`
@@ -29,6 +31,7 @@ The instrumented tests were run on a Motorola phone.
 
 ### Testing Limitations
 
-Not every feature has automated tests. We also manually tested order navigation, screen rotation, error messages, and the Retry button when the connection fails.
+Not every feature has automated tests. We also manually tested order navigation, 
+screen rotation, error messages, and the Retry button when the connection fails.
 
 Some Home Screen UI tests are commented out and were not included in the test runs.
