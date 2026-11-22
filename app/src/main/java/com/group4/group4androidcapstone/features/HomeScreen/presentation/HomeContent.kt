@@ -21,6 +21,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -96,7 +98,10 @@ fun HomeContent(
                 Button(
                     onClick = onNavigateToOrderHistory,
                     modifier = Modifier
-                        .padding(LocalSpacing.current.medium),
+                        .padding(LocalSpacing.current.medium)
+                        .semantics {
+                            contentDescription = "Tap to go to the order directory"
+                        },
 
                     ) {
                     Text("To Order History")
@@ -120,6 +125,9 @@ fun HomeContent(
                     onClick = onNavigateToProductDirectory,
                     modifier = Modifier
                         .padding(LocalSpacing.current.medium)
+                        .semantics {
+                            contentDescription = "Tap to go to the product directory"
+                        }
                 ) {
                     Text("To Products")
                 }

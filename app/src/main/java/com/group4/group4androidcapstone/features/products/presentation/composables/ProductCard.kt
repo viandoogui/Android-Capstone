@@ -25,6 +25,9 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
@@ -54,11 +57,17 @@ fun ProductCard(
         )
     )
 
+    val stockText = when (ProductStockMapper.convertStockLevel(product.stockLevel)) {
+        ProductStockCase.IN_STOCK -> "In Stock"
+        ProductStockCase.OUT_OF_STOCK -> "Out of Stock"
+        ProductStockCase.UNKNOWN -> "Unknown"
+    }
+
     Card(
         modifier = modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .clickable { onClick() },
+            .clickable { onClick() }
     ) {
 
             Column(
@@ -69,17 +78,19 @@ fun ProductCard(
                     onCheckedChange = {
                         isFavorite = it
                         onProductSavedSet(product.productId, it)
+                    },
+                    modifier = Modifier.semantics {
+                        contentDescription = "Product ${product.name} is " +
+                                (if (isFavorite) "" else "not") +
+                                "saved."
                     }
+
                 ) {
                     Icon(
                         painter = painterResource(
                             id = if (isFavorite) R.drawable.filled_in_star_foreground else R.drawable.outline_star_foreground
                         ),
-                        contentDescription = if (isFavorite)
-                            "Favorite icon."
-                        else
-                            "Not Favorite icon.",
-
+                        contentDescription = null,
                         tint = if (isFavorite)
                             MaterialTheme.colorScheme.primary
                         else
@@ -90,35 +101,44 @@ fun ProductCard(
                         }
                     )
                 }
-                Text("${product.name} : $${product.listPrice}")
-                if (!product.summary.isNullOrBlank()) {
-                    Text(product.summary)
-                }
-                AsyncImage(
-                    model = product.thumbnailPhoto,
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .size(96.dp)
-                        .clip(MaterialTheme.shapes.medium)
-                )
-                val productStockLevel = ProductStockMapper.convertStockLevel(product.stockLevel)
-                when (productStockLevel) {
-                    ProductStockCase.IN_STOCK ->
-                        Text(
-                            text = "In Stock",
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                    ProductStockCase.OUT_OF_STOCK ->
-                        Text(
-                            text = "Out of Stock",
-                            color = MaterialTheme.colorScheme.error
-                        )
-                    ProductStockCase.UNKNOWN ->
-                        Text(
-                            text = "Unknown",
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
+
+                Column(
+                    modifier = Modifier.clearAndSetSemantics {
+                    contentDescription = "The stock of product ${product.name} is ${stockText}" +
+                            (if (isFavorite) "and it is saved." else ".") + "The price is $${product.listPrice}." +
+                            "The summary is ${product.summary}"
+                },
+                ) {
+                    Text("${product.name} : $${product.listPrice}")
+                    if (!product.summary.isNullOrBlank()) {
+                        Text(product.summary)
+                    }
+                    AsyncImage(
+                        model = product.thumbnailPhoto,
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .size(96.dp)
+                            .clip(MaterialTheme.shapes.medium)
+                    )
+                    val productStockLevel = ProductStockMapper.convertStockLevel(product.stockLevel)
+                    when (productStockLevel) {
+                        ProductStockCase.IN_STOCK ->
+                            Text(
+                                text = "In Stock",
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        ProductStockCase.OUT_OF_STOCK ->
+                            Text(
+                                text = "Out of Stock",
+                                color = MaterialTheme.colorScheme.error
+                            )
+                        ProductStockCase.UNKNOWN ->
+                            Text(
+                                text = "Unknown",
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                    }
                 }
 
             }

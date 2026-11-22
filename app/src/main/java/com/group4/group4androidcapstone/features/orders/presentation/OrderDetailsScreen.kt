@@ -19,7 +19,15 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Surface
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 
 @Composable
 fun OrderDetailsScreen(
@@ -40,51 +48,72 @@ fun OrderDetailsScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
+
         ) {
-            Button(onClick = onBack) {
+            Button(
+                onClick = onBack,
+                modifier = Modifier.semantics {
+                    contentDescription = "Click to go back to the order history screen"
+                }
+            ) {
                 Text("Back to Order History")
             }
 
             Text(
                 text = "Order Details",
-                style = MaterialTheme.typography.headlineMedium
+                style = MaterialTheme.typography.headlineMedium,
+                modifier = Modifier.fillMaxWidth()
             )
 
-            Text(
-                text = "Order #${order.id}",
-                style = MaterialTheme.typography.titleMedium
-            )
+            Column(
+                modifier = Modifier.clearAndSetSemantics() {
+                    contentDescription = "Order #${order.id} ${if (customerName.isNotEmpty()) "by $customerName" else ""} " +
+                            "was made on ${formatLocalDate(order.orderDate.toLocalDate())}," +
+                            "with a status of $displayStatus." +
+                            if (displayStatus == "Shipped") "This order was shipped on " + formatLocalDate(order.shipDate.toLocalDate())
+                            else "The order's shipping date on record is ${formatLocalDate(order.shipDate.toLocalDate())}" +
+                                    "but this does not confirm payment."
+                }
+                    .fillMaxWidth()
+            ) {
 
-            if (customerName.isNotEmpty()) {
                 Text(
-                    text = "Customer: $customerName"
+                    text = "Order #${order.id}",
+                    style = MaterialTheme.typography.titleMedium
                 )
-            }
 
-            Text(
-                text = "Date: ${order.orderDate.toLocalDate()}"
-            )
+                if (customerName.isNotEmpty()) {
+                    Text(
+                        text = "Customer: $customerName"
+                    )
+                }
 
-            Text(
-                text = "Status: $displayStatus"
-            )
-            if (displayStatus == "Shipped") {
                 Text(
-                    text = "Shipped on: ${order.shipDate.toLocalDate()}"
+                    text = "Date: ${order.orderDate.toLocalDate()}"
                 )
-            } else {
+
                 Text(
-                    text = "Shipping date on record: ${order.shipDate.toLocalDate()}"
+                    text = "Status: $displayStatus"
                 )
-                Text(
-                    text = "This date does not confirm shipment.",
-                    style = MaterialTheme.typography.bodySmall
-                )
+                if (displayStatus == "Shipped") {
+                    Text(
+                        text = "Shipped on: ${order.shipDate.toLocalDate()}"
+                    )
+                } else {
+                    Text(
+                        text = "Shipping date on record: ${order.shipDate.toLocalDate()}"
+                    )
+                    Text(
+                        text = "This date does not confirm shipment.",
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
             }
 
             Text(
                 text = "Products",
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.fillMaxWidth()
             )
 
             if (order.items.isEmpty()) {
@@ -92,7 +121,13 @@ fun OrderDetailsScreen(
             } else {
                 order.items.forEach { item ->
                     Column(
-                        verticalArrangement = Arrangement.spacedBy(4.dp)
+                        verticalArrangement = Arrangement.spacedBy(4.dp),
+                        modifier = Modifier.clearAndSetSemantics {
+                            contentDescription = "Product ${item.productName ?: "with no name"}" +
+                                    "has a quantity of ${item.orderQty}, a unit price of ${formatOrderMoney(item.unitPrice)}," +
+                                    "and a line total of ${formatOrderMoney(item.lineTotal)}"
+                        }
+                            .fillMaxWidth()
                     ) {
                         Text(
                             text = item.productName ?: "Product name unavailable",
@@ -111,7 +146,13 @@ fun OrderDetailsScreen(
             if (order.items.isNotEmpty()) {
                 Text(
                     text = "Items Subtotal: ${formatOrderMoney(itemsSubtotal)}",
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier
+                        .semantics {
+                            contentDescription = "The subtotal of all products in this order is " +
+                                    formatOrderMoney(itemsSubtotal)
+                        }
+                        .fillMaxWidth()
                 )
             }
         }
@@ -150,6 +191,11 @@ private fun formatOrderMoney(value: Double): String {
 private fun formatOrderMoney(value: BigDecimal): String {
     val amount = value.setScale(2, RoundingMode.HALF_UP)
     return "$" + amount.toPlainString()
+}
+
+private fun formatLocalDate(date: LocalDate): String {
+    val formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
+    return date.format(formatter)
 }
 
 @Preview(showBackground = true)
