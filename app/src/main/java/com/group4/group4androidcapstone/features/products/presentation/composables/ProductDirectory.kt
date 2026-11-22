@@ -49,6 +49,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
@@ -127,7 +129,7 @@ fun ProductDirectory(
                         IconButton(onClick = onBack) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = "Back arrow",
+                                contentDescription = "Go back to previous screen",
                                 tint = MaterialTheme.colorScheme.primary
                             )
                         }
@@ -153,14 +155,22 @@ fun ProductDirectory(
                         onExpandedChange = {},
                         modifier = Modifier
                             .weight(1f)
-                            .padding(vertical = 8.dp),
+                            .padding(vertical = 8.dp)
+                            .semantics {
+                            contentDescription = "Search products by name with the given criteria"
+                        },
+
+
                         content = {}
                     )
 
                     Box(
                     ) {
                         IconButton(
-                            onClick = { categoryExpanded = true }
+                            onClick = { categoryExpanded = true },
+                            modifier = Modifier.semantics {
+                                contentDescription = "Click to show the list of viewed product categories"
+                            }
                         ) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.More,
@@ -179,6 +189,9 @@ fun ProductDirectory(
                                     onShowRecentClearChange(false)
                                     categoryExpanded = false
                                     screenName = ""
+                                },
+                                modifier = Modifier.semantics {
+                                    contentDescription = "Show all products that meet the given search criteria"
                                 }
                             )
                             DropdownMenuItem(
@@ -188,6 +201,9 @@ fun ProductDirectory(
                                     onShowRecentClearChange(true)
                                     categoryExpanded = false
                                     screenName = "Recent"
+                                },
+                                modifier = Modifier.semantics {
+                                    contentDescription = "Show recently showed products"
                                 }
                             )
                             DropdownMenuItem(
@@ -197,6 +213,9 @@ fun ProductDirectory(
                                     onShowRecentClearChange(false)
                                     categoryExpanded = false
                                     screenName = "Saved"
+                                },
+                                modifier = Modifier.semantics {
+                                    contentDescription = "Show all products that have been saved with the star icon"
                                 }
                             )
 
@@ -211,7 +230,7 @@ fun ProductDirectory(
                         ) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.Sort,
-                                contentDescription = "Sort"
+                                contentDescription = "Sort currently shown products by alphabetical order or price"
                             )
                         }
                         DropdownMenu(
@@ -224,6 +243,9 @@ fun ProductDirectory(
                                 onClick = {
                                     onSortChanged(SortOrder.ASCENDING)
                                     sortExpanded = false
+                                },
+                                modifier = Modifier.semantics {
+                                    contentDescription = "Sort the currently viewed products by name from A to Z"
                                 }
                             )
                             DropdownMenuItem(
@@ -231,6 +253,9 @@ fun ProductDirectory(
                                 onClick = {
                                     onSortChanged(SortOrder.DESCENDING)
                                     sortExpanded = false
+                                },
+                                modifier = Modifier.semantics {
+                                    contentDescription = "Sort the currently viewed products by name from Z to A"
                                 }
                             )
                             DropdownMenuItem(
@@ -238,6 +263,9 @@ fun ProductDirectory(
                                 onClick = {
                                     onSortChanged(SortOrder.PRICE_LOW_TO_HIGH)
                                     sortExpanded = false
+                                },
+                                modifier = Modifier.semantics {
+                                    contentDescription = "Sort the currently viewed products from lowest to highest price"
                                 }
                             )
 
@@ -279,7 +307,7 @@ fun ProductDirectory(
                     icon = {
                         Icon(
                             Icons.Filled.Filter,
-                            contentDescription = "Filter icon"
+                            contentDescription = "Show additional filters"
                         )
                     },
                     onClick = {
@@ -327,6 +355,9 @@ fun ProductDirectory(
                         checked = state.displayWarrantyOnly,
                         onCheckedChange = {
                             onWarrantyToggled(it)
+                        },
+                        modifier = Modifier.semantics {
+                            contentDescription = "Toggle to filter by warranty"
                         }
                     )
                     Row(
@@ -339,7 +370,10 @@ fun ProductDirectory(
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = MaterialTheme.colorScheme.secondaryContainer,
                                 contentColor = MaterialTheme.colorScheme.onSecondaryContainer
-                            )
+                            ),
+                            modifier = Modifier.semantics {
+                                contentDescription = "Click to reset additional filters"
+                            }
                         ) {
                             Text("Reset Filters")
                         }
@@ -347,6 +381,9 @@ fun ProductDirectory(
                         Button(
                             onClick = {
                                 onShowFilterChange(false)
+                            },
+                            modifier = Modifier.semantics {
+                                contentDescription = "Click to close additional filters tab"
                             }
                         ) {
                             Text("Close")
