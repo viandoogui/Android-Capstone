@@ -83,7 +83,7 @@ fun ProductDirectoryRoute(
                         CompositionLocalProvider(LocalPaneAnimatedScope provides this) {
                             val productId = navigator.currentDestination?.contentKey
                             if (productId != null) {
-                                ProductDetails(productId)
+                                ProductDetails(productId,onBack = {scope.launch { navigator.navigateBack() }})
                             }
                         }
                     }

@@ -1,5 +1,6 @@
 package com.group4.group4androidcapstone.features.orders.presentation
 
+import androidx.compose.foundation.background
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.layout.Column
@@ -16,13 +17,20 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.ui.unit.dp
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.style.TextAlign
 import com.group4.group4androidcapstone.features.orders.domain.OrderSorter
+import com.group4.group4androidcapstone.ui.theme.LocalSpacing
 
 @Composable
 fun OrderHistoryScreen(
@@ -49,10 +57,18 @@ fun OrderHistoryScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             item {
-                Text(
-                    text = "Order History",
-                    style = MaterialTheme.typography.headlineMedium
-                )
+                Column(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(MaterialTheme.colorScheme.surface)
+                        .padding(LocalSpacing.current.medium)
+                        .width(800.dp),
+                ) {
+                    Text(
+                        text = "Order History",
+                        style = MaterialTheme.typography.headlineMedium,
+                    )
+                }
             }
 
             item {

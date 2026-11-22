@@ -37,7 +37,8 @@ import kotlin.io.encoding.Base64
 @Composable
 fun ProductDetails(
     productId: Int,
-    viewModel: ProductDetailsViewModel = hiltViewModel()
+    viewModel: ProductDetailsViewModel = hiltViewModel(),
+    onBack: () -> Unit = {}
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -69,6 +70,9 @@ fun ProductDetails(
                         .fillMaxWidth()
                         .verticalScroll(rememberScrollState())
                 ) {
+                    Button(onClick = onBack){
+                        Text("Back")
+                    }
                     ProductDetailText("Product Name", product.productName)
                     ProductDetailText("Product Number", product.productNumber)
                     ProductDetailText("Summary", product.summary)
