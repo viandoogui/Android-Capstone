@@ -49,6 +49,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
@@ -156,7 +157,7 @@ fun ProductDirectory(
                         modifier = Modifier
                             .weight(1f)
                             .padding(vertical = 8.dp)
-                            .semantics {
+                            .clearAndSetSemantics() {
                             contentDescription = "Search products by name with the given criteria"
                         },
 
