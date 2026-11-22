@@ -50,7 +50,12 @@ fun OrderDetailsScreen(
             verticalArrangement = Arrangement.spacedBy(8.dp)
 
         ) {
-            Button(onClick = onBack) {
+            Button(
+                onClick = onBack,
+                modifier = Modifier.semantics {
+                    contentDescription = "Click to go back to the order history screen"
+                }
+            ) {
                 Text("Back to Order History")
             }
 
@@ -117,7 +122,7 @@ fun OrderDetailsScreen(
                 order.items.forEach { item ->
                     Column(
                         verticalArrangement = Arrangement.spacedBy(4.dp),
-                        modifier = Modifier.semantics(mergeDescendants = true) {
+                        modifier = Modifier.clearAndSetSemantics {
                             contentDescription = "Product ${item.productName ?: "with no name"}" +
                                     "has a quantity of ${item.orderQty}, a unit price of ${formatOrderMoney(item.unitPrice)}," +
                                     "and a line total of ${formatOrderMoney(item.lineTotal)}"
