@@ -26,6 +26,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.group4.group4androidcapstone.features.HomeScreen.presentation.ViewModels.HomeViewModel
@@ -80,7 +82,10 @@ fun HomeOrderReview(
 
             }
             Button(modifier = Modifier.align(Alignment.End)
-                .padding(LocalSpacing.current.small),
+                .padding(LocalSpacing.current.small)
+                .semantics {
+                    contentDescription = "Refresh five most recent orders"
+                },
                 onClick = { viewModel.getRecentOrders() }){
                 Text("Refresh")
             }

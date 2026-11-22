@@ -24,6 +24,9 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.NavigationRailItemDefaults
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteItemColors
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 
 @Composable
 fun AppNavigationShell(
@@ -69,7 +72,10 @@ fun AppNavigationShell(
                     },
                     icon = { Icon(destination.icon, contentDescription = null)},
                     label = { Text(stringResource(destination.labelRes),color = MaterialTheme.colorScheme.tertiary) },
-                    colors = customItemColors
+                    colors = customItemColors,
+                    modifier = Modifier.clearAndSetSemantics {
+                        contentDescription = "Click to navigate to " + destination.name.lowercase() + " screen."
+                    }
                 )
 
 
