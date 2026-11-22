@@ -19,6 +19,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.Button
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import com.group4.group4androidcapstone.features.orders.domain.OrderSorter
 
 @Composable
@@ -47,11 +50,21 @@ fun OrderHistoryScreen(
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    Button(onClick = { onSortChange(true) }) {
+                    Button(
+                        onClick = { onSortChange(true) },
+                        modifier = Modifier.semantics {
+                            contentDescription = "Sort orders by newest date first"
+                        }
+                    ) {
                         Text("Newest First")
                     }
 
-                    Button(onClick = { onSortChange(false) }) {
+                    Button(
+                        onClick = { onSortChange(false) },
+                        modifier = Modifier.semantics {
+                            contentDescription = "Sort orders by oldest date first"
+                        }
+                        ) {
                         Text("Oldest First")
                     }
                 }
