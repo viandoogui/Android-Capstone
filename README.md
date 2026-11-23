@@ -1,7 +1,23 @@
 # Android-Capstone
 
-## Automated Tests Summary
+## Installation Instructions
+Download capstone-version to your local android device from the github releases page.
+Locate the file and run it with package manager, or preferred manager of choice.
+If prompted with a security message, allow your browser to install unknown apps.
+If prompted, allow Google Play Protect to scan the app.
+Once completed, Press Install.
+Press open or tap the application icon to launch the app.
 
+## Demo Customer Configuration
+The application is automatically created to configure the customer as Brandy Chandra. No user action is required.
+
+## Base URL configuration.
+The application is automatically configured to use the Adventureworks API as its base URL. No user action is required.
+
+## Known limitations
+This application will not allow you to change users, add or update information in the Adventureworks API, or create actual orders.
+
+## Automated Tests Summary
 We added automated tests to check that the main parts of our app are working correctly.
 
 ### Unit Tests
@@ -16,7 +32,6 @@ We added automated tests to check that the main parts of our app are working cor
 - **Product Details:** Tested saving, updating, and retrieving product details from the database.
 
 ### Test Results
-
 To run the automated tests, open a terminal in the project's folder and use the commands below. 
 For instrumented tests, make sure an Android device with USB debugging enabled 
 is connected or an emulator is running. Both automated test runs completed successfully.
@@ -35,3 +50,8 @@ Not every feature has automated tests. We also manually tested order navigation,
 screen rotation, error messages, and the Retry button when the connection fails.
 
 Some Home Screen UI tests are commented out and were not included in the test runs.
+
+## Final Product Backlog
+<img width="1628" height="888" alt="image" src="https://github.com/user-attachments/assets/ba50bd4f-3b99-40bd-826e-9c85aa845372" />
+
+## Scrum Artifacts
