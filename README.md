@@ -55,3 +55,4 @@ Some Home Screen UI tests are commented out and were not included in the test ru
 <img width="1628" height="888" alt="image" src="https://github.com/user-attachments/assets/ba50bd4f-3b99-40bd-826e-9c85aa845372" />
 
 ## Scrum Artifacts
+https://docs.google.com/document/d/1sT2_gvkrLmQqhybrYrVy-nCTq41GXemaXPuLua8WPxw/edit?usp=sharing
