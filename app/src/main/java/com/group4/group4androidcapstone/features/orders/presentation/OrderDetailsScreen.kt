@@ -20,11 +20,13 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Surface
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import com.group4.group4androidcapstone.ui.theme.LocalSpacing
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -41,7 +43,8 @@ fun OrderDetailsScreen(
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = Color.White,
-        contentColor = Color.Black
+        contentColor = Color.Black,
+        shape = RoundedCornerShape(LocalSpacing.current.small)
     ) {
         Column(
             modifier = Modifier
