@@ -1,33 +1,32 @@
 package com.group4.group4androidcapstone.features.orders.presentation
 
-import androidx.compose.runtime.Composable
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Text
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import com.group4.group4androidcapstone.features.orders.domain.Order
-import androidx.compose.ui.tooling.preview.Preview
-import java.time.LocalDateTime
-import com.group4.group4androidcapstone.features.orders.domain.LineItem
-import java.math.BigDecimal
-import java.math.RoundingMode
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.Surface
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.ui.draw.alpha
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.group4.group4androidcapstone.features.orders.domain.LineItem
+import com.group4.group4androidcapstone.features.orders.domain.Order
 import com.group4.group4androidcapstone.ui.theme.LocalSpacing
+import java.math.BigDecimal
+import java.math.RoundingMode
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
@@ -39,6 +38,7 @@ fun OrderDetailsScreen(
     val customerName = "${order.firstName.orEmpty()} ${order.lastName.orEmpty()}".trim()
     val displayStatus = displayOrderStatus(order.statusName)
     val itemsSubtotal = calculateItemsSubtotal(order.items)
+    val shippingDate = order.shipDate?.toLocalDate()
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -69,14 +69,23 @@ fun OrderDetailsScreen(
             )
 
             Column(
-                modifier = Modifier.clearAndSetSemantics() {
-                    contentDescription = "Order #${order.id} ${if (customerName.isNotEmpty()) "by $customerName" else ""} " +
-                            "was made on ${formatLocalDate(order.orderDate.toLocalDate())}," +
-                            "with a status of $displayStatus." +
-                            if (displayStatus == "Shipped") "This order was shipped on " + formatLocalDate(order.shipDate.toLocalDate())
-                            else "The order's shipping date on record is ${formatLocalDate(order.shipDate.toLocalDate())}" +
-                                    "but this does not confirm payment."
-                }
+                modifier = Modifier
+                    .clearAndSetSemantics {
+                        contentDescription = "Order #${order.id}. " +
+                                "Customer: $customerName. " +
+                                "Ordered on ${formatLocalDate(order.orderDate.toLocalDate())}. " +
+                                "Status: $displayStatus. " +
+                                when {
+                                    shippingDate == null -> "Shipping date unavailable."
+
+                                    displayStatus == "Shipped" ->
+                                        "Shipped on ${formatLocalDate(shippingDate)}."
+
+                                    else ->
+                                        "Shipping date on record: ${formatLocalDate(shippingDate)}. " +
+                                                "This does not confirm shipment."
+                                }
+                    }
                     .fillMaxWidth()
             ) {
 
@@ -98,18 +107,22 @@ fun OrderDetailsScreen(
                 Text(
                     text = "Status: $displayStatus"
                 )
-                if (displayStatus == "Shipped") {
-                    Text(
-                        text = "Shipped on: ${order.shipDate.toLocalDate()}"
-                    )
-                } else {
-                    Text(
-                        text = "Shipping date on record: ${order.shipDate.toLocalDate()}"
-                    )
-                    Text(
-                        text = "This date does not confirm shipment.",
-                        style = MaterialTheme.typography.bodySmall
-                    )
+                when {
+                    shippingDate == null -> {
+                        Text("Shipping date unavailable")
+                    }
+
+                    displayStatus == "Shipped" -> {
+                        Text("Shipped on: $shippingDate")
+                    }
+
+                    else -> {
+                        Text("Shipping date on record: $shippingDate")
+                        Text(
+                            text = "This date does not confirm shipment.",
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                    }
                 }
             }
 
@@ -125,11 +138,17 @@ fun OrderDetailsScreen(
                 order.items.forEach { item ->
                     Column(
                         verticalArrangement = Arrangement.spacedBy(4.dp),
-                        modifier = Modifier.clearAndSetSemantics {
-                            contentDescription = "Product ${item.productName ?: "with no name"}" +
-                                    "has a quantity of ${item.orderQty}, a unit price of ${formatOrderMoney(item.unitPrice)}," +
-                                    "and a line total of ${formatOrderMoney(item.lineTotal)}"
-                        }
+                        modifier = Modifier
+                            .clearAndSetSemantics {
+                                contentDescription =
+                                    "Product ${item.productName ?: "with no name"}" +
+                                            "has a quantity of ${item.orderQty}, a unit price of ${
+                                                formatOrderMoney(
+                                                    item.unitPrice
+                                                )
+                                            }," +
+                                            "and a line total of ${formatOrderMoney(item.lineTotal)}"
+                            }
                             .fillMaxWidth()
                     ) {
                         Text(
@@ -166,9 +185,7 @@ internal fun calculateItemsSubtotal(items: List<LineItem>): BigDecimal {
     var subtotal = BigDecimal.ZERO
 
     items.forEach { item ->
-        subtotal = subtotal.add(
-            BigDecimal.valueOf(item.lineTotal)
-        )
+        subtotal = subtotal.add(item.lineTotal)
     }
     return subtotal
 }
@@ -185,13 +202,7 @@ internal fun displayOrderStatus(statusName: String): String {
     }
 }
 
-private fun formatOrderMoney(value: Double): String {
-    val amount = BigDecimal.valueOf(value)
-        .setScale(2, RoundingMode.HALF_UP)
-    return "$" + amount.toPlainString()
-}
-
-private fun formatOrderMoney(value: BigDecimal): String {
+internal fun formatOrderMoney(value: BigDecimal): String {
     val amount = value.setScale(2, RoundingMode.HALF_UP)
     return "$" + amount.toPlainString()
 }
@@ -218,8 +229,8 @@ fun OrderDetailsPreview() {
                 id = 1,
                 productName = "Sample Product",
                 orderQty = 2,
-                unitPrice = 24.99,
-                lineTotal = 49.98
+                unitPrice = BigDecimal("24.99"),
+                lineTotal = BigDecimal("49.98")
             )
         )
     )

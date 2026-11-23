@@ -41,7 +41,6 @@ fun OrderHistoryScreen(
 ) {
     when {
         uiState.isLoading -> Text("Loading orders...")
-        uiState.orders.isEmpty() -> Text("No orders found")
         uiState.errorMessage != null -> {
             Column {
                 Text(uiState.errorMessage)
@@ -51,6 +50,7 @@ fun OrderHistoryScreen(
                 }
             }
         }
+        uiState.orders.isEmpty() -> Text("No orders found")
 
         else -> LazyColumn(
             contentPadding = PaddingValues(16.dp),

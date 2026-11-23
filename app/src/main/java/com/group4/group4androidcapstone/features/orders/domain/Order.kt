@@ -8,7 +8,7 @@ data class Order(
     val firstName: String?,
     val lastName: String?,
     val orderDate: LocalDateTime,
-    val shipDate: LocalDateTime,
+    val shipDate: LocalDateTime?,
     val status: Int,
     val statusName: String,
     val items: List<LineItem>
