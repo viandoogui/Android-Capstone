@@ -1,0 +1,65 @@
+package com.group4.group4androidcapstone.features.products.data.local
+
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import java.time.LocalDateTime
+
+@Entity(tableName = "products")
+data class ProductEntity(
+    @PrimaryKey
+    val productId: Int,
+    val name: String,
+    val productNumber: String,
+    val summary: String?,
+    val thumbnailPhoto: ByteArray,
+    val thumbnailPhotoFileName: String,
+    val warranty: String?,
+    val color: String?,
+    val listPrice: Double,
+    @ColumnInfo(name = "stock_level", defaultValue = "0") val stockLevel: Int,
+    val viewedTime: LocalDateTime? = null,
+    @ColumnInfo(name = "is_saved", defaultValue = "0") val isSaved: Boolean = false,
+    val savedTime: LocalDateTime? = null
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as ProductEntity
+
+        if (productId != other.productId) return false
+        if (listPrice != other.listPrice) return false
+        if (stockLevel != other.stockLevel) return false
+        if (isSaved != other.isSaved) return false
+        if (name != other.name) return false
+        if (productNumber != other.productNumber) return false
+        if (summary != other.summary) return false
+        if (!thumbnailPhoto.contentEquals(other.thumbnailPhoto)) return false
+        if (thumbnailPhotoFileName != other.thumbnailPhotoFileName) return false
+        if (warranty != other.warranty) return false
+        if (color != other.color) return false
+        if (viewedTime != other.viewedTime) return false
+        if (savedTime != other.savedTime) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = productId
+        result = 31 * result + listPrice.hashCode()
+        result = 31 * result + stockLevel
+        result = 31 * result + isSaved.hashCode()
+        result = 31 * result + name.hashCode()
+        result = 31 * result + productNumber.hashCode()
+        result = 31 * result + (summary?.hashCode() ?: 0)
+        result = 31 * result + thumbnailPhoto.contentHashCode()
+        result = 31 * result + thumbnailPhotoFileName.hashCode()
+        result = 31 * result + (warranty?.hashCode() ?: 0)
+        result = 31 * result + (color?.hashCode() ?: 0)
+        result = 31 * result + (viewedTime?.hashCode() ?: 0)
+        result = 31 * result + (savedTime?.hashCode() ?: 0)
+        return result
+    }
+
+}
