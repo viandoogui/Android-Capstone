@@ -60,9 +60,6 @@ fun HomeContent(
             .verticalScroll(state = rememberScrollState()),
 
     ) {
-        if(state.error != null){
-         Text(state.error ?:  "there was an error")
-        }
 
 
 
@@ -94,7 +91,7 @@ fun HomeContent(
                     recentOrders = state.recentOrders,
                     isLoading = state.isOrderRefreshing,
                     onOrderSelected = onOrderSelected,
-                    error = state.error,
+                    error = state.orderError,
                     viewModel = viewModel
                 )
 
@@ -121,7 +118,7 @@ fun HomeContent(
                         viewModel.setProductIsSaved(id, isSaved)
                     },
                     isLoading = state.isProductRefreshing,
-                    error = state.error,
+                    error = state.productError,
                     viewModel = viewModel
                     )
                 Button(
