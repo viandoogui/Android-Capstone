@@ -40,7 +40,7 @@ class HomeViewModel @Inject constructor(
 
      fun loadRecentProducts() {
          viewModelScope.launch {
-             _uiState.update { it.copy(isProductRefreshing = true) }
+             _uiState.update { it.copy(isProductRefreshing = true, productError = null) }
              try {
                  useCase().collect { products ->
                      _uiState.update {
@@ -49,7 +49,7 @@ class HomeViewModel @Inject constructor(
                  }
              } catch (e: Exception) {
                  _uiState.update {
-                     it.copy(error = e.message ?: "Couldn't load products", isProductRefreshing = false)
+                     it.copy(productError = e.message ?: "Couldn't load products", isProductRefreshing = false)
                  }
              }
          }
@@ -62,14 +62,14 @@ class HomeViewModel @Inject constructor(
     }
     fun refreshProducts() {
         viewModelScope.launch {
-            _uiState.update { it.copy(isProductRefreshing = true) }
+            _uiState.update { it.copy(isProductRefreshing = true, productError = null) }
             try {
                 refreshProductsUseCase()
                 val updatedProducts = useCase().first()
                 _uiState.update { it.copy(recentProducts = updatedProducts) }
             } catch (e: Exception) {
                 _uiState.update {
-                    it.copy(error = e.message ?: "Couldn't refresh products")
+                    it.copy(productError = e.message ?: "Couldn't refresh products")
                 }
             } finally {
                 _uiState.update { it.copy(isProductRefreshing = false) }
@@ -79,7 +79,7 @@ class HomeViewModel @Inject constructor(
 
     fun getRecentOrders(){
         viewModelScope.launch {
-            _uiState.update { it.copy(isOrderRefreshing = true) }
+            _uiState.update { it.copy(isOrderRefreshing = true, orderError = null) }
             try {
                 val orders = getOrders()
                 _uiState.update {
@@ -87,7 +87,7 @@ class HomeViewModel @Inject constructor(
                 }
             } catch (e: Exception) {
                 _uiState.update {
-                    it.copy(error = e.message ?: "Couldn't load recent orders", isOrderRefreshing = false)
+                    it.copy(orderError = e.message ?: "Couldn't load recent orders", isOrderRefreshing = false)
                 }
             }
         }
