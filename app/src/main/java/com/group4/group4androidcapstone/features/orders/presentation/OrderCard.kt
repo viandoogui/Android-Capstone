@@ -22,6 +22,8 @@ fun OrderCard(
     order: Order,
     onClick: () -> Unit
 ) {
+    val itemsSubtotal = calculateItemsSubtotal(order.items)
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -31,7 +33,12 @@ fun OrderCard(
             .clearAndSetSemantics {
                 contentDescription = "The date of order #${order.id} is " +
                         "${order.orderDate.toLocalDate()} and " +
-                        "the status is ${displayOrderStatus(order.statusName)}." +
+                        "the status is ${displayOrderStatus(order.statusName)}. " +
+                        (if (order.items.isNotEmpty()) {
+                            "Items subtotal is ${formatOrderMoney(itemsSubtotal)}. "
+                        } else {
+                            ""
+                        }) +
                         "Tap to view order details."
             }
     ) {
@@ -53,6 +60,13 @@ fun OrderCard(
                 text = "Status: ${displayOrderStatus(order.statusName)}",
                 style = MaterialTheme.typography.bodyMedium
             )
+
+            if (order.items.isNotEmpty()) {
+                Text(
+                    text = "Items Subtotal: ${formatOrderMoney(itemsSubtotal)}",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
         }
     }
 }

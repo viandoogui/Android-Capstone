@@ -9,5 +9,6 @@ data class HomeUiState(
    // val isRefreshing: Boolean = false,
     val isProductRefreshing: Boolean = false,
     val isOrderRefreshing: Boolean = false,
-   val error: String? = null
+   val orderError: String? = null,
+    val productError: String? = null,
 )

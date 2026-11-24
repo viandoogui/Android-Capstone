@@ -14,15 +14,15 @@ class OrderDetailsSubtotalTest {
                 id = 1,
                 productName = "Product A",
                 orderQty = 2,
-                unitPrice = 24.99,
-                lineTotal = 49.98
+                unitPrice = BigDecimal("24.99"),
+                lineTotal = BigDecimal("49.98")
             ),
             LineItem(
                 id = 2,
                 productName = "Product B",
                 orderQty = 1,
-                unitPrice = 10.50,
-                lineTotal = 10.50
+                unitPrice = BigDecimal("10.50"),
+                lineTotal = BigDecimal("10.50")
             )
         )
 

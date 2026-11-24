@@ -60,6 +60,16 @@ fun HomeRecentProducts(
         CircularProgressIndicator()
     }else if (error != null){
         Text("There was an error: (${error})")
+        Button(
+            modifier = Modifier.align(Alignment.End)
+                .padding(LocalSpacing.current.small)
+                .semantics {
+                    contentDescription = "Refresh recently viewed products"
+                },
+            onClick = { viewModel.refreshProducts() }){
+            Text("Refresh")
+        }
+
     }else {
         Text("Recently Viewed Products:", Modifier.padding(LocalSpacing.current.small))
                 Row(
